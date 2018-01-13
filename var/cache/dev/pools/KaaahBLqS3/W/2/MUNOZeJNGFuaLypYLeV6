@@ -1,0 +1,3 @@
+1546958140
+%255BUserBundle%255CEntity%255CUser%2524captchaCode%255D%255B1%255D
+a:1:{i:0;O:63:"Captcha\Bundle\CaptchaBundle\Validator\Constraints\ValidCaptcha":3:{s:7:"message";s:37:"CAPTCHA validation failed, try again.";s:7:"payload";N;s:6:"groups";a:1:{i:0;s:7:"Default";}}}

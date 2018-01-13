@@ -1,0 +1,14 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block menutop %}
+{% endblock %}
+
+{% block menuleft %}
+{% endblock %}
+
+{% block fos_user_content %}
+    <h6 class="">Validez votre compte et vous pourrez apporter votre contribution au forum !<br></h6> 
+    <a href="{{ path('app_home') }}" class="text-center">Retourné sur le forum</a>
+{% endblock fos_user_content %}

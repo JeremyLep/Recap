@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <title>{% block title %}Récap{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  {% block stylesheets %}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani:500" rel="stylesheet">
+
+    {% stylesheets 
+    'bundles/app/css/style.css'
+    'bundles/starrating/css/rating.css' 
+    %}
+
+      <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+
+    {% endstylesheets %}
+
+  {% endblock %}
+
+  </head>
+
+  <body>
+    {% block menutop %}
+    <header>
+      <nav class="navbar navbar-expand-md bg-light fixed-top bg-light col-md-10 offset-md-2 col-sm-9 offset-sm-3" id="menu-top">
+        {% block titre %}
+        <a class="navbar-brand" href="{{ path('app_home') }}">Dashboard</a>
+        {% endblock %}
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse col-12" id="navbarsExampleDefault">
+          <ul class="navbar-nav col-3 pr-0">
+            {% block groupe %}
+            <li class="nav-item" id="fiche-icon">
+              <a class="nav-link" href="">16 <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+            </li>
+            <li class="nav-item" id="membre-list">
+              <a class="nav-link" href="">14 <i class="fa fa-user-o" aria-hidden="true"></i></a>
+            </li>
+            <li class="nav-item" id="invite">
+              <a class="nav-link" href=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+            </li>
+            {% endblock %}
+          </ul>
+          <form class="form-inline mt-2 mt-md-0 col-5 p-0">
+            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-defaut my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+          </form>
+          <div class="col-1 p-0">
+            <button class="btn" style="background: #4a7fb3; color:white; border-radius: 50%; max-height: 35px; max-width: 35px;    padding-left: 8.5px">
+            <i class="fa fa-bell" aria-hidden="true"></i>
+            </button>
+          </div>
+          <ul class="navbar-nav col-2" id="deconnexion">
+            <li class="nav-item float-right" style="width: 50px;">
+              <a class="nav-link float-right" href="{{ path('fos_user_profile_show') }}">
+                <button class="btn bg-info" style=" color:white; border-radius: 50%; max-height: 35px; max-width: 35px;    padding-left: 10.5px">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                </button>
+              </a>
+            </li>
+            <li class="nav-item float-right" style="width: 50px;">
+              <a class="nav-link float-right btn" href="{{ path('fos_user_security_logout') }}">
+                <button class="btn bg-danger" style="color:white; border-radius: 50%; max-height: 35px; max-width: 35px;    padding-left: 9.5px">
+                  <i class="fa fa-power-off" aria-hidden="true"></i>
+                </button>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    {% endblock %}
+
+    <div class="container-fluid">
+      <div class="row">
+
+        {% block menuleft %}
+          {{ render(controller("AppBundle:Default:menu")) }}
+        {% endblock %}
+
+        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-5">
+
+          {% block body %}
+          {% endblock %}
+
+        </main>
+      </div>
+    </div>
+
+  {% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/06bfea3587.js"></script>
+
+    <script src="{{ asset('bundles/starrating/js/rating.js') }}"></script>
+
+    {% javascripts
+      '@StarRatingBundle/Resources/public/js/rating.js' %}
+      <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+      $('#modif').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var recipient = button.data('name');
+      var modal = $(this);
+      modal.find('.modal-title').text('Réglage du membre ' + recipient);
+      })
+    </script>
+  {% endblock %} 
+
+  </body>
+</html>
