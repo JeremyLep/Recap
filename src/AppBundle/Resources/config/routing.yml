@@ -1,0 +1,87 @@
+app_home:
+    path:      /
+    defaults:
+        _controller: AppBundle:Default:index
+
+app_groupe:
+    path:      /groupe{id_groupe}/{page}
+    defaults:
+        _controller: AppBundle:Groupe:index
+        page:        1
+    requirements:
+        id_groupe: \d+
+        page: \d*
+
+app_groupe_edit:
+    path:      /groupe{id_groupe}/edit
+    defaults:
+        _controller: AppBundle:Groupe:edit
+    requirements:
+        id_groupe: \d+
+
+app_groupe_delete:
+    path:      /groupe{id_groupe}/delete
+    defaults:
+        _controller: AppBundle:Groupe:delete
+    requirements:
+        id_groupe: \d+
+
+app_groupe_add:
+    path:      /groupe/add
+    defaults:
+        _controller: AppBundle:Groupe:add
+    requirements:
+        id_groupe: \d+
+
+app_fiche:
+    path:      /groupe{id_groupe}/fiche{id_fiche}
+    defaults:
+        _controller: AppBundle:Fiche:index
+    requirements:
+        id_fiche: \d+
+        id_groupe: \d+
+
+app_fiche_edit:
+    path:      /groupe{id_groupe}/fiche{id_fiche}/edit
+    defaults:
+        _controller: AppBundle:Fiche:edit
+    requirements:
+        id_fiche: \d+
+        id_groupe: \d+
+
+app_fiche_delete:
+    path:      /groupe{id_groupe}/fiche{id_fiche}/delete
+    defaults:
+        _controller: AppBundle:Fiche:delete
+    requirements:
+        id_fiche: \d+
+        id_groupe: \d+
+
+app_fiche_add:
+    path:      /groupe{id_groupe}/fiche/add
+    defaults:
+        _controller: AppBundle:Fiche:add
+    requirements:
+        id_groupe: \d+
+
+app_membre:
+    path:      /groupe{id_groupe}/membre
+    defaults:
+        _controller: AppBundle:Membre:index
+    requirements:
+        id_groupe: \d+
+
+app_invite:
+    path:      /groupe{id_groupe}/invite
+    defaults:
+        _controller: AppBundle:Invite:index
+    requirements:
+        id_groupe: \d+
+
+app_parametre:
+    path:      /parametre
+    defaults:
+        _controller: AppBundle:Parametre:index
+
+logout:
+    path: /logout   

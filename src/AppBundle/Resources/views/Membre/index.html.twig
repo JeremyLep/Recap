@@ -1,0 +1,111 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+
+{% block titre %}
+  <a class="navbar-brand" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a>
+
+{% endblock %}
+
+{% block groupe %}
+  <li class="nav-item" id="fiche-icon">
+    <a class="nav-link" href="">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item" id="membre-list">
+    <a class="nav-link" href="">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item" id="invite">
+    <a class="nav-link" href=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+  </li>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
+  <h5 class="p-3 m-0">{{groupe.nbMembre}} membres</h5>
+</div>
+<div class="row p-2" id="membre" style=" border-right: .25rem solid transparent;">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>N°</th>
+        <th>Nom</th>
+        <th>E-mail</th>
+        <th>Nombre fiche crée</th>
+        <th>Statut</th>
+        <th>Gérer utilisateur</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for membre in membres %}
+      <tr>
+        <th scope="row">{{ membre.id }}</th>
+        <td>{{membre.user.nom}}</td>
+        <td>{{membre.user.email}}</td>
+        <td>3</td>
+        <td>Niveau {{membre.accesLvl}}</td>
+        <td><button type="button" class="btn btn-defaut" data-toggle="modal" data-target="#modif" data-name="Mark Otto"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<div class="modal fade" id="modif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Gestion de l'utilisateur</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group row">
+            <div class="col-7">
+              <label for="box1" class="form-control-label">Poster des fiches</label>
+            </div>
+            <div class="text-right col-5">
+              <input type="checkbox" id="box1" /><label for="box1"><span class="ui"></span></label>
+            </div>
+            
+          </div>
+          <div class="form-group row">
+            <div class="col-7">
+              <label for="box2" class="form-control-label">Modifier des fiches</label>
+            </div>
+            <div class="text-right col-5">
+              <input type="checkbox" id="box2" /><label for="box2"><span class="ui"></span></label>
+            </div>
+            
+          </div>
+          <div>
+            
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="row w-100">
+        <div class="text-left col-5 pl-0">
+          <button type="button" class="btn btn-danger text-left">Supprimer le membre</button>
+        </div>
+        <div class="text-right col-7">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-defaut-inv">Appliquer</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+

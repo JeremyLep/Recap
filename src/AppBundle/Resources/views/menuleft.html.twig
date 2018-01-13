@@ -1,0 +1,40 @@
+<nav class="col-sm-3 col-md-2 d-none d-sm-block navbar-dark bg-dark p-0" id="menu-left" style="position: fixed; height: 100%; border-right: .20rem solid transparent;">
+          <div class="col-12 p-0">
+            <div class="row">
+              <div class="col-7 pr-0">
+                <h6 id="nom" class="text-white pb-2 pt-3">John Doe </h6>
+              </div>
+              <div class="col-5">
+                <img src="{{ asset('bundles/app/images/defaut.png') }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="max-width: 35px; max-height: 35px;">
+              </div>
+            </div>
+            
+            <ul class="nav nav-pills flex-column pt-3">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_home') }}">Dashboard</a>
+              </li>
+            </ul>
+            <ul class="nav nav-pills flex-column pt-3 w-100">
+              {% for groupe in listGroupes %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+
+            <ul class="nav nav-pills flex-column pt-3">
+              <li class="nav-item">
+                <a class="nav-link" href="">Mes fiches (0)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="">Favoris (0)</a>
+              </li>
+            </ul>
+
+            <ul class="nav nav-pills flex-column pt-3">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_parametre') }}">Paramètres</a>
+              </li>
+            </ul>
+          </div>
+        </nav>

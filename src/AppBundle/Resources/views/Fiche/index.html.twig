@@ -1,0 +1,98 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block titre %}
+  <a class="navbar-brand" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a>
+  <img src="{{  asset('bundles/app/images/defaut2.png') }}" class="img-fluid rounded mt-1" alt="avatar" style="max-width: 35px; max-height: 35px;">
+{% endblock %}
+
+{% block groupe %}
+  <li class="nav-item" id="fiche-icon">
+    <a class="nav-link" href="">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item" id="membre-list">
+    <a class="nav-link" href="">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item" id="invite">
+    <a class="nav-link" href=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+  </li>
+{% endblock %}
+
+{% block body %}
+
+<div class="row" id="menu-titre">
+<h5 class="p-3 col-8" style="border-bottom: .0625rem solid #e8e8e8; border-right: 1rem solid transparent;">Fiche N°{{ fiche.id }}  <i class="fa fa-star-o" id="fiche-fav" aria-hidden="true"></i><a href="{{ path('app_fiche_edit', {'id_fiche': fiche.id, 'id_groupe': id_groupe}) }}" class="pl-3" style="font-size: 0.8rem; ">edit</a></h5>
+<h5 class="p-3 col-4" style="border-bottom: .0625rem solid #e8e8e8; border-left: 1rem solid transparent;">Sources<a href="" class="pl-3" style="font-size: 0.8rem; ">ajouter</a></h5>
+</div>
+<div class="row" style="border-top: .25rem solid transparent;">
+
+  <section class="col-8 placeholders pt-3" id="fiche">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 placeholder">
+        <div class="card ">
+          <div class="card-header">
+            <div class="row">
+              <div class=" col-12 text-left">
+                <h5>{{ fiche.theme }}</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class=" col-8 text-left">
+                <p class="m-0" style="font-size: 0.9rem; ">Auteur: {{ fiche.auteur.user.nom }}</p>
+              </div>
+              <div class=" col-4 text-right">
+                <h6 class="m-0">
+                  {{ fiche.note|rating(5) }}
+                </h6>
+              </div>
+            </div>
+            <div class="row">
+              <div class=" col-12 text-left">
+                <p class="m-0" style="font-size: 0.7rem; ">Difficulté : {{ fiche.difficulte }}  |  Durée : {{ fiche.duree}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-block text-center">
+            <h4 class="card-title pt-3">{{ fiche.titre }}</h4>
+            <p class="card-text p-3">{{ fiche.description }}</p>
+          </div>
+          <div class="card-footer text-muted">
+            <div class="row">
+              <h6 class="col-5 text-left m-0">{{ fiche.nbCommentaire }} commentaires</h6>
+              <h6 class="col-7 m-0 text-right text-white">
+                {% for tag in tags %}
+                <span class="badge badge-primary">{{tag.label}}</span>
+                {% endfor %}
+              </h6>
+            </div>
+          </div>
+          {% for commentaire in commentaires %}
+          <div  class="card-footer text-muted">
+            {{commentaire.contenu}}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="col-4 text-center placeholders pt-3" id="source" style=" border-left: .0625rem solid #e8e8e8;">
+    <div class="row"> 
+      {% for ressource in ressources %}
+      <div class="col-lg-6 col-md-6 col-sm-12 placeholder pb-2">
+        <div class="card">
+          <img class="card-img-top " src="https://www.openoffice.org/ui/VisualDesign/gifs/Icons/OOo30_final_mimetype/Galaxy_OOo3_writer-doc_256.png" alt="Card image cap">
+          <div class="card-body p-0">
+            <p class="text-muted m-0">{{ressource.titre}}</p>
+            <div class="row col-12 m-0 p-0">
+              <button type="button" class="btn btn-sm btn-secondary col-6 rounded-0"><i class="fa fa-eye" aria-hidden="true"></i></button>
+              <button type="button" class="btn btn-sm btn-secondary col-6 rounded-0"><i class="fa fa-cloud-download" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+  </section>
+</div>
+
+{% endblock %}

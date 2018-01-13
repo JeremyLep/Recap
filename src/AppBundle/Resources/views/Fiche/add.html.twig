@@ -1,0 +1,16 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block body %}
+    <h1>Fiche creation</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('app_groupe', {'id_groupe': id_groupe}) }}">Retour au groupe</a>
+        </li>
+    </ul>
+{% endblock %}

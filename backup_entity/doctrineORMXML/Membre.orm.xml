@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Membre" table="membre">
+    <indexes>
+      <index name="FK_Membre_id_Compte" columns="compte_id"/>
+    </indexes>
+    <id name="membreId" type="integer" column="membre_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="accesLvl" type="smallint" column="acces_lvl" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="dateRejoins" type="datetime" column="date_rejoins" nullable="true"/>
+    <many-to-one field="compte" target-entity="Compte" fetch="LAZY">
+      <join-columns>
+        <join-column name="compte_id" referenced-column-name="compte_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="idGroupe" target-entity="Groupe" mapped-by="idMembre" fetch="LAZY"/>
+  </entity>
+</doctrine-mapping>
