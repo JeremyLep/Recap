@@ -17,10 +17,7 @@
   </li>
 {% endblock %}
 
-
 {% block body %}
-
-
 <div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
   <h5 class="p-3 m-0">{{ groupe.nbFiche }} fiches <a href="{{ path('app_fiche_add', {'id_groupe': groupe.id}) }}"  style="font-size: 0.8rem;"> Ajouter</a></h5>
 </div>
@@ -59,7 +56,7 @@
             </div>
             <div class="card-block text-center">
               <h4 class="card-title pt-3">{{ fiche.titre}}</h4>
-              <p class="card-text p-3">{{ fiche.description }}</p>
+              <p class="card-text p-3">{{ fiche.description|length > 250 ? fiche.description|slice(0, 250) ~ '...' : fiche.description  }}</p>
             </div>
             <div class="card-footer text-muted">
               <div class="row">
