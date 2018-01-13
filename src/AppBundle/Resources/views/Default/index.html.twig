@@ -7,7 +7,7 @@
 
 <div id="content" class="col-12">
   {% for groupe in listGroupes %}
-  <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}"><h4 class="pt-3">{{ groupe.titre }}</h4></a>
+  <h4 class="pt-3"><a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a></h4>
   <div class="row p-3 ">
     {% for fiche in groupe.fiche %}
     {% if loop.index < 3 %}
