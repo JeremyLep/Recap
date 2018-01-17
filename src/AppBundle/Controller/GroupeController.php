@@ -37,7 +37,7 @@ class GroupeController extends Controller
             $groupe->setUser($this->getUser());
             $membre = new Membre();
             $membre->setUser($this->getUser());
-            $membre->setAccesLvl(0);
+            $membre->setAccesLvl(3);
             $membre->setGroupe($groupe);
 
             $em = $this->getDoctrine()->getManager();

@@ -64,6 +64,14 @@ app_fiche_add:
     requirements:
         id_groupe: \d+
 
+app_ressource_add:
+    path:      /groupe{groupeId}/fiche{ficheId}/add-ressource
+    defaults:
+        _controller: AppBundle:Fiche:addRessource
+    requirements:
+        groupeId: \d+
+        ficheId: \d+
+
 app_membre:
     path:      /groupe{id_groupe}/membre
     defaults:
