@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
+use Doctrine\ORM\PersistentCollection;
 use \DateTime;
 
 /**
@@ -110,7 +111,7 @@ class Fiche
     /**
      * @var \Commentaire
      *
-     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="fiche")
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="fiche", cascade={"persist", "remove"})
      *
      */
     private $commentaire;
@@ -118,7 +119,7 @@ class Fiche
     /**
      * @var \Ressource
      *
-     * @ORM\OneToMany(targetEntity="Ressource", mappedBy="fiche")
+     * @ORM\OneToMany(targetEntity="Ressource", mappedBy="fiche", cascade={"persist", "remove"})
      *
      */
     private $ressource;
@@ -427,6 +428,22 @@ class Fiche
     }
 
     /**
+     * Add tag
+     *
+     * @param PersistentCollection $tag
+     *
+     * @return Fiche
+     */
+    public function addManyTags($tags)
+    {   
+        foreach ($tags as $tag) {
+            $this->tag[] = $tag;    
+        }
+
+        return $this;
+    }
+
+    /**
      * Remove tag
      *
      * @param \AppBundle\Entity\Tag $tag
@@ -434,6 +451,18 @@ class Fiche
     public function removeTag(\AppBundle\Entity\Tag $tag)
     {
         $this->tag->removeElement($tag);
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param PersistentCollection $tag
+     */
+    public function removeManyTags(PersistentCollection $tags)
+    {
+        foreach ($tags as $tag) {
+            $this->tag->removeElement($tag);   
+        }
     }
 
     /**

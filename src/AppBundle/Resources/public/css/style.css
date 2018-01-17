@@ -2,6 +2,7 @@
 html, body{
 	overflow:hidden;
 	font-family: 'Rajdhani', sans-serif;
+  height: 100%;
 }
 
 thead tr th {
@@ -45,6 +46,18 @@ a, a:hover, a:focus, a:active{
 .navbar-dark{
 	overflow-y: auto;
 	overflow-x: unset;
+}
+
+.border-b{
+  border-bottom: 1px solid #e9ecef; 
+}
+
+.container-fluid{
+  height: 100%;
+}
+
+strong.select2-results__group{
+  display: none!important;
 }
 
 /* SCROLL */

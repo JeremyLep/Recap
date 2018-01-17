@@ -9,10 +9,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use AppBundle\Entity\Fiche;
+use AppBundle\Entity\Ressource;
+use AppBundle\Entity\Commentaire;
+use AppBundle\Entity\Membre;
+use AppBundle\Entity\Tag;
+use AppBundle\Form\FicheType;
+use AppBundle\Form\RessourceType;
+use AppBundle\Form\CommentaireType;
 
 class FicheController extends Controller
 {
-    public function indexAction($id_groupe, $id_fiche)
+    public function indexAction(Request $request, $id_groupe, $id_fiche)
     {
       $em    = $this->getDoctrine()->getManager();
       $fiche = $em
@@ -22,46 +29,123 @@ class FicheController extends Controller
           'groupe'    => $id_groupe,
         ));
 
+      $membre = $em->getRepository('AppBundle:Membre')
+                    ->find($this->getUser());
+
       if (!$fiche) {
         throw $this->createNotFoundException('La fiche n\'existe pas');
       }
-      $groupe       = $fiche->getGroupe();
-      $commentaires = $fiche->getCommentaire();
-      $ressources   = $fiche->getRessource();     
-      $tags         = $fiche->getTag();
+      $commentaire = new Commentaire;
+      $form        = $this->createForm(CommentaireType::class, $commentaire);
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+        $commentaire->setMembre($membre);
+        $commentaire->setFiche($fiche);
+        $fiche->addCommentaire($commentaire);
+        $em->persist($fiche);
+        $em->persist($commentaire);
+        $em->flush();
+
+        return $this->redirectToRoute('app_fiche', array(
+          'id_fiche'  => $fiche->getId(), 
+          'id_groupe' => $fiche->getGroupe()->getId(),
+        ));
+      }
 
       return $this->render('AppBundle:Fiche:index.html.twig', array(
           'fiche'        => $fiche,
-          'groupe'       => $groupe,
-          'commentaires' => $commentaires,
-          'ressources'   => $ressources,
-          'tags'         => $tags,
-          'id_groupe'    => $id_groupe,
+          'groupe'       => $fiche->getGroupe(),
+          'commentaires' => $fiche->getCommentaire(),
+          'ressources'   => $fiche->getRessource(),
+          'tags'         => $fiche->getTag(),
+          'form'         => $form->createView(),
+      ));
+    }
+
+    public function addRessourceAction(Request $request, $groupeId, $ficheId)
+    {
+      $em        = $this->getDoctrine()->getManager();
+      $fiche = $em
+        ->getRepository('AppBundle:Fiche')
+        ->findOneBy(array(
+          'id'     => $ficheId, 
+          'groupe' => $groupeId,
+        ));
+      $ressource = new Ressource();
+      $form      = $this->createForm(RessourceType::class, $ressource);
+
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+        $ressource->setFiche($fiche);
+        $fiche->addRessource($ressource);
+        $em->persist($fiche);
+        $em->persist($ressource);
+        $em->flush();
+
+        return $this->redirectToRoute('app_fiche', array(
+          'id_fiche'  => $fiche->getId(), 
+          'id_groupe' => $groupeId,
+        ));
+      }
+
+      return $this->render('AppBundle:Fiche:addRessource.html.twig', array(
+          'fiche'     => $fiche,
+          'form'      => $form->createView(),
+          'groupe'    => $fiche->getGroupe(),
       ));
     }
 
     public function addAction(Request $request, $id_groupe)
     {
-      $fiche = new Fiche();
-      $form  = $this->createForm('AppBundle\Form\FicheType', $fiche);
+      $em    = $this->getDoctrine()->getManager();
+      $tags  = $em
+        ->getRepository('AppBundle:Tag')
+        ->findAll();
+      $groupe = $em
+        ->getRepository('AppBundle:Groupe')
+        ->find($id_groupe);
+
+      $fiche  = new Fiche();
+      $form   = $this->createForm(FicheType::class, $fiche, array(
+        'tag' => $tags));
+
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
 
-        $em = $this->getDoctrine()->getManager();
-        $groupe = $em
-          ->getRepository('AppBundle:Groupe')
-          ->find($id_groupe);
+        $tags = $form->get('tag')->getData();
 
-        //$fiche->setAuteur($this->getUser());
+        $membre = $em->getRepository('AppBundle:Membre')
+                     ->find($this->getUser());
+
+        $fiche->setAuteur($membre);
         $fiche->setGroupe($groupe);
 
         $groupe->addFiche($fiche);
+        
+        foreach ($tags as $tag) {
+          $tag = $em->getRepository('AppBundle:Tag')->find($tag);
+          $fiche->addTag($tag);
+        }
+
+        if (!empty($_POST['addTag'])) {
+          $addTags = $_POST['addTag'];
+          
+          foreach ($addTags as $addTag) {
+            $newTag = new Tag;
+            $newTag->setLabel($addTag);
+            $fiche->addTag($newTag);
+            $em->persist($newTag);
+          }
+        }
 
         $em->persist($groupe);
         $em->persist($fiche);
-        $em->flush();
 
+        $em->flush();
+ 
         return $this->redirectToRoute('app_fiche', array(
           'id_fiche'  => $fiche->getId(), 
           'id_groupe' => $id_groupe,
@@ -71,7 +155,7 @@ class FicheController extends Controller
       return $this->render('AppBundle:Fiche:add.html.twig', array(
           'fiche'     => $fiche,
           'form'      => $form->createView(),
-          'id_groupe' => $id_groupe,
+          'groupe'    => $groupe,
       ));
     }
 
@@ -82,62 +166,75 @@ class FicheController extends Controller
       $fiche = $em
         ->getRepository('AppBundle:Fiche')
         ->find($id_fiche);
+      $tags  = $em
+        ->getRepository('AppBundle:Tag')
+        ->findAll();
 
-      $deleteForm = $this->createDeleteForm($id_fiche, $id_groupe);
-      $editForm   = $this->createForm('AppBundle\Form\FicheType', $fiche);
+      $tag = $fiche->getTag();
+      $usedTags = array();
+      foreach ($tag as $t) {
+        array_push($usedTags, $t->getId());
+      }
+
+      $editForm   = $this->createForm(FicheType::class, $fiche, array(
+        'tag'     => $tags
+      ));
       $editForm->handleRequest($request);
 
       if ($editForm->isSubmitted() && $editForm->isValid()) {
-        $this->getDoctrine()->getManager()->flush();
+        $tags = $editForm->get('tag')->getData();
 
-        return $this->redirectToRoute('app_fiche_edit', array(
+        $fiche->removeManyTags($fiche->getTag());
+
+        if (!empty($_POST['addTag'])) {
+          $addTags = $_POST['addTag'];
+          
+          foreach ($addTags as $addTag) {
+            $newTag = new Tag;
+            $newTag->setLabel($addTag);
+            $fiche->addTag($newTag);
+            $em->persist($newTag);
+          }
+        }
+
+        $tags = $em->getRepository('AppBundle:Tag')->findById($tags);
+        $fiche->addManyTags($tags);
+        $em->persist($fiche);
+        $em->flush();
+
+        return $this->redirectToRoute('app_fiche', array(
             'id_fiche' => $fiche->getId(),
             'id_groupe'=> $id_groupe, 
           ));
       }
 
       return $this->render('AppBundle:Fiche:edit.html.twig', array(
-          'fiche'       => $fiche,
-          'id_groupe'   => $id_groupe,
-          'edit_form'   => $editForm->createView(),
-          'delete_form' => $deleteForm->createView(),
+          'fiche'    => $fiche,
+          'usedTags' => $usedTags,
+          'tags'     => $tags,
+          'groupe'   => $fiche->getGroupe(),
+          'form'     => $editForm->createView(),
       ));
     }
 
-    public function deleteAction(Request $request, $id_groupe, $id_fiche)
+    public function deleteAction($id_groupe, $id_fiche)
     {
       $em = $this->getDoctrine()->getManager();
 
       $fiche = $em
         ->getRepository('AppBundle:Fiche')
         ->find($id_fiche);
+      
+      $groupe = $fiche->getGroupe();
+      $groupe->removeFiche($fiche);
 
-      $form = $this->createDeleteForm($fiche);
-      $form->handleRequest($request);
-
-      if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($fiche);
-        $em->flush();
-      }
-
-      return $this->redirectToRoute('AppBundle:Fiche:index.html.twig');
-    }
-    /**
-     * Delete fiche entity
-     *
-     * @param Fiche $fiche
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id_fiche, $id_groupe)
-    {
-      return $this->createFormBuilder()
-          ->setAction($this->generateUrl('app_fiche_delete', array(
-            'id_fiche'  => $id_fiche, 
-            'id_groupe' => $id_groupe
-          )))
-          ->setMethod('DELETE')
-          ->getForm();
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($groupe);
+      $em->remove($fiche);
+      $em->flush();
+  
+      return $this->redirectToRoute('app_groupe', array(
+        'id_groupe' => $id_groupe
+      ));
     }
 }

@@ -68,14 +68,14 @@ class Groupe
     /**
      * @var Collections\Collection
      *
-     * @ORM\oneToMany(targetEntity="Membre", mappedBy="groupe")
+     * @ORM\oneToMany(targetEntity="Membre", mappedBy="groupe", cascade={"persist", "remove"})
      */
     private $membre;
 
     /**
      * @var \Fiche
      *
-     * @ORM\OneToMany(targetEntity="Fiche", mappedBy="groupe")
+     * @ORM\OneToMany(targetEntity="Fiche", mappedBy="groupe", cascade={"remove"})
      *
      */
     private $fiche;

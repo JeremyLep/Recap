@@ -33,7 +33,7 @@ class Membre
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="date_rejoins", type="datetime", nullable=true)
+     * @ORM\Column(name="date_rejoins", type="datetime", nullable=false)
      */
     private $dateRejoins;
 
@@ -75,6 +75,7 @@ class Membre
         $this->commentaire = new Collections\ArrayCollection();
         $this->fiche       = new Collections\ArrayCollection();
         $this->dateRejoins = new DateTime();
+        $this->user        = $this->getUser();
     }
 
 
