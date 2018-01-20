@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use AppBundle\Entity\Fiche;
-use AppBundle\Entity\Ressource;
 use AppBundle\Entity\Commentaire;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Tag;
 use AppBundle\Form\FicheType;
-use AppBundle\Form\RessourceType;
 use AppBundle\Form\CommentaireType;
 
 class FicheController extends Controller
@@ -60,40 +58,6 @@ class FicheController extends Controller
           'ressources'   => $fiche->getRessource(),
           'tags'         => $fiche->getTag(),
           'form'         => $form->createView(),
-      ));
-    }
-
-    public function addRessourceAction(Request $request, $groupeId, $ficheId)
-    {
-      $em        = $this->getDoctrine()->getManager();
-      $fiche = $em
-        ->getRepository('AppBundle:Fiche')
-        ->findOneBy(array(
-          'id'     => $ficheId, 
-          'groupe' => $groupeId,
-        ));
-      $ressource = new Ressource();
-      $form      = $this->createForm(RessourceType::class, $ressource);
-
-      $form->handleRequest($request);
-
-      if ($form->isSubmitted() && $form->isValid()) {
-        $ressource->setFiche($fiche);
-        $fiche->addRessource($ressource);
-        $em->persist($fiche);
-        $em->persist($ressource);
-        $em->flush();
-
-        return $this->redirectToRoute('app_fiche', array(
-          'id_fiche'  => $fiche->getId(), 
-          'id_groupe' => $groupeId,
-        ));
-      }
-
-      return $this->render('AppBundle:Fiche:addRessource.html.twig', array(
-          'fiche'     => $fiche,
-          'form'      => $form->createView(),
-          'groupe'    => $fiche->getGroupe(),
       ));
     }
 
