@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections;
+use \DateTime;
 
 /**
  * Commentaire
@@ -24,14 +26,14 @@ class Commentaire
     /**
      * @var string
      *
-     * @ORM\Column(name="contenu", type="string", length=700, nullable=true)
+     * @ORM\Column(name="contenu", type="string", length=700, nullable=false)
      */
     private $contenu;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_com", type="date", nullable=true)
+     * @ORM\Column(name="date_com", type="date", nullable=false)
      */
     private $dateCom;
 
@@ -48,6 +50,15 @@ class Commentaire
      * @ORM\ManyToOne(targetEntity="Membre", inversedBy="commentaire")
      */
     private $membre;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->fiche   = new Collections\ArrayCollection();
+        $this->dateCom = new DateTime();
+    }
 
     /**
      * Get Id

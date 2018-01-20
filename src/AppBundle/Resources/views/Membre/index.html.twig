@@ -44,13 +44,15 @@
         <td>{{membre.user.email}}</td>
         <td>3</td>
         <td>Niveau {{membre.accesLvl}}</td>
-        <td><button type="button" class="btn btn-defaut" data-toggle="modal" data-target="#modif" data-name="Mark Otto"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+        <td><button type="button" class="btn btn-defaut" data-toggle="modal" data-target="#modif"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
 </div>
+{% endblock %}
 
+{% block modal %}
 
 <div class="modal fade" id="modif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
