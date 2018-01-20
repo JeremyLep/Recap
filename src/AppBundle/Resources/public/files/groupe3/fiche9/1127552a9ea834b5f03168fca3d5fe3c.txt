@@ -1,0 +1,158 @@
+#------------------------------------------------------------
+#        Script MySQL.
+#------------------------------------------------------------
+
+CREATE DATABASE ProjetLP;
+USE ProjetLP;
+#------------------------------------------------------------
+# Table: Compte
+#------------------------------------------------------------
+
+CREATE TABLE Compte(
+        id       int (11) Auto_increment  NOT NULL ,
+        nom      Varchar (50) ,
+        prenom   Varchar (50) ,
+        email    Varchar (75) ,
+        password Varchar (75) ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: Groupe
+#------------------------------------------------------------
+
+CREATE TABLE Groupe(
+        id              int (11) Auto_increment  NOT NULL ,
+        titre           Varchar (75) ,
+        nb_fiche        Int ,
+        password_groupe Varchar (75) ,
+        id_Fiche        Int ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: Fiche
+#------------------------------------------------------------
+
+CREATE TABLE Fiche(
+        id           int (11) Auto_increment  NOT NULL ,
+        titre        Varchar (100) ,
+        description  Varchar (600) ,
+        date_crea    Date ,
+        duree        Varchar (25) ,
+        difficulte   Varchar (50) ,
+        note_auteur  Smallint ,
+        note_user    Smallint ,
+        id_groupe    Int ,
+        id_Ressource Int ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: Ressource
+#------------------------------------------------------------
+
+CREATE TABLE Ressource(
+        id       int (11) Auto_increment  NOT NULL ,
+        titre    Varchar (75) ,
+        routeDoc Varchar (300) ,
+        id_fiche Int ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: Membre
+#------------------------------------------------------------
+
+CREATE TABLE Membre(
+        id        int (11) Auto_increment  NOT NULL ,
+        id_compte Int NOT NULL ,
+        id_groupe Int NOT NULL ,
+        acces_lvl Smallint NOT NULL ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: commentaire
+#------------------------------------------------------------
+
+CREATE TABLE commentaire(
+		id          int (11) Auto_increment  NOT NULL ,
+        id_compte   Int ,
+        commentaire Varchar (700) ,
+        date_com    Date ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: tag
+#------------------------------------------------------------
+
+CREATE TABLE tag(
+		id    int (11) Auto_increment  NOT NULL ,
+        label Varchar (25) ,
+        PRIMARY KEY (id )
+);
+
+
+#------------------------------------------------------------
+# Table: creer
+#------------------------------------------------------------
+
+CREATE TABLE creer(
+        id        Int NOT NULL ,
+        id_Groupe Int NOT NULL ,
+        PRIMARY KEY (id ,id_Groupe )
+);
+
+
+#------------------------------------------------------------
+# Table: rejoins
+#------------------------------------------------------------
+
+CREATE TABLE rejoins(
+        id        Int NOT NULL ,
+        id_Groupe Int NOT NULL ,
+        PRIMARY KEY (id ,id_Groupe )
+);
+
+
+#------------------------------------------------------------
+# Table: possède
+#------------------------------------------------------------
+
+CREATE TABLE possede(
+        id        Int NOT NULL ,
+        id_Membre Int NOT NULL ,
+        PRIMARY KEY (id ,id_Membre )
+);
+
+
+#------------------------------------------------------------
+# Table: contient
+#------------------------------------------------------------
+
+CREATE TABLE contient(
+        id             Int NOT NULL ,
+        id_commentaire Int NOT NULL ,
+        id_Fiche       Int NOT NULL ,
+        PRIMARY KEY (id ,id_commentaire ,id_Fiche)
+);
+
+ALTER TABLE Groupe ADD CONSTRAINT FK_Groupe_id_Fiche FOREIGN KEY (id_Fiche) REFERENCES Fiche(id);
+ALTER TABLE Fiche ADD CONSTRAINT FK_Fiche_id_Ressource FOREIGN KEY (id_Ressource) REFERENCES Ressource(id);
+ALTER TABLE creer ADD CONSTRAINT FK_creer_id FOREIGN KEY (id) REFERENCES Compte(id);
+ALTER TABLE creer ADD CONSTRAINT FK_creer_id_Groupe FOREIGN KEY (id_Groupe) REFERENCES Groupe(id);
+ALTER TABLE rejoins ADD CONSTRAINT FK_rejoins_id FOREIGN KEY (id) REFERENCES Compte(id);
+ALTER TABLE rejoins ADD CONSTRAINT FK_rejoins_id_Groupe FOREIGN KEY (id_Groupe) REFERENCES Groupe(id);
+ALTER TABLE possede ADD CONSTRAINT FK_possede_id FOREIGN KEY (id) REFERENCES Groupe(id);
+ALTER TABLE possede ADD CONSTRAINT FK_possede_id_Membre FOREIGN KEY (id_Membre) REFERENCES Membre(id);
+ALTER TABLE contient ADD CONSTRAINT FK_contient_id FOREIGN KEY (id) REFERENCES tag(id);
+ALTER TABLE contient ADD CONSTRAINT FK_contient_id_commentaire FOREIGN KEY (id_commentaire) REFERENCES commentaire(id);
+ALTER TABLE contient ADD CONSTRAINT FK_contient_id_Fiche FOREIGN KEY (id_Fiche) REFERENCES Fiche(id);

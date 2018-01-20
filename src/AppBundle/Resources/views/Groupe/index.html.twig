@@ -7,10 +7,10 @@
 
 {% block groupe %}
   <li class="nav-item" id="fiche-icon">
-    <a class="nav-link" href="">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+    <a class="nav-link" href="{{ path('app_groupe', {'id_groupe': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
   </li>
   <li class="nav-item" id="membre-list">
-    <a class="nav-link" href="">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
   </li>
   <li class="nav-item" id="invite">
     <a class="nav-link" href=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>

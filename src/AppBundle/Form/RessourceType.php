@@ -5,10 +5,11 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
-class GroupeType extends AbstractType
+
+class RessourceType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -17,10 +18,10 @@ class GroupeType extends AbstractType
     {
         $builder
             ->add('titre', TextType::class, array(
-                'label' => 'Titre du groupe'
+                'label' => 'Nom du document'
             ))
-            ->add('passwordGroupe', PasswordType::class, array(
-                'label' => 'Password du groupe'
+            ->add('routeDoc', FileType::class, array(
+                'label' => 'Votre document'
             ));
     }
     
@@ -30,7 +31,7 @@ class GroupeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Groupe'
+            'data_class' => 'AppBundle\Entity\Ressource'
         ));
     }
 
@@ -39,7 +40,7 @@ class GroupeType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_groupe';
+        return 'appbundle_ressource';
     }
 
 
