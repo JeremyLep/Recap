@@ -67,7 +67,31 @@ app_fiche_add:
 app_ressource_add:
     path:      /groupe{groupeId}/fiche{ficheId}/add-ressource
     defaults:
-        _controller: AppBundle:Fiche:addRessource
+        _controller: AppBundle:Ressource:add
+    requirements:
+        groupeId: \d+
+        ficheId: \d+
+
+app_ressource_view:
+    path:     /groupe{groupeId}/fiche{ficheId}/view/{fileName}
+    defaults:
+        _controller: AppBundle:Ressource:view
+    requirements:
+        groupeId: \d+
+        ficheId: \d+
+
+app_ressource_dl:
+    path:     /groupe{groupeId}/fiche{ficheId}/dl/{fileName}
+    defaults:
+        _controller: AppBundle:Ressource:download
+    requirements:
+        groupeId: \d+
+        ficheId: \d+
+
+app_ressource_delete:
+    path:     /groupe{groupeId}/fiche{ficheId}/delete-ressource
+    defaults:
+        _controller: AppBundle:Ressource:delete
     requirements:
         groupeId: \d+
         ficheId: \d+
