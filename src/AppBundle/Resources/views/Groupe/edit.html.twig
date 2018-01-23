@@ -1,21 +1,24 @@
 {% extends "AppBundle::layout.html.twig" %}
 
 {% block body %}
-    <h1>Groupe edit</h1>
+ <div class="col-sm-8 offset-sm-2">
+    <h2 class="mt-5 mb-5">Groupe édition</h2>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">Retour au groupe</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    {{ form_start(editForm) }}
+        <div class="col-12">
+            {{ form_label(editForm.titre) }}
+            {{ form_errors(editForm.titre) }}
+            {{ form_widget(editForm.titre, { 'attr': {'class': 'form-control' }}) }}
+        </div>
+        <div class="col-12">
+            {{ form_label(editForm.passwordGroupe) }}
+            {{ form_errors(editForm.passwordGroupe) }}
+            {{ form_widget(editForm.passwordGroupe, { 'attr': {'class': 'form-control' }}) }}
+        </div>
+        <div class="text-right col-12 mt-2">
+            <input type="submit" class="btn btn-defaut-inv btn-lg" value="Edit" />
+            <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}" class="btn btn-secondary btn-lg">Retour</a>
+        </div>
+    {{ form_end(editForm) }}
+</div>
 {% endblock %}

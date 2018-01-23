@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Membre;
@@ -48,7 +49,7 @@ class FicheType extends AbstractType
             ->add('difficulte', TextType::class, array(
                 'label' => 'Difficulté de la fiche'
             ))
-            ->add('note', TextType::class, array(
+            ->add('note', IntegerType::class, array(
                 'label' => 'note de la fiche'
             ))
             ->add('tag', ChoiceType::class, array(
