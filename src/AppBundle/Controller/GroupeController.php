@@ -62,7 +62,6 @@ class GroupeController extends Controller
           ->getRepository('AppBundle:Groupe')
           ->find($id_groupe);
 
-        $deleteForm = $this->createDeleteForm($groupe);
         $editForm   = $this->createForm('AppBundle\Form\GroupeType', $groupe);
 
         $editForm->handleRequest($request);
@@ -75,13 +74,12 @@ class GroupeController extends Controller
 
         return $this->render('AppBundle:Groupe:edit.html.twig', array(
             'groupe'      => $groupe,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'editForm'   => $editForm->createView()
         ));
     }
 
 
-    public function deleteAction(Request $request, $id_groupe)
+    public function deleteAction($id_groupe)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -89,36 +87,9 @@ class GroupeController extends Controller
           ->getRepository('AppBundle:Groupe')
           ->find($id_groupe);
 
-        $form = $this->createDeleteForm($groupe);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($groupe);
-            $em->flush();
-        }
+        $em->remove($groupe);
+        $em->flush();
 
         return $this->redirectToRoute('app_home');
-    }
-
-    /**
-     * Creates a form to delete a groupe entity.
-     *
-     * @param Groupe $groupe The groupe entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id_groupe)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $groupe = $em
-          ->getRepository('AppBundle:Groupe')
-          ->find($id_groupe);
-
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('app_groupe_delete', array('id_groupe' => $groupe->getId())))
-            ->setMethod('DELETE')
-            ->getForm();
     }
 }
