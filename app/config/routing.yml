@@ -1,14 +1,5 @@
-app_groupe:
-    resource: "@AppBundle/Controller/GroupeController.php"
-    type:     annotation
-
-app_fiche:
-    resource: "@AppBundle/Controller/FicheController.php"
-    type:     annotation
-
 app_home:
     resource: "@AppBundle/Resources/config/routing.yml"
-    prefix:   
 
 fos_user:
     resource: "@UserBundle/Resources/config/routing.yml"
