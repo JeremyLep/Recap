@@ -3,6 +3,7 @@ app_home:
     defaults:
         _controller: AppBundle:Default:index
 
+# ----------- GROUPE ----------- #
 app_groupe:
     path:      /groupe{id_groupe}/{page}
     defaults:
@@ -33,6 +34,7 @@ app_groupe_add:
     requirements:
         id_groupe: \d+
 
+# --------- FICHE ----------- #
 app_fiche:
     path:      /groupe{id_groupe}/fiche{id_fiche}
     defaults:
@@ -64,6 +66,13 @@ app_fiche_add:
     requirements:
         id_groupe: \d+
 
+# --------- MES FICHES ----------- #
+app_mes_fiches:
+    path:   /mes-fiches
+    defaults:
+        _controller: AppBundle:MesFiches:index
+
+# --------- RESSOURCES ----------- #
 app_ressource_add:
     path:      /groupe{groupeId}/fiche{ficheId}/add-ressource
     defaults:
@@ -96,6 +105,7 @@ app_ressource_delete:
         groupeId: \d+
         ficheId: \d+
 
+# --------- MEMBRE ---------- #
 app_membre:
     path:      /groupe{id_groupe}/membre
     defaults:
@@ -103,6 +113,7 @@ app_membre:
     requirements:
         id_groupe: \d+
 
+# --------- INVITE ----------- #
 app_invite:
     path:      /groupe{id_groupe}/invite
     defaults:
@@ -110,6 +121,7 @@ app_invite:
     requirements:
         id_groupe: \d+
 
+# --------- PARAMETRE ----------- #
 app_parametre:
     path:      /parametre
     defaults:
