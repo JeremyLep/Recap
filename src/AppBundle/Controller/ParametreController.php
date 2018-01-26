@@ -19,8 +19,6 @@ class ParametreController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('AppBundle:Parametre:parametre.html.twig');
+        return $this->render('AppBundle:Parametre:index.html.twig');
     }
-
-
 }

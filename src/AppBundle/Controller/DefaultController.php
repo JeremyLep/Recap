@@ -21,8 +21,14 @@ class DefaultController extends Controller
     {
         $listGroupes = $this->getUser()->getGroupe();
 
+        $em    = $this->getDoctrine()->getManager();
+        $nbFiche = $em
+            ->getRepository('AppBundle:Fiche')
+            ->countMesFiches($this->getUser());
+
         return $this->render('AppBundle::menuleft.html.twig', array(
             'listGroupes' => $listGroupes,
+            'nbFiche'     => $nbFiche,
         ));
     }
 
