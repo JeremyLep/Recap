@@ -27,6 +27,20 @@ class FicheController extends Controller
           'groupe'    => $id_groupe,
         ));
 
+      $favoris = $em
+        ->getRepository('AppBundle:Favoris')
+        ->findOneBy(array(
+          'fiche' => $id_fiche, 
+          'user'  => $this->getUser(),
+        ));
+        
+      if ($favoris === null) {
+        $favoris = false;
+      }
+      else {
+        $favoris = true;
+      }
+
       $membre = $em->getRepository('AppBundle:Membre')
                     ->find($this->getUser());
 
@@ -58,6 +72,7 @@ class FicheController extends Controller
           'ressources'   => $fiche->getRessource(),
           'tags'         => $fiche->getTag(),
           'form'         => $form->createView(),
+          'favoris'      => $favoris
       ));
     }
 
