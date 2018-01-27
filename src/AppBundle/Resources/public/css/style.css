@@ -14,6 +14,10 @@ a, a:hover, a:focus, a:active{
     color: initial;
 }
 
+#scroll {
+  overflow-y: auto!important; 
+}
+
 #fiche{
 	overflow-y: auto;
 	height: 78vh;
