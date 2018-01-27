@@ -1,4 +1,5 @@
 <?php
+
 namespace UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -95,6 +96,14 @@ class User extends BaseUser
      *
      */
     private $groupe;
+
+    /**
+     * @var \AppBundle\Entity\Favoris
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favoris", mappedBy="user", cascade={"remove"})
+     *
+     */
+    protected $favoris;
 
 	/**
 	 * @CaptchaAssert\ValidCaptcha(
@@ -298,6 +307,16 @@ class User extends BaseUser
     public function getGroupe()
     {
         return $this->groupe;
+    }
+
+    /**
+     * Get favoris
+     *
+     * @return Collections\Collection
+     */
+    public function getFavoris()
+    {
+        return $this->favoris;
     }
 
     /**

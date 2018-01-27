@@ -117,6 +117,14 @@ class Fiche
     private $commentaire;
 
     /**
+     * @var \Favoris
+     *
+     * @ORM\OneToMany(targetEntity="Favoris", mappedBy="fiche", cascade={"persist", "remove"})
+     *
+     */
+    private $favoris;
+
+    /**
      * @var \Ressource
      *
      * @ORM\OneToMany(targetEntity="Ressource", mappedBy="fiche", cascade={"persist", "remove"})
@@ -132,6 +140,7 @@ class Fiche
     {
         $this->tag           = new Collections\ArrayCollection();
         $this->commentaire   = new Collections\ArrayCollection();
+        $this->favoris       = new Collections\ArrayCollection();
         $this->ressource     = new Collections\ArrayCollection();
         $this->dateCreation  = new DateTime();
         $this->nbRessource   = 0;
@@ -483,6 +492,16 @@ class Fiche
     public function getRessource()
     {
         return $this->ressource;
+    }
+
+    /**
+     * Get favoris
+     *
+     * @return Collections\Collection
+     */
+    public function getFavoris()
+    {
+        return $this->favoris;
     }
 
     /**
