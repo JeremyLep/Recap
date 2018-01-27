@@ -10,4 +10,5 @@ parameters:
     mailer_user: jeremy.leprince1@gmail.com
     mailer_password: null
     ressource_dir: '%kernel.project_dir%/web/bundles/app/files/'
+    avatar_directory: '%kernel.project_dir%/web/bundles/app/avatar'
     secret: 82254233605ffdd98abf832af865111c4e849309

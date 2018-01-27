@@ -20,7 +20,6 @@ class AppKernel extends Kernel
             new UserBundle\UserBundle(),
             new blackknight467\StarRatingBundle\StarRatingBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new Captcha\Bundle\CaptchaBundle\CaptchaBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
