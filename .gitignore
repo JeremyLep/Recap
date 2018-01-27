@@ -24,7 +24,7 @@
 /web/bundles/
 /web/uploads/
 /src/AppBundle/Resources/public/files/
-
+/src/SQL/
 # PHPUnit
 /app/phpunit.xml
 /phpunit.xml

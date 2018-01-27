@@ -113,6 +113,17 @@ app_membre:
     requirements:
         id_groupe: \d+
 
+# --------- FAVORIS ---------- #
+app_favoris:
+    path:      /favoris
+    defaults:
+        _controller: AppBundle:Favoris:index
+
+app_favoris_action:
+    path:      /favoris-add
+    defaults:
+        _controller: AppBundle:Favoris:ajaxAdd
+
 # --------- INVITE ----------- #
 app_invite:
     path:      /groupe{id_groupe}/invite

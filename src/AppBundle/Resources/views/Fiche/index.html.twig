@@ -52,7 +52,12 @@
             </div>
           </div>
           <div class="card-block text-center">
-            <h4 class="card-title pt-3">{{ fiche.titre }}</h4>
+            <h4 class="card-title pt-3">{{ fiche.titre }} 
+              {% if favoris == true %}
+                <i class="fa fa-star pull-right pr-3" id="favoris" data-fav="{{ favoris }}"></i></h4>
+              {% else %}
+                <i class="fa fa-star-o pull-right pr-3" id="favoris" data-fav="{{ favoris }}"></i></h4>
+              {% endif %}
             <p class="card-text p-3">{{ fiche.description }}</p>
           </div>
           <div class="card-footer text-muted">
@@ -159,5 +164,23 @@
           $('#routeModal').val(route);
         });
       });
+    </script>
+    <script type="text/javascript">
+      $( '#favoris' ).click(function() {
+        $.ajax({
+            url: '{{ path("app_favoris_action") }}',
+            type: 'POST',
+            data: { fiche : '{{ fiche.id }}' },
+            success: function(success) {
+              if (success.add) {
+                $('#favoris').removeClass('fa-star-o').addClass('fa-star');
+              } 
+              if (success.delete) {
+                $('#favoris').removeClass('fa-star').addClass('fa-star-o');
+              }
+            }
+        });
+      });
+
     </script>
 {% endblock %}
