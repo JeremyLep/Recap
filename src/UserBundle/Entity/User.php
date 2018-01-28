@@ -69,9 +69,10 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="tel", type="string", nullable=true)
-     * @Assert\Regex(pattern="(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}", message="Le numero de téléphone doit etre au format français.")
      */
     protected $tel;
+    /*regex tel pattern @Assert\Regex(pattern="(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}", message="Le numero de téléphone doit etre au format français.")*/
+
 
     /**
      * @var string
@@ -104,13 +105,6 @@ class User extends BaseUser
      *
      */
     protected $favoris;
-
-	/**
-	 * @CaptchaAssert\ValidCaptcha(
-	 *      message = "CAPTCHA validation failed, try again."
-	 * )
-	 */
-	protected $captchaCode;
 
 	public function __construct()
     {
@@ -341,16 +335,6 @@ class User extends BaseUser
     public function getMembre()
     {
         return $this->membre;
-    }
-
-    public function getCaptchaCode()
-    {
-        return $this->captchaCode;
-    }
-
-    public function setCaptchaCode($captchaCode)
-    {
-        $this->captchaCode = $captchaCode;
     }
 
     public function isAuthor(User $user = null)

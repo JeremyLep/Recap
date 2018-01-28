@@ -1,0 +1,68 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block titre %}
+  <a class="navbar-brand" href="{{ path('fos_user_profil_edit') }}">Edit profil</a>
+  <img src="{{  asset('bundles/app/images/defaut2.png') }}" class="img-fluid rounded mt-1" alt="avatar" style="max-width: 35px; max-height: 35px;">
+{% endblock %}
+
+{% block groupe %}
+
+{% endblock %}
+
+{% block body %}
+<div class="col-sm-8 offset-sm-2">
+    <h2 class="mt-5 mb-5">Modifier le profil {{ user.prenom }} {{ user.nom }}</h2>
+
+{{ form_start(formEdit, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(formEdit) }}
+  <div class="form-group col-lg-12 m-0">
+    {{ form_label(formEdit.username, "Identifiant", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.username) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.username, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.email, "Email", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.email) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.email, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.nom, "Nom", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.nom) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.nom, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.prenom, "Prénom", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.prenom) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.prenom, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.avatar, "Avatar (JPG)", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.avatar) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.avatar, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.tel, "Téléphone", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.tel) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.tel, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.ville, "Ville", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.ville) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.ville, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(formEdit.age, "Age", {'label_attr': {'class': 'col-sm-12 control-label'}}) }}
+    {{ form_errors(formEdit.age) }}
+    <div class="col-sm-12">
+        {{ form_widget(formEdit.age, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="col-lg-12 p-2">
+      {{ form_widget(formEdit.submit, {'attr': {'class' : 'btn btn-defaut-inv float-right m-2' }}) }}
+      <a href="{{ path('fos_user_profil') }}" class="btn btn-secondary float-right m-2" role="button">Retour</a>
+    </div>
+  </div>
+  {{ form_rest(formEdit) }}
+{{ form_end(formEdit) }}
+</div>
+
+{% endblock %}

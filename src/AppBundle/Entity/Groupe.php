@@ -61,7 +61,7 @@ class Groupe
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="groupe")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="groupe");
      */
     private $user;
 
