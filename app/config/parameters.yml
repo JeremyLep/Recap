@@ -1,14 +1,17 @@
 # This file is auto-generated during the composer install
 parameters:
+    locale: en
     database_host: db
     database_port: null
     database_name: recap
     database_user: root
     database_password: root
     mailer_transport: smtp
-    mailer_host: 127.0.0.1
+    mailer_host: smtp.gmail.com
     mailer_user: jeremy.leprince1@gmail.com
-    mailer_password: null
+    mailer_password: Triggers0
+    mailer_encryption: ssl
+    mailer_auth_mode: login
     ressource_dir: '%kernel.project_dir%/web/bundles/app/files/'
     avatar_directory: '%kernel.project_dir%/web/bundles/app/avatar'
     secret: 82254233605ffdd98abf832af865111c4e849309
