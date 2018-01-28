@@ -1,0 +1,11 @@
+{% block subject %}Réinitialisation mot de passe{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Bonjour {{ user.username }} !
+
+Vous pouvez réinitialiser votre mot de passe en cliquant sur ce lien : {{ confirmationUrl }}
+
+L'équipe Recap
+{% endautoescape %}
+{% endblock %}

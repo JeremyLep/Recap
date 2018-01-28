@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace UserBundle\Controller;
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
@@ -25,15 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Captcha\Bundle\CaptchaBundle\Security\Core\Exception\InvalidCaptchaException;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * Controller managing the registration.
- *
- * @author Thibault Duplessis <thibault.duplessis@gmail.com>
- * @author Christophe Coevoet <stof@notk.org>
- */
 class RegistrationController extends Controller
 {
     /**
@@ -64,7 +48,6 @@ class RegistrationController extends Controller
         $form->setData($user);
 
         $form->handleRequest($request);
-        $captcha = $this->get('captcha')->setConfig('RegisterCaptcha');
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
@@ -72,17 +55,6 @@ class RegistrationController extends Controller
                 $authErrorKey = Security::AUTHENTICATION_ERROR;
                 $lastUsernameKey = Security::LAST_USERNAME;
                 
-                $code = $request->request->get('captchaCode');
-                $isHuman = $captcha->Validate($code);
-                if ($isHuman) {
-                    // Captcha validation passed, check username and password
-                    return $this->redirectToRoute('fos_user_registration_register', [
-                      'request' => $request], 307);
-                } else {
-                    // Captcha validation failed, set an invalid captcha exception in $authErrorKey attribute
-                    $invalidCaptchaEx = new InvalidCaptchaException('La validation anti-robot n\'est pas valide, veuillez réessayer.');
-                    $request->attributes->set($authErrorKey, $invalidCaptchaEx);
-                }
 
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
@@ -108,7 +80,6 @@ class RegistrationController extends Controller
 
         return $this->render('@FOSUser/Registration/register.html.twig', array(
             'form' => $form->createView(),
-            'captcha_html' => $captcha->Html()
         ));
     }
 

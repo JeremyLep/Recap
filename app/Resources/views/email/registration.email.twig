@@ -1,0 +1,11 @@
+{% block subject %}Confirmation du compte{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Bonjour {{ user.username }} !
+
+Vous pouvez confirmer votre lien en cliquant sur ce lien : {{ confirmationUrl }}
+
+L'équipe Recap
+{% endautoescape %}
+{% endblock %}

@@ -2,10 +2,10 @@
           <div class="col-12 p-0">
             <div class="row">
               <div class="col-7 pr-0">
-                <h6 id="nom" class="text-white pb-2 pt-3">John Doe </h6>
+                <h6 id="nom" class="text-white pb-2 pt-3">{{ app.user.username }} </h6>
               </div>
               <div class="col-5">
-                <img src="{{ asset('bundles/app/images/defaut.png') }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="max-width: 35px; max-height: 35px;">
+                <img src="{{ asset('bundles/app/avatar/'~ app.user.avatar) }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="max-width: 35px; max-height: 35px;">
               </div>
             </div>
             
@@ -30,11 +30,11 @@
                 <a class="nav-link" href="{{ path('app_favoris') }}">Favoris ({{ nbFavoris }})</a>
               </li>
             </ul>
-
             <ul class="nav nav-pills flex-column pt-3">
               <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_parametre') }}">Paramètres</a>
               </li>
             </ul>
+            
           </div>
         </nav>

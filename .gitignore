@@ -23,7 +23,7 @@
 # Assets and user uploads
 /web/bundles/
 /web/uploads/
-/src/AppBundle/Resources/public/files/
+/src/AppBundle/Resources/public/
 /src/SQL/
 # PHPUnit
 /app/phpunit.xml
