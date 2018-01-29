@@ -27,3 +27,7 @@ fos_user_profil_delete:
     path:      /profil/delete
     defaults:
         _controller: UserBundle:Profil:delete
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group

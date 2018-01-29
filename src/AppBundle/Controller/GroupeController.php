@@ -17,12 +17,24 @@ class GroupeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $membre = $em
+            ->getRepository('AppBundle:Membre')
+            ->findOneBy(array(
+                'user'   => $this->getUser(),
+                'groupe' => $id_groupe,
+            ));
+        
+        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+            throw new AccessDeniedException();
+        }
+
         $groupe = $em
           ->getRepository('AppBundle:Groupe')
           ->find($id_groupe);
 
-        return $this->render('AppBundle:Groupe:index.html.twig', array(
+         return $this->render('AppBundle:Groupe:index.html.twig', array(
             'groupe' => $groupe,
+            'membre' => $membre
         ));
     }
 
@@ -37,7 +49,7 @@ class GroupeController extends Controller
             $groupe->setUser($this->getUser());
             $membre = new Membre();
             $membre->setUser($this->getUser());
-            $membre->setAccesLvl(3);
+            $membre->setRoles(array('ROLE_ADMIN', 'ROLE_MODO', 'ROLE_USER'));
             $membre->setGroupe($groupe);
 
             $em = $this->getDoctrine()->getManager();
@@ -61,6 +73,10 @@ class GroupeController extends Controller
         $groupe = $em
           ->getRepository('AppBundle:Groupe')
           ->find($id_groupe);
+
+        if ($groupe->getUser() !== $this->getUser()) {
+            throw new AccessDeniedException();
+        }
 
         $editForm   = $this->createForm('AppBundle\Form\GroupeType', $groupe);
 
@@ -86,6 +102,10 @@ class GroupeController extends Controller
         $groupe = $em
           ->getRepository('AppBundle:Groupe')
           ->find($id_groupe);
+
+        if ($groupe->getUser() !== $this->getUser()) {
+            throw new AccessDeniedException();
+        }
 
         $em->remove($groupe);
         $em->flush();

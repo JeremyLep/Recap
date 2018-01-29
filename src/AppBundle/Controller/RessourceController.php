@@ -18,12 +18,25 @@ class RessourceController extends Controller
     public function addAction(Request $request, $groupeId, $ficheId)
     {
       $em        = $this->getDoctrine()->getManager();
+
       $fiche = $em
         ->getRepository('AppBundle:Fiche')
         ->findOneBy(array(
           'id'     => $ficheId,
           'groupe' => $groupeId,
         ));
+
+      $membre = $em
+        ->getRepository('AppBundle:Membre')
+        ->findOneBy(array(
+            'user'   => $this->getUser(),
+            'groupe' => $groupeId,
+        ));
+      
+      if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_MODO') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
+        throw new AccessDeniedException();
+      }
+
       $ressource = new Ressource();
       $form      = $this->createForm(RessourceType::class, $ressource);
 
@@ -62,6 +75,18 @@ class RessourceController extends Controller
     public function viewAction($groupeId, $ficheId, $fileName)
     {
         $em    = $this->getDoctrine()->getManager();
+        
+        $membre = $em
+            ->getRepository('AppBundle:Membre')
+            ->findOneBy(array(
+                'user'   => $this->getUser(),
+                'groupe' => $groupeId,
+            ));
+        
+        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+          throw new AccessDeniedException();
+        }
+
         $fiche = $em
         ->getRepository('AppBundle:Fiche')
         ->findOneBy(array(
@@ -88,6 +113,17 @@ class RessourceController extends Controller
           'groupe'    => $groupeId,
         ));
 
+        $membre = $em
+            ->getRepository('AppBundle:Membre')
+            ->findOneBy(array(
+                'user'   => $this->getUser(),
+                'groupe' => $groupeId,
+            ));
+        
+        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+          throw new AccessDeniedException();
+        }
+
         $file = $this->getParameter('ressource_dir')."groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/".$fileName;
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
@@ -111,6 +147,17 @@ class RessourceController extends Controller
         'id'     => $ficheId, 
         'groupe' => $groupeId,
       ));
+
+      $membre = $em
+        ->getRepository('AppBundle:Membre')
+        ->findOneBy(array(
+            'user'   => $this->getUser(),
+            'groupe' => $groupeId,
+        ));
+      
+      if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_MODO') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
+        throw new AccessDeniedException();
+      }
 
       $ressource = $em
       ->getRepository('AppBundle:Ressource')

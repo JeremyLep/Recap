@@ -14,6 +14,14 @@ a, a:hover, a:focus, a:active{
     color: initial;
 }
 
+.yellow {
+  color: #ffc107;
+}
+
+.grey {
+  color: #9aa0a7;
+}
+
 #scroll {
   overflow-y: auto!important; 
 }
@@ -221,11 +229,9 @@ strong.select2-results__group{
 }
 
 #fiche-fav{
-	color: #9aa0a7;
 	transition: all 0.3s ease;
 }
 #fiche-fav:hover{
-	color: #ffc107;
 	transition: all 0.3s ease;
 }
 #menu-top{
@@ -251,9 +257,6 @@ strong.select2-results__group{
 	color: black;
 }
 
-.fa-star, .fa-star-o{
-	color: #ffc107;
-}
 
 /* PADDING */
 

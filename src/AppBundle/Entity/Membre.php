@@ -21,35 +21,35 @@ class Membre
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="acces_lvl", type="smallint", nullable=false)
-     */
-    private $accesLvl;
+    protected $id;
 
     /**
      * @var DateTime
      *
      * @ORM\Column(name="date_rejoins", type="datetime", nullable=false)
      */
-    private $dateRejoins;
+    protected $dateRejoins;
+
+    /**
+     * @var array 
+     *
+     * @ORM\Column(name="roles", type="text", nullable=false)
+     */
+    protected $roles;
 
     /**
      * @var \User
      *
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="membre")
      */
-    private $user;
+    protected $user;
 
     /**
      * @var \Groupe
      *
      * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="membre")
      */
-    private $groupe;
+    protected $groupe;
 
     /**
      * @var \Commentaire
@@ -57,7 +57,7 @@ class Membre
      * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="membre")
      *
      */
-    private $commentaire;
+    protected $commentaire;
 
     /**
      * @var \Fiche
@@ -65,7 +65,7 @@ class Membre
      * @ORM\OneToMany(targetEntity="Fiche", mappedBy="auteur")
      *
      */
-    private $fiche;
+    protected $fiche;
 
     /**
      * Constructor
@@ -76,6 +76,7 @@ class Membre
         $this->fiche       = new Collections\ArrayCollection();
         $this->dateRejoins = new DateTime();
         $this->user        = $this->getUser();
+        $this->roles       = setRoles(array('ROLE_USER'));
     }
 
 
@@ -90,28 +91,59 @@ class Membre
     }
 
     /**
-     * Set accesLvl
-     *
-     * @param integer $accesLvl
-     *
-     * @return Membre
+     * {@inheritdoc}
      */
-    public function setAccesLvl($accesLvl)
+    public function setRoles(array $roles)
     {
-        $this->accesLvl = $accesLvl;
+        $this->roles = array();
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
 
         return $this;
     }
 
     /**
-     * Get accesLvl
+     * Get roles
      *
-     * @return integer
+     * @return string
      */
-    public function getAccesLvl()
+    public function getRoles()
     {
-        return $this->accesLvl;
+        $roles = $this->roles;
+
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === 'ROLE_USER') {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+
 
     /**
      * Get dateRejoins
