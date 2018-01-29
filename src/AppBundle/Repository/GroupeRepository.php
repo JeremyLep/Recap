@@ -17,11 +17,25 @@ class GroupeRepository extends EntityRepository
       	->getResult();
 	}
 
-	public function getCurrGroupe($id_groupe)
+	public function getCurrGroupe($groupeId)
 	{
 		$query = $this->createQueryBuilder('g')
 		->where('g.id = :idG')
-        ->setParameter('idG', $id_groupe)
+        ->setParameter('idG', $groupeId)
+	    ->orderBy('g.dateCreation', 'DESC')
+	    ->getQuery();
+
+    	return $query
+      	->getResult();
+	}
+
+	public function getGroupeMembre($user)
+	{
+		$query = $this->createQueryBuilder('g')
+		->select('g')
+		->join('g.membre', 'm')
+		->where('m.user = :user')
+        ->setParameter('user', $user)
 	    ->orderBy('g.dateCreation', 'DESC')
 	    ->getQuery();
 

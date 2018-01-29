@@ -19,9 +19,12 @@ class DefaultController extends Controller
 {
     public function menuAction()
     {
-        $listGroupes = $this->getUser()->getGroupe();
+        $em = $this->getDoctrine()->getManager();
 
-        $em    = $this->getDoctrine()->getManager();
+        $listGroupes = $em
+            ->getRepository('AppBundle:Groupe')
+            ->getGroupeMembre($this->getUser());
+        
         $nbFiche = $em
             ->getRepository('AppBundle:Fiche')
             ->countMesFiches($this->getUser());
@@ -39,8 +42,11 @@ class DefaultController extends Controller
 
     public function indexAction()
     {
-        $user        = $this->getUser();
-        $listGroupes = $user->getGroupe();
+        $em = $this->getDoctrine()->getManager();
+
+        $listGroupes = $em
+            ->getRepository('AppBundle:Groupe')
+            ->getGroupeMembre($this->getUser());
       
         return $this->render('AppBundle:Default:index.html.twig', array(
             'listGroupes' => $listGroupes,

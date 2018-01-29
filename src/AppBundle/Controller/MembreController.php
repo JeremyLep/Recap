@@ -21,6 +21,17 @@ class MembreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $membre = $em
+            ->getRepository('AppBundle:Membre')
+            ->findOneBy(array(
+                'user'   => $this->getUser(),
+                'groupe' => $id_groupe,
+            ));
+        
+        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+            throw new AccessDeniedException();
+        }
+
         $groupe  = $em
             ->getRepository('AppBundle:Groupe')
             ->find($id_groupe);
