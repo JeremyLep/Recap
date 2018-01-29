@@ -3,6 +3,7 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
+        ROLE_MODO:        [ROLE_MODO, ROLE_USER]
         ROLE_ADMIN:       [ROLE_ADMIN, ROLE_MODO, ROLE_USER]
         ROLE_SUPER_ADMIN: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_MODO, ROLE_USER]
 
@@ -19,6 +20,10 @@ security:
 
             logout:       true
             anonymous:    true
+            remember_me:
+                secret:      '%secret%'
+                lifetime: 604800
+                path:     /
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
