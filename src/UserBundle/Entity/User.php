@@ -2,6 +2,7 @@
 
 namespace UserBundle\Entity;
 
+use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Captcha\Bundle\CaptchaBundle\Validator\Constraints as CaptchaAssert;
@@ -101,14 +102,31 @@ class User extends BaseUser
     /**
      * @var \AppBundle\Entity\Favoris
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favoris", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favoris", mappedBy="user")
      *
      */
     protected $favoris;
 
+    /**
+     * @var Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserNotif", mappedBy="user")
+     */
+    protected $userBridge;
+
+    /**
+     * @var \AppBundle\Entity\Notification
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notification", mappedBy="auteur")
+     *
+     */
+    protected $notificationAuteur;
+
+
 	public function __construct()
     {
         $this->dateInscription = new \DateTime;
+        $this->notification    = new Collections\ArrayCollection;
         parent::__construct();
     }
 
@@ -341,4 +359,46 @@ class User extends BaseUser
     {
         return $user && $user->getEmail() == $this->getEmail();
     }
+
+
+    /**
+     * Get userBridge
+     *
+     * @return Collections\Collection
+     */
+    public function getUserBridge()
+    {
+        return $this->userBridge;
+    }
+
+    /**
+     * Add userBridge
+     *
+     * @param \UserBundle\Entity\User $userBridge
+     *
+     * @return User
+     */
+    public function addUserBridge(\UserBundle\Entity\User $userBridge)
+    {
+        $this->userBridge[] = $userBridge;
+
+        return $this;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param PersistentCollection $notification
+     *
+     * @return User
+     */
+    public function addManyNotifications($notifications)
+    {   
+        foreach ($notifications as $notification) {
+            $this->notification[] = $notification;    
+        }
+
+        return $this;
+    }
+
 }

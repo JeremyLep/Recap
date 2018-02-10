@@ -12,6 +12,8 @@ use AppBundle\Entity\Fiche;
 use AppBundle\Entity\Commentaire;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Tag;
+use AppBundle\Entity\Notification;
+use AppBundle\Entity\UserNotif;
 use AppBundle\Form\FicheType;
 use AppBundle\Form\CommentaireType;
 
@@ -145,10 +147,30 @@ class FicheController extends Controller
           }
         }
 
+        $notification = new Notification();
+        $notification->setFiche($fiche);
+        $notification->setAuteur($this->getUser());
+        
+        $em->persist($notification);
         $em->persist($groupe);
         $em->persist($fiche);
 
         $em->flush();
+
+        $membres = $fiche->getGroupe()->getMembre();
+        
+        foreach ($membres as $membre) {
+          $user = $membre->getUser();
+          
+          if ($user !== $this->getUser()) {
+            $userNotif = new UserNotif();
+            $userNotif->setNotification($notification);
+            $userNotif->setUser($membre->getUser());
+
+            $em->persist($userNotif);
+            $em->flush();
+          }
+        }
  
         return $this->redirectToRoute('app_fiche', array(
           'id_fiche'  => $fiche->getId(), 
