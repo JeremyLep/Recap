@@ -80,7 +80,6 @@ class Groupe
      */
     private $fiche;
 
-
     /**
      * Constructor
      */

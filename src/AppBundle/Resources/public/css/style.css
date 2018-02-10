@@ -26,6 +26,29 @@ a, a:hover, a:focus, a:active{
   overflow-y: auto!important; 
 }
 
+
+#scroll-notif::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+#scroll-notif::-webkit-scrollbar {
+  width: 7px;
+}
+
+#scroll-notif::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #bebebe;
+}
+
+#scroll-notif {
+    max-height: 40vh;
+    overflow-y: auto!important;
+}
+
+.not-active {
+  background-color: rgba(0,0,0,0.07);
+}
+
 #fiche{
 	overflow-y: auto;
 	height: 78vh;
@@ -184,7 +207,7 @@ strong.select2-results__group{
 
 /* BG COLOR */
 
-.card:hover{
+.card-fiche:hover{
 	background-color: #f9f9f9;
 }
 
@@ -350,3 +373,69 @@ strong.select2-results__group{
     box-sizing: border-box;
     margin-top: -1px;
   }
+
+.inline {
+  display: inline-block;
+}
+
+.card-body {
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.row ~ .col-3 + .col-8 {
+  background-color: rgba(0,0,0,.125); 
+}
+
+.notification {
+  display: none;
+  position: absolute;
+  right: 0;
+  width: 500%;
+  top: 45px;
+}
+
+#notif {
+  top: -5px;
+}
+
+.badge-notif {
+  position: absolute;
+  width: 22px;
+  display: block;
+  top: -5px;
+  right: 23px;
+}
+
+.notif-check [type="checkbox"]:not(:checked){
+  display: none;
+}
+
+.notif-check:checked ~ .notification {
+  display: block;
+}
+
+.notif-check {
+  position: relative!important;
+  left: 0!important;
+  background: #4a7fb3;
+  color:white;
+  border-radius: 50%;
+  max-height: 35px;
+  max-width: 35px;
+  padding-left: 8.5px;
+}
+
+.notif-check:before {
+  font-family: FontAwesome;
+  content: "\f0f3" ;
+  background: #4a7fb3; 
+  color:white;
+  border-radius: 50%;
+  max-height: 35px;
+  max-width: 35px;
+  padding: 10px;
+}
+
+.font-14 {
+  font-size: 14px;
+}

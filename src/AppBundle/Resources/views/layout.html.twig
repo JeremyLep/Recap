@@ -21,6 +21,7 @@
 
   {% endblock %}
 
+
   </head>
 
   <body>
@@ -52,11 +53,10 @@
               <input class="form-control" type="text" placeholder="Search" aria-label="Search">
               <button class="btn btn-defaut my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
             </form>
-            <div class="col-1 p-0">
-              <button class="btn" style="background: #4a7fb3; color:white; border-radius: 50%; max-height: 35px; max-width: 35px;    padding-left: 8.5px">
-                <i class="fa fa-bell" aria-hidden="true"></i>
-              </button>
+            <div class="col-1 p-0" id="notif">
+              {{ render(controller("AppBundle:Notification:panel")) }}  
             </div>
+
             <ul class="navbar-nav col-2" id="deconnexion">
               <li class="nav-item float-right" style="width: 50px;">
                 <a class="nav-link float-right" href="{{ path('fos_user_profil') }}">
@@ -118,6 +118,32 @@
       var modal = $(this);
       modal.find('.modal-title').text('Réglage du membre ' + recipient);
       })
+    </script>
+    <script type="text/javascript">
+      $(document).on("click", "#notif-activated i", function() {
+        $.ajax({
+            url: '{{ path("app_notif_active") }}',
+            type: 'POST',
+            data: { id : $(this).attr('data-id') },
+            success: function(success) {
+              $('#notif').html( success );
+              $('.notif-check').prop('checked', true);
+            }
+        });
+      });
+    </script>
+
+    <script type="text/javascript">
+      $(document).on("click", "#markAll", function() {
+        $.ajax({
+            url: '{{ path("app_all_notif_active") }}',
+            type: 'POST',
+            success: function(success) {
+              $('#notif').html( success );
+              $('.notif-check').prop('checked', true);
+            }
+        });
+      });
     </script>
   {% endblock %} 
 

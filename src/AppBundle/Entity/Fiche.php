@@ -132,6 +132,13 @@ class Fiche
      */
     private $ressource;
 
+    /**
+     * @var \AppBundle\Entity\Notification
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notification", mappedBy="fiche")
+     *
+     */
+    private $notification;
 
     /**
      * Constructor
@@ -142,6 +149,7 @@ class Fiche
         $this->commentaire   = new Collections\ArrayCollection();
         $this->favoris       = new Collections\ArrayCollection();
         $this->ressource     = new Collections\ArrayCollection();
+        $this->notification  = new Collections\ArrayCollection();
         $this->dateCreation  = new DateTime();
         $this->nbRessource   = 0;
         $this->nbCommentaire = 0;
@@ -512,6 +520,16 @@ class Fiche
     public function getCommentaire()
     {
         return $this->commentaire;
+    }
+
+    /**
+     * Get notification
+     *
+     * @return Collections\Collection
+     */
+    public function getNotification()
+    {
+        return $this->notification;
     }
 
     /**
