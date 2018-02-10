@@ -1,0 +1,55 @@
+<input type="checkbox" class="btn notif-check">
+{% if nbNotif != 0 %}
+<span class="badge badge-pill badge-danger badge-notif">{{ nbNotif }}</span>
+{% endif %}
+<div class="card notification">
+	<div class="card-header">
+    	<h6 class="inline m-0">Notification {% if nbNotif != 0 %}({{ nbNotif }}){% endif %}</h6>
+	    <h6 id="markAll" style="cursor: pointer;" class="inline float-right m-0">Maquer tous comme lu</h6>
+	</div>
+  	<div id="scroll-notif">
+  		{% for notification in notifications %}
+  		<div class="card-body p-3 {% if notification.active == false %} not-active {% endif %}">
+  			<div class="row">
+	  			<div class="inline col-3 p-0 text-center mt-1">		  				<img class="rounded-circle" height="50" src="{{  asset('bundles	/app/images/defaut2.png') }}">
+			  	</div>
+		    	<div class="inline col-8 p-0">
+		  			<a href="{{ path('app_fiche', {'id_fiche': notification.notification.fiche.id, 'id_groupe': notification.notification.fiche.groupe.id }) }}">
+		   				<strong>
+		   				{{ notification.notification.auteur.username }} a ajouté
+		   				{% if notification.notification.nbressource == null %}
+		   				une nouvelle fiche 
+		   				{% else %}
+		   				une nouvelle ressource
+		   				{% endif %}
+		   				</strong><br>
+		    			<p class="m-0 font-14">
+		    				{% if notification.notification.nbressource == null %}
+		    					<i class="m-0">La fiche</i> 
+		    					{{ notification.notification.fiche.titre }}
+		    					<i class="m-0"> à été ajouté au groupe {{ notification.notification.fiche.groupe.titre }}</i>
+		    				{% else %}
+		    					<i class="m-0">
+		    					{{ notification.notification.nbressource }} nouvelle ressource a été ajouté à la fiche</i> {{ notification.notification.fiche.titre }}
+		    				{% endif %}
+
+		    			</p>
+		   				<small class="float-right">{{ notification.notification.date|date('d/m/y H:i') }}</small>
+		    		</a>
+		    	</div>
+	    		<div class="inline col-1 p-0 text-center" id="notif-activated">
+	   				{% if notification.active == true %}
+	   				<i data-id="{{ notification.id }}" class="fa fa-dot-circle-o"></i>
+	    			{% else %}
+					<i data-id="{{ notification.id }}" class="fa fa-circle-o text-muted"></i>
+	    			{% endif %}
+	    		</div>
+    		</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="card-footer text-muted text-center">
+		<a href="{{ path('app_all_notif') }}" class="m-0">Voir tous</a>
+	</div>
+</div>
+

@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Ressource;
+use AppBundle\Entity\Notification;
+use AppBundle\Entity\UserNotif;
 use AppBundle\Form\RessourceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -55,6 +57,29 @@ class RessourceController extends Controller
 
         $fiche->addRessource($ressource);
         
+        $notification = new Notification();
+        $notification->setFiche($fiche);
+        $notification->setAuteur($this->getUser());
+        $notification->setNbRessource(count($ressource));
+
+        $em->persist($notification);
+
+        $membres = $fiche->getGroupe()->getMembre();
+        
+        foreach ($membres as $membre) {
+          $user = $membre->getUser();
+          
+          if ($user !== $this->getUser()) {
+            $userNotif = new UserNotif();
+            $userNotif->setNotification($notification);
+            $userNotif->setUser($membre->getUser());
+
+            $em->persist($userNotif);
+            $em->flush();
+          }
+        }
+
+        $em->persist($notification);
         $em->persist($fiche);
         $em->persist($ressource);
         $em->flush();

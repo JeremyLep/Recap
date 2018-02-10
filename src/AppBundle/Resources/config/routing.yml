@@ -132,6 +132,29 @@ app_invite:
     requirements:
         id_groupe: \d+
 
+# --------- NOTIFICATION ----------- #
+app_notification:
+    path:      /groupe{groupeId}/event
+    defaults:
+        _controller: AppBundle:Notification:index
+    requirements:
+        groupeId: \d+
+
+app_all_notif:
+    path:      /notifications
+    defaults:
+        _controller: AppBundle:Notification:all
+
+app_notif_active:
+    path:      /notif-active
+    defaults:
+        _controller: AppBundle:Notification:ajaxActivated
+
+app_all_notif_active:
+    path:      /notif-all-active
+    defaults:
+        _controller: AppBundle:Notification:ajaxAllActivated
+
 # --------- PARAMETRE ----------- #
 app_parametre:
     path:      /parametre
