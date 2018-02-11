@@ -48,7 +48,7 @@
                 <h6 class="col-5 text-left m-0">{{ fiche.nbCommentaire }} commentaires</h6>
                 <h6 class="col-7 m-0 text-right text-white">
                   {% for tag in fiche.getTag() %}
-                      <span class="badge badge-primary">{{ tag.label }}</span>
+                      <span class="badge badge-color" style="background-color: {{ tag.color}};">{{ tag.label }}</span>
                   {% endfor %}
                 </h6>
               </div>
