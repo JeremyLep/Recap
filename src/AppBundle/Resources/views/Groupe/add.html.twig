@@ -15,6 +15,11 @@
             {{ form_errors(form.passwordGroupe) }}
             {{ form_widget(form.passwordGroupe, { 'attr': {'class': 'form-control' }}) }}
         </div>
+        <div class="col-sm-12">
+            {{ form_label(form.avatar) }}
+            {{ form_errors(form.avatar) }}
+            {{ form_widget(form.avatar, {'attr': {'class': 'form-control'}}) }}
+        </div>
         <div class="text-right col-12 mt-2">
             <input type="submit" class="btn btn-defaut-inv btn-lg" value="Create" />
             <a href="{{ path('app_home') }}" class="btn btn-secondary btn-lg">Retour</a>

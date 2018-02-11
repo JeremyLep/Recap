@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class GroupeType extends AbstractType
 {
@@ -21,6 +22,11 @@ class GroupeType extends AbstractType
             ))
             ->add('passwordGroupe', PasswordType::class, array(
                 'label' => 'Password du groupe'
+            ))
+            ->add('avatar', FileType::class, array(
+                'label' => 'Image du groupe',
+                'required' => false,
+                'data_class' => null
             ));
     }
     

@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use \DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Groupe
@@ -81,6 +82,26 @@ class Groupe
     private $fiche;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="avatar", nullable=true)
+     * @Assert\File(
+     *     maxSize = "5M",
+     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
+     *     maxSizeMessage = "La taille maximal d'un avatar est de 5MB.",
+     *     mimeTypesMessage = "Seulement des fichier de type image sont autorisé (jpg, png, tiff, gif)"
+     * )
+     */
+    protected $avatar;
+
+    /**
+     * @var string
+     *
+     *@ORM\Column(name="color", type="string", length=8, nullable=true)
+     */
+    private $color;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -90,6 +111,7 @@ class Groupe
         $this->dateCreation = new DateTime();
         $this->nbFiche      = 0;
         $this->nbMembre     = 1;
+        $this->color = "#".str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
     }
 
 
@@ -317,5 +339,42 @@ class Groupe
     {
         $this->fiche->removeElement($fiche);
         $this->nbFiche--;
+    }
+
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return Tag
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 }

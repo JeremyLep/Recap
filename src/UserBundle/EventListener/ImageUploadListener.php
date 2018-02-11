@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use UserBundle\Entity\User;
+use AppBundle\Entity\Groupe;
 use UserBundle\ImageUpload;
 
 class ImageUploadListener
@@ -32,7 +33,7 @@ class ImageUploadListener
 
     private function uploadFile($entity)
     {
-        if (!$entity instanceof User) {
+        if ((!$entity instanceof User) || (!$entity instanceof Groupe)) {
             return;
         }
 
