@@ -15,6 +15,11 @@
             {{ form_errors(editForm.passwordGroupe) }}
             {{ form_widget(editForm.passwordGroupe, { 'attr': {'class': 'form-control' }}) }}
         </div>
+        <div class="col-sm-12">
+            {{ form_label(editForm.avatar) }}
+            {{ form_errors(editForm.avatar) }}
+            {{ form_widget(editForm.avatar, {'attr': {'class': 'form-control'}}) }}
+        </div>
         <div class="text-right col-12 mt-2">
             <input type="submit" class="btn btn-defaut-inv btn-lg" value="Edit" />
             <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}" class="btn btn-secondary btn-lg">Retour</a>

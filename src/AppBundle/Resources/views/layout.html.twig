@@ -36,7 +36,7 @@
             {% block titre %}
             <a class="navbar-brand col-2" href="{{ path('app_home') }}">Dashboard</a>
             {% endblock %}
-            <ul class="navbar-nav pr-0 col-2">
+            <ul class="navbar-nav pr-0 col-2 ml-2 float-right" id="groupe-icon">
               {% block groupe %}
               <li class="nav-item" id="fiche-icon">
                 <a class="nav-link" href="">16 <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
@@ -78,7 +78,7 @@
       </nav>
     </header>
     <div class="container-fluid">
-      <div class="row">
+      <div class="row h-100">
 
         {% block menuleft %}
           {{ render(controller("AppBundle:Default:menu")) }}
