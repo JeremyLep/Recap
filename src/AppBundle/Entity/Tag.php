@@ -30,6 +30,14 @@ class Tag
     private $label;
 
     /**
+     *
+     * @var string
+     *
+     *@ORM\Column(name="color", type="string", length=8, nullable=false)
+     */
+    private $color;
+
+    /**
      * @var Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Fiche", mappedBy="tag", cascade={"persist"})
@@ -42,6 +50,7 @@ class Tag
     public function __construct()
     {
         $this->fiche = new Collections\ArrayCollection();
+        $this->color = "#".str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
     }
 
 
@@ -77,6 +86,30 @@ class Tag
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return Tag
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 
     /**
