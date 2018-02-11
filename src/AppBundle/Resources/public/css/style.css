@@ -403,7 +403,12 @@ strong.select2-results__group{
   width: 22px;
   display: block;
   top: -5px;
-  right: 23px;
+  left: 23px;
+}
+
+.badge-color {
+  background-color: attr(data-color);
+  color: white;
 }
 
 .notif-check [type="checkbox"]:not(:checked){
