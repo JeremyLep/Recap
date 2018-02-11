@@ -33,7 +33,7 @@ class Membre
     /**
      * @var array 
      *
-     * @ORM\Column(name="roles", type="text", nullable=false)
+     * @ORM\Column(name="roles", type="array", nullable=false)
      */
     protected $roles;
 
@@ -107,12 +107,11 @@ class Membre
     /**
      * Get roles
      *
-     * @return string
+     * @return array
      */
     public function getRoles()
     {
         $roles = $this->roles;
-
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
