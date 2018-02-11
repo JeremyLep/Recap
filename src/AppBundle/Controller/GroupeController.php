@@ -45,7 +45,12 @@ class GroupeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $avatar    = $form->get('avatar')->getData();
+            $fileName  = md5(uniqid()).'.'.$avatar->guessExtension();
 
+            $avatar->move($this->getParameter('avatar_directory'), $fileName);
+            $groupe->setAvatar($fileName);
+            
             $groupe->setUser($this->getUser());
             $membre = new Membre();
             $membre->setUser($this->getUser());
@@ -78,19 +83,28 @@ class GroupeController extends Controller
             throw new AccessDeniedException();
         }
 
-        $editForm   = $this->createForm('AppBundle\Form\GroupeType', $groupe);
+        $editForm = $this->createForm('AppBundle\Form\GroupeType', $groupe);
 
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $avatar    = $editForm->get('avatar')->getData();
+            $fileName  = md5(uniqid()).'.'.$avatar->guessExtension();
 
-            return $this->redirectToRoute('app_groupe_edit', array('id_groupe' => $groupe->getId()));
+            $avatar->move($this->getParameter('avatar_directory'), $fileName);
+            $groupe->setAvatar($fileName);
+
+            $em->persist($groupe);
+            $em->flush();
+
+            return $this->redirectToRoute('app_groupe_edit', array(
+                'id_groupe' => $groupe->getId()
+            ));
         }
 
         return $this->render('AppBundle:Groupe:edit.html.twig', array(
-            'groupe'      => $groupe,
-            'editForm'   => $editForm->createView()
+            'groupe'   => $groupe,
+            'editForm' => $editForm->createView()
         ));
     }
 

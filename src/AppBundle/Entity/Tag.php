@@ -33,7 +33,7 @@ class Tag
      *
      * @var string
      *
-     *@ORM\Column(name="color", type="string", length=8, nullable=false)
+     *@ORM\Column(name="color", type="string", length=8, nullable=true)
      */
     private $color;
 

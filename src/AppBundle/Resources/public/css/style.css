@@ -411,6 +411,21 @@ strong.select2-results__group{
   color: white;
 }
 
+.default-avatar {
+  display: block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  margin-top: 20%;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 900;
+  padding-top: 3px;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
 .notif-check [type="checkbox"]:not(:checked){
   display: none;
 }

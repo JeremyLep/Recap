@@ -122,12 +122,20 @@ class User extends BaseUser
      */
     protected $notificationAuteur;
 
+    /**
+     * @var string
+     *
+     *@ORM\Column(name="color", type="string", length=8, nullable=true)
+     */
+    private $color;
+
 
 	public function __construct()
     {
+        parent::__construct();
         $this->dateInscription = new \DateTime;
         $this->notification    = new Collections\ArrayCollection;
-        parent::__construct();
+        $this->color           = "#".str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
     }
 
 	/**
@@ -399,6 +407,30 @@ class User extends BaseUser
         }
 
         return $this;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return Tag
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 
 }

@@ -5,7 +5,11 @@
                 <h6 id="nom" class="text-white pb-2 pt-3">{{ app.user.username }} </h6>
               </div>
               <div class="col-5">
+                {% if app.user.avatar == null %}
+                <span class="default-avatar" style="background-color: {{ app.user.color  }};">{{ app.user.username|first|upper }}</span>
+                {% else %}
                 <img src="{{ asset('bundles/app/avatar/'~ app.user.avatar) }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="max-width: 35px; max-height: 35px;">
+                {% endif %}
               </div>
             </div>
             

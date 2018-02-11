@@ -1,8 +1,12 @@
 {% extends "AppBundle::layout.html.twig" %}
 
 {% block titre %}
-  <a class="navbar-brand" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a>
-  <img src="{{  asset('bundles/app/images/defaut2.png') }}" class="img-fluid rounded mt-1" alt="avatar" style="max-width: 35px; max-height: 35px;">
+  <a class="navbar-brand" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a> 
+  {% if groupe.avatar == null %}
+    <span class="default-avatar m-0" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
+  {% else %}
+    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="max-width: 35px; max-height: 35px;">
+  {% endif %}
 {% endblock %}
 
 {% block groupe %}

@@ -76,7 +76,7 @@ class Membre
         $this->fiche       = new Collections\ArrayCollection();
         $this->dateRejoins = new DateTime();
         $this->user        = $this->getUser();
-        $this->roles       = setRoles(array('ROLE_USER'));
+        $this->roles       = $this->setRoles(array('ROLE_USER'));
     }
 
 
