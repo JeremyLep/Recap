@@ -126,11 +126,21 @@ app_favoris_action:
 
 # --------- INVITE ----------- #
 app_invite:
-    path:      /groupe{id_groupe}/invite
+    path:      /invite
     defaults:
         _controller: AppBundle:Invite:index
+
+app_invite_add:
+    path:      /groupe{groupeId}/invite/add
+    defaults:
+        _controller: AppBundle:Invite:add
     requirements:
-        id_groupe: \d+
+        groupeId: \d+
+
+app_invite_confirm:
+    path:   /invite-confirm
+    defaults:
+        _controller: AppBundle:Invite:inviteConfirm
 
 # --------- NOTIFICATION ----------- #
 app_notification:
@@ -162,4 +172,4 @@ app_parametre:
         _controller: AppBundle:Parametre:index
 
 logout:
-    path: /logout   
+    path: /logout
