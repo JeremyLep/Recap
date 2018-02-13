@@ -36,7 +36,20 @@ class DefaultController extends Controller
         return $this->render('AppBundle::menuleft.html.twig', array(
             'listGroupes' => $listGroupes,
             'nbFiche'     => $nbFiche,
-            'nbFavoris'   => $nbFavoris
+            'nbFavoris'   => $nbFavoris,
+        ));
+    }
+
+    public function menuTopAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $nbInvite = $em
+            ->getRepository('AppBundle:Invite')
+            ->countInviteActive($this->getUser()->getEmail());
+
+        return $this->render('AppBundle:Default:invite.html.twig', array(
+            'nbInvite' => $nbInvite
         ));
     }
 
@@ -47,7 +60,11 @@ class DefaultController extends Controller
         $listGroupes = $em
             ->getRepository('AppBundle:Groupe')
             ->getGroupeMembre($this->getUser());
-      
+
+        $nbInvite = $em
+            ->getRepository('AppBundle:Invite')
+            ->countInviteActive($this->getUser());
+            
         return $this->render('AppBundle:Default:index.html.twig', array(
             'listGroupes' => $listGroupes,
         ));

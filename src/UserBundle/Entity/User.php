@@ -108,6 +108,14 @@ class User extends BaseUser
     protected $favoris;
 
     /**
+     * @var \AppBundle\Entity\Invite
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Invite", mappedBy="auteur")
+     *
+     */
+    protected $invite;
+
+    /**
      * @var Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserNotif", mappedBy="user")
