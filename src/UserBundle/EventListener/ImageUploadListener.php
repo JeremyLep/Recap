@@ -33,7 +33,7 @@ class ImageUploadListener
 
     private function uploadFile($entity)
     {
-        if ((!$entity instanceof User) || (!$entity instanceof Groupe)) {
+        if (!$entity instanceof User) {
             return;
         }
 
