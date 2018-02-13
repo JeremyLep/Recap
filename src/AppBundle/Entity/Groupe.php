@@ -69,9 +69,16 @@ class Groupe
     /**
      * @var Collections\Collection
      *
-     * @ORM\oneToMany(targetEntity="Membre", mappedBy="groupe", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Membre", mappedBy="groupe", cascade={"persist", "remove"})
      */
     private $membre;
+
+    /**
+     * @var Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Invite", mappedBy="groupe", cascade={"remove"})
+     */
+    private $invite;
 
     /**
      * @var \Fiche

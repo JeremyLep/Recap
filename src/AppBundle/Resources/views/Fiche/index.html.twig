@@ -18,9 +18,6 @@
   <li class="nav-item" id="membre-list">
     <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
   </li>
-  <li class="nav-item" id="invite">
-    <a class="nav-link" href=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-  </li>
 {% endblock %}
 
 {% block body %}
@@ -93,8 +90,12 @@
             {% for commentaire in commentaires %}
               <div class="row p-3 border-b">
                 <span class="row p-2 w-100">
-                  <img src="{{  asset('bundles/app/images/' ~commentaire.getMembre.getUser.avatar) }}" class="img-fluid rounded mr-3" alt="avatar" style="max-width: 35px; max-height: 35px;">
-                  {{ commentaire.getMembre.getUser.prenom }} {{ commentaire.getMembre.getUser.nom}}
+                  {% if commentaire.membre.user.avatar == null %}
+                    <span class="default-avatar" style="background-color: {{ commentaire.membre.user.color  }};">{{ commentaire.membre.user.username|first|upper }}</span>
+                  {% else %}
+                  <img src="{{  asset('bundles/app/avatar/' ~commentaire.getMembre.getUser.avatar) }}" class="img-fluid rounded mr-3" alt="avatar" style="max-width: 35px; max-height: 35px;">
+                  {{ commentaire.getMembre.getUser.username}}
+                  {% endif %}
                 </span>
                 <span class="p-2 pl-3 row w-100">
                   {{ commentaire.contenu }}
