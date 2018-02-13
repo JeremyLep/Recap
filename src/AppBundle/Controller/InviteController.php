@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Invite;
 use AppBundle\Entity\Groupe;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\Notification;
 use AppBundle\Form\InviteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,12 +87,11 @@ class InviteController extends Controller
 
       $this->get('mailer')->send($message);
 */
+      $em->persist($notification);
   		$em->persist($invite);
       $em->flush();
 
-      return $this->redirectToRoute('app_invite', array(
-        'groupeId' => $groupe->getId()
-      ));
+      return $this->redirectToRoute('app_invite');
     }
 
     return $this->render('AppBundle:Invite:add.html.twig', array(
