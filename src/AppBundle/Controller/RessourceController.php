@@ -46,6 +46,50 @@ class RessourceController extends Controller
 
       if ($form->isSubmitted() && $form->isValid()) {
         $file = $ressource->getRouteDoc();
+
+        switch ($file->guessExtension()) {
+          case "pdf":
+            $imageRessource = "pdf.png";
+          break;
+          
+          case "doc":
+          case "docx":
+          case "odt":
+              $imageRessource = "word.png";
+          break;
+          
+          case "xls":
+          case "xlsx":
+            $imageRessource = "excel.png";
+          break;
+
+          case "ppt":
+          case "pptx":
+          case "odp":
+            $imageRessource = "powerpoint.png";
+          break;
+          
+          case "mp4":
+          case "avi":
+          case "mov":
+          case "wmv":
+          case "mpeg":
+          case "mpg":
+          case "wma":
+          case "wmv":
+          case "flv":
+          case "xvid":
+              $imageRessource = "video.png";
+          break;
+
+          case "jpg":
+          case "jpeg":
+          case "png":
+          case "bmp":
+              $imageRessource = "image.jpg";
+          break;
+        }
+        
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
         $route = $this->getParameter('ressource_dir')."groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/";
         if (!is_dir($route)) {
@@ -55,6 +99,7 @@ class RessourceController extends Controller
         $ressource->setRouteDoc($fileName);
         $ressource->setFiche($fiche);
 
+        $ressource->setImage($imageRessource);
         $fiche->addRessource($ressource);
         
         $notification = new Notification();
