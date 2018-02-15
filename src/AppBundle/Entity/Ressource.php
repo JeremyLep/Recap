@@ -42,6 +42,12 @@ class Ressource
      */
     private $fiche;
 
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="image", type="string", length=75, nullable=false)
+    */
+    private $image;
 
 
     /**
@@ -76,6 +82,30 @@ class Ressource
     public function getTitre()
     {
         return $this->titre;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return Ressource
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
