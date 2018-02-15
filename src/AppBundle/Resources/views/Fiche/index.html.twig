@@ -118,7 +118,7 @@
       {% for ressource in ressources %}
       <div class="col-lg-6 col-md-6 col-sm-12 placeholder pb-2">
         <div class="card">
-          <img class="card-img-top " src="https://www.openoffice.org/ui/VisualDesign/gifs/Icons/OOo30_final_mimetype/Galaxy_OOo3_writer-doc_256.png" alt="Card image cap">
+          <img class="card-img-top " height="150" src="{{ asset('bundles/app/images/'~ ressource.image) }}" alt="Ressource Image">
           <div class="card-body p-0">
             <p class="text-muted m-0">{{ ressource.titre }}</p>
             <div class="row col-12 m-0 p-0">
