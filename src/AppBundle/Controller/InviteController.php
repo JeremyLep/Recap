@@ -87,7 +87,6 @@ class InviteController extends Controller
 
       $this->get('mailer')->send($message);
 */
-      $em->persist($notification);
   		$em->persist($invite);
       $em->flush();
 
