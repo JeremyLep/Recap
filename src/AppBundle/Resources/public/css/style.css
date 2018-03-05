@@ -77,6 +77,49 @@ a, a:hover, a:focus, a:active{
 	border-top: .25rem solid transparent;
 }
 
+#overlayRessource {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1200;
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0, 0.9);
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+#overlayRessource #overlayTop {
+  height: 60px;
+  background-color: black;
+  top: 0;
+}
+
+#overlayRessource #overlayContent {
+  height: 90%;
+  width: 100%;
+}
+
+#overlayRessource #overlayTop #close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  float: right;
+}
+
+#image {
+  width: 100%;
+}
+
+#object {
+  width: 100%;
+}
+
+#office {
+  width: 100%;
+}
+
 
 .navbar-dark{
 	overflow-y: auto;
@@ -466,4 +509,12 @@ strong.select2-results__group{
 
 .font-14 {
   font-size: 14px;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.w-auto {
+  width: auto;
 }
