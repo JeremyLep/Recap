@@ -14,6 +14,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RessourceController extends Controller
 {
@@ -142,10 +144,11 @@ class RessourceController extends Controller
       ));
     }
 
-    public function viewAction($groupeId, $ficheId, $fileName)
-    {
-        $em    = $this->getDoctrine()->getManager();
-        
+    public function viewAction(Request $request, $groupeId, $ficheId)
+    { 
+      if ($request->isXmlHttpRequest()) {
+        $fileName = $request->get('fileName');
+        $em    = $this->getDoctrine()->getManager();  
         $membre = $em
             ->getRepository('AppBundle:Membre')
             ->findOneBy(array(
@@ -158,19 +161,50 @@ class RessourceController extends Controller
         }
 
         $fiche = $em
-        ->getRepository('AppBundle:Fiche')
-        ->findOneBy(array(
-          'id'        => $ficheId, 
-          'groupe'    => $groupeId,
-        ));
+          ->getRepository('AppBundle:Fiche')
+          ->findOneBy(array(
+            'id'        => $ficheId, 
+            'groupe'    => $groupeId,
+          ));
 
-        $file = $this->getParameter('ressource_dir')."groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/".$fileName;
+        $ressource = $em
+          ->getRepository('AppBundle:Ressource')
+          ->findOneBy(array(
+            'routeDoc' => $fileName
+          ));
 
-        if (!file_exists($file)) {
-            return new NotFoundHttpException;
+        $file = "/bundles/app/files/groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/".$fileName;
+
+        switch ($ressource->getImage()) {
+          case "word.png":
+          case "powerpoint.png":
+          case "excel.png":
+            return new JsonResponse(array(
+              "content" => "<iframe src='https://view.officeapps.live.com/op/view.aspx?src=/var/www/recap/web".$file."' width='100%' height='100%' frameborder='0'></iframe>",
+              "type" => "office"
+            ));
+          break;
+          case "video.png":
+            return new JsonResponse(array(
+              "content" => $file,
+              "type"    => "video"
+            ));
+          break;
+          case "image.jpg":
+            return new JsonResponse(array(
+              "content" => $file,
+              "type"    => "image"
+            ));
+          break;
         }
 
-        return new BinaryFileResponse($file);
+        //$file = "/var/www/recap/web".$file;
+        
+        return new JsonResponse(array(
+          "content" => $file,
+          "type"    => "file"
+        ));
+      }
     }
 
     public function downloadAction($groupeId, $ficheId, $fileName)
