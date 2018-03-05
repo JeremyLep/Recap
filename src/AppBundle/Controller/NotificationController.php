@@ -76,7 +76,6 @@ class NotificationController extends Controller
             ->findBy(array('user' => $user), array('date' => 'DESC'));
 
         if ($request->isXmlHttpRequest()) {
-            
             $notification = $em
                 ->getRepository('AppBundle:UserNotif')
                 ->findOneBy(array(

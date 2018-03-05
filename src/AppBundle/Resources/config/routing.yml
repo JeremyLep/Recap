@@ -82,7 +82,7 @@ app_ressource_add:
         ficheId: \d+
 
 app_ressource_view:
-    path:     /groupe{groupeId}/fiche{ficheId}/view/{fileName}
+    path:     /groupe{groupeId}/fiche{ficheId}/view/ressource
     defaults:
         _controller: AppBundle:Ressource:view
     requirements:
