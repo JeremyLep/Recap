@@ -146,7 +146,7 @@
   <source id="video" type='video/mp4' src='' />
 </video>
 
-<div id="overlayRessource">
+<div id="overlayRessource" style="display: none;">
   <div id="overlayTop">
     <div id="close"><i class="fa fa-close fa-lg text-white"></i></div>
   </div>
@@ -210,7 +210,6 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
-      
     </div>
 </div>
 {% endblock %}
@@ -222,7 +221,7 @@
       $('.btn-suppr').each(function () {
         var $this = $(this);
         $this.on("click", function() {
-          var route = $(this).attr('data-route');      
+          var route = $(this).attr('data-route');
           $('#routeModal').val(route);
         });
       });
@@ -245,7 +244,7 @@
       });
     </script>
     <script type="text/javascript">
-      $("#overlayRessource").hide();
+      //$("#overlayRessource").hide();
       $("object#object").css('height', '0');
       $("a#openRessource").on("click", function() {
         var ressource = $(this).attr('data-ressource');
@@ -263,20 +262,17 @@
               a.dispatchEvent(evt);
             }
             if (ressource.type == "file") {
-              console.log(ressource.content);
               $("#overlayRessource").show();
               $("object#object").css('height', '100%');
               $("embed#file").attr('src', ressource.content);
               $("object#object").attr('data', ressource.content);
             }
             if (ressource.type == "office") {
-              console.log(ressource.content);
               $("#overlayRessource").show();
               $("#office").css('height', '100%');
               $("#office").html(ressource.content);
             }
             if (ressource.type == "image") {
-              console.log(ressource.content);
               $("#overlayRessource").show();
               $("#image").css('height', '100%');
               $("#image").attr('src', ressource.content);
