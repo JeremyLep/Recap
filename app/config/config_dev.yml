@@ -8,7 +8,7 @@ framework:
     translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
-        resource: '%kernel.project_dir%/app/config/routing.yml'
+        resource: '%kernel.project_dir%/app/config/routing_dev.yml'
         strict_requirements: ~
     form: ~
     csrf_protection: ~
@@ -27,6 +27,11 @@ framework:
     assets: ~
     php_errors:
         log: true
+    profiler: { only_exceptions: false }
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
 
 # Twig Configuration
 twig:

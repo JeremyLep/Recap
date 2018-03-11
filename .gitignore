@@ -8,9 +8,8 @@
 /var/*
 
 # Parameters
-/app/config/parameters.yml
-/app/config/parameters.yml.dist
-/app/config/parameters.ini
+/app/config/
+/app/
 
 # Managed by Composer
 /app/bootstrap.php.cache
@@ -19,6 +18,8 @@
 !bin/console
 !bin/symfony_requirements
 /vendor/
+/var/
+/web/
 
 # Assets and user uploads
 /web/bundles/

@@ -171,5 +171,13 @@ app_parametre:
     defaults:
         _controller: AppBundle:Parametre:index
 
+# --------- SEARCH ----------- #
+app_search:
+    path:       /search
+    defaults:
+        _controller: AppBundle:Search:index
+    methods: GET
+
+# --------- LOGOUT ----------- #
 logout:
     path: /logout

@@ -23,7 +23,6 @@
 
 
   </head>
-
   <body>
     <header>
       <nav class="navbar navbar-expand-md bg-light fixed-top bg-light col-md-10 offset-md-2 col-sm-9 offset-sm-3" id="menu-top">
@@ -49,10 +48,10 @@
               {{ render(controller('AppBundle:Default:menuTop')) }}
               {% endblock %}
             </ul>
-            <form class="form-inline mt-2 mt-md-0 col-5 p-0">
-              <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-              <button class="btn btn-defaut my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-            </form>
+            {% block search%}
+            {{ render(controller('AppBundle:Search:searchBar')) }}
+            {% endblock %}
+            
             <div class="col-1 p-0" id="notif">
               {{ render(controller("AppBundle:Notification:panel")) }}  
             </div>
@@ -144,6 +143,14 @@
               $('.notif-check').prop('checked', true);
             }
         });
+      });
+    </script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('#search-form').click(function(){
+              $('form').submit();
+          });
       });
     </script>
   {% endblock %} 

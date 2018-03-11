@@ -21,7 +21,7 @@ class RessourceController extends Controller
 {
     public function addAction(Request $request, $groupeId, $ficheId)
     {
-      $em        = $this->getDoctrine()->getManager();
+      $em = $this->getDoctrine()->getManager();
 
       $fiche = $em
         ->getRepository('AppBundle:Fiche')

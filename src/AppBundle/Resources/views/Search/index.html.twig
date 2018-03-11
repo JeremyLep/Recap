@@ -1,0 +1,42 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block body %}
+<div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
+  <h5 class="p-3 m-0">{{ search|length }} fiches trouvées pour <i>"{{ term }}"</i></h5>
+</div>
+
+<div id="content" class="col-12">
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>Auteur</th>
+        <th>Groupe</th>
+        <th>Thème</th>
+        <th>Titre</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in search %}
+      {% set url = path('app_fiche', {'id_groupe': result['groupe_id'], 'id_fiche': result['id'] }) %}
+        <tr class="fiche" onclick="javascript:goToURL('{{ url }}')" url="">
+          <td><img src="{{ asset('bundles/app/avatar/'~ result['avatar']) }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="width: 45px; height: 45px;"></td>
+          <td>{{ result['groupe']}}</td>
+          <td>{{ result['theme'] }}</td>
+          <td>{{ result['titre'] }}</td>
+          <td>{{ result['description']|length > 175 ? result['description']|slice(0, 175) ~ '...' : result['description'] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script type="text/javascript">
+    function goToURL(term) {
+      location.href = term
+    }
+  </script>
+{% endblock %}
