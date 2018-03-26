@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User_Notif
@@ -24,6 +25,24 @@ class UserNotif
     private $id;
 
     /**
+     * @var Boolean
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @Assert\Choice({false, true})
+     * @Assert\NotBlank()
+     */
+    private $active;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
+     */
+    private $date;
+
+    /**
      * @var UserBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="userBridge", cascade="persist")
@@ -36,21 +55,6 @@ class UserNotif
      * @ORM\ManyToOne(targetEntity="Notification", inversedBy="notifBridge", cascade="persist")
      */
     protected $notification;
-
-    /**
-     * @var Boolean
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
-     */
-    private $date;
-
 
     /**
      * Constructor

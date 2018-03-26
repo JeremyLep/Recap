@@ -5,12 +5,13 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use \DateTime;
 
 /**
  * Fiche
  *
- * @ORM\Table(name="fiche")
+ * @ORM\Table(name="fiche", indexes={@ORM\Index(columns={"theme", "titre", "description"}, flags={"fulltext"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FicheRepository")
  */
 class Fiche
@@ -27,28 +28,36 @@ class Fiche
     /**
      * @var string
      *
-     * @ORM\Column(name="theme", type="string", length=100, nullable=true)
+     * @ORM\Column(name="theme", type="string", length=25, nullable=false)
+     * @Assert\Length(min=3, max=25, minMessage="Votre thème doit contenir au moins 3 caractères", maxMessage="Votre thème ne peut contenir plus de 25 caractères")
+     * @Assert\NotNull()
      */
     private $theme;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=100, nullable=true)
+     * @ORM\Column(name="titre", type="string", length=25, nullable=true)
+     * @Assert\Length(min=3, max=25, minMessage="Votre titre de fiche doit contenir au moins 3 caractères", maxMessage="Votre titre de fiche ne peut contenir plus de 25 caractères")
+     * @Assert\NotNull()
      */
     private $titre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=1500, nullable=true)
+     * @ORM\Column(name="description", type="string", length=1200, nullable=true)
+     * @Assert\Length(min=3, max=1200, minMessage="Votre description doit contenir au moins 3 caractères", maxMessage="Votre description ne peut contenir plus de 1200 caractères")
+     * @Assert\NotNull()
      */
     private $description;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="date_creation", type="datetime", nullable=true)
+     * @ORM\Column(name="date_creation", type="datetime", nullable=false)
+     * @Assert\DateTime()
+     * @Assert\NotNull()
      */
     private $dateCreation;
 
@@ -56,34 +65,47 @@ class Fiche
      * @var string
      *
      * @ORM\Column(name="duree", type="string", length=25, nullable=true)
+     * @Assert\Length(min=3, max=25, minMessage="Votre durée doit contenir au moins 3 caractères", maxMessage="Votre durée ne peut contenir plus de 25 caractères")
      */
     private $duree;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="difficulte", type="string", length=50, nullable=true)
+     * @ORM\Column(name="difficulte", type="string", length=25, nullable=true)
+     * @Assert\Length(min=3, max=25, minMessage="Votre difficulté doit contenir au moins 3 caractères", maxMessage="Votre difficulté ne peut contenir plus de 25 caractères")
      */
     private $difficulte;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="note", type="smallint", nullable=true)
+     * @ORM\Column(name="note", type="smallint", nullable=false)
+     * @Assert\NotBlank()
      */
     private $note;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_ressource", type="integer", nullable=true)
+     * @ORM\Column(name="nb_note", type="integer", nullable=false)
+     * @Assert\NotBlank()
+     */
+    private $nbNote;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nb_ressource", type="integer", nullable=false)
+     * @Assert\NotBlank()
      */
     private $nbRessource;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_commentaire", type="integer", nullable=true)
+     * @ORM\Column(name="nb_commentaire", type="integer", nullable=false)
+     * @Assert\NotBlank()
      */
     private $nbCommentaire;
 
@@ -153,6 +175,8 @@ class Fiche
         $this->dateCreation  = new DateTime();
         $this->nbRessource   = 0;
         $this->nbCommentaire = 0;
+        $this->note          = 0;
+        $this->nbNote        = 0;
     }
 
 
@@ -319,7 +343,8 @@ class Fiche
      */
     public function setNote($note)
     {
-        $this->note = $note;
+        $this->note = (int)round(($this->getNbNote() * $this->note + $note) / ($this->getNbNote()+1));
+        $this->nbNote++;
 
         return $this;
     }
@@ -332,6 +357,31 @@ class Fiche
     public function getNote()
     {
         return $this->note;
+    }
+
+    /**
+     * Set note
+     *
+     * @param integer $
+     *
+     * @return Fiche
+     */
+    public function incremNbNote()
+    {
+        
+        $this->nbNote = $nbNote++;
+
+        return $this;
+    }
+
+    /**
+     * Get nb_note
+     *
+     * @return integer
+     */
+    public function getNbNote()
+    {
+        return $this->nbNote;
     }
 
     /**

@@ -3,17 +3,17 @@
 {% block titre %}
   <a class="navbar-brand" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a> 
   {% if groupe.avatar == null %}
-    <span class="default-avatar m-0" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
+    <span class="default-avatar m-0 hidden-xs" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
   {% else %}
-    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="max-width: 35px; max-height: 35px;">
+    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right hidden-xs" alt="avatar" style="max-width: 35px; max-height: 35px;">
   {% endif %}
 {% endblock %}
 
 {% block groupe %}
-  <li class="nav-item" id="fiche-icon">
+  <li class="nav-item li-inline" id="fiche-icon">
     <a class="nav-link" href="{{ path('app_groupe', {'id_groupe': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
   </li>
-  <li class="nav-item" id="membre-list">
+  <li class="nav-item li-inline" id="membre-list">
     <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
   </li>
 {% endblock %}
@@ -21,7 +21,7 @@
 {% block body %}
 <div id="content" class="col-12">
     <div class="col-sm-8 offset-sm-2">
-        <h2 class="mt-5 mb-5">Nouvelle fiche</h2>
+        <h2 class="mt-5 mb-2">Nouvelle fiche</h2>
 
         {{ form_start(form) }}
             <div class="col-12">
@@ -36,8 +36,9 @@
             </div>
             <div class="col-12">
                 {{ form_label(form.description) }}
+                <small class="float-right countChar">1200 caractères restants</small>
                 {{ form_errors(form.description) }}
-                {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 6  }}) }}
+                {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 6, 'maxlength': 1200 }}) }}
             </div>
             <div class="col-12">
                 {{ form_label(form.duree) }}
@@ -48,11 +49,6 @@
                 {{ form_label(form.difficulte) }}
                 {{ form_errors(form.difficulte) }}
                 {{ form_widget(form.difficulte, { 'attr': {'class': 'form-control' }}) }}
-            </div>
-            <div class="col-12">
-                {{ form_label(form.note) }}
-                {{ form_errors(form.note) }}
-                {{ form_widget(form.note, { 'attr': {'class': 'form-control' }}) }}
             </div>
             <div class="col-12">
                 {{ form_label(form.tag) }}
@@ -94,4 +90,16 @@
     });
   });
  </script>
+ <script type="text/javascript">
+    $('form textarea').on("input", function(){
+        var maxlength = $(this).attr("maxlength");
+        var currentLength = $(this).val().length;
+        if( currentLength >= maxlength ){
+            $('.countChar').html(" Vous avez atteint la limite de caractères.").addClass('text-danger');
+            $('.countChar').prepend('<i class="fa fa-exclamation-circle"></i> ');
+        } else {
+            $('.countChar').html(maxlength - currentLength + " caractères restants").removeClass('text-danger');
+        }
+    });
+</script>
 {% endblock %}

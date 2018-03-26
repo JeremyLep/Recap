@@ -13,24 +13,42 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\Email;
 
 class ProfilType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('email', EmailType::class)
-        ->add('username', null, array('translation_domain' => 'FOSUserBundle'))
-        ->add('nom', TextType::class, array('required' => false))
-        ->add('prenom', TextType::class, array('required' => false))
-        ->add('avatar', FileType::class, array(
-            'required' => false,
-            'data_class'   => null,
-        ))
-        ->add('tel', TextType::class, array('required' => false))
-        ->add('age', IntegerType::class, array('required' => false))
-        ->add('ville', TextType::class, array('required' => false))
-        ->add('submit', SubmitType::class);
+            ->add('email', EmailType::class, array(
+                'required'    => true,
+                'constraints' => new Email('message' => 'Vous devez entrer un email valide.')
+            ))
+            ->add('username', null, array(
+                'translation_domain' => 'FOSUserBundle',
+                'required' => true
+            ))
+            ->add('nom', TextType::class, array(
+                'required' => false
+            ))
+            ->add('prenom', TextType::class, array(
+                'required' => false
+            ))
+            ->add('avatar', FileType::class, array(
+                'required'   => false,
+                //'mapped'     => true,
+                'data_class' => null,
+            ))
+            ->add('tel', TextType::class, array(
+                'required' => false
+            ))
+            ->add('age', IntegerType::class, array(
+                'required' => false
+            ))
+            ->add('ville', TextType::class, array(
+                'required' => false
+            ))
+            ->add('submit', SubmitType::class);
     }
     /**
      * {@inheritdoc}

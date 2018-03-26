@@ -1,6 +1,15 @@
-{{ form_start(form, { 'attr': {'class': 'form-inline mt-2 mt-md-0 col-5 p-0'} , action: path('app_search')}) }}
-	{{ form_errors(form.search) }}
-	{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Search' }}) }}
+<div class="input-group hidden-xs">
+	{{ form_start(form, { 'attr': {'class': 'form-inline'} , action: path('app_search')}) }}
+		{{ form_errors(form.search) }}
+		{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Search' }}) }}
+    	<button id="search-form" type="submit" class="btn btn-defaut-inv"><i class="fa fa-search"></i></button>
+   	{{ form_end(form) }}
+</div>
 
-	<button id="search-form" type="submit" class="btn btn-defaut-inv my-2 my-sm-0" value=""><i class="fa fa-search"></i></button>
-{{ form_end(form) }}
+<div class="input-group visible-xs">
+	{{ form_start(form, { 'attr': {'class': 'demo-2 form-inline'} , action: path('app_search')}) }}
+		{{ form_errors(form.search) }}
+		{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Search' }}) }}
+    	<button id="search-form" type="submit" class="btn btn-defaut-inv"><i class="fa fa-search"></i></button>
+	{{ form_end(form) }}
+</div>

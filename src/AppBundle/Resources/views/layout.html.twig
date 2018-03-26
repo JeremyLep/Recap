@@ -25,65 +25,108 @@
   </head>
   <body>
     <header>
-      <nav class="navbar navbar-expand-md bg-light fixed-top bg-light col-md-10 offset-md-2 col-sm-9 offset-sm-3" id="menu-top">
-        <div class="col-lg-12 p-0">
-          <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+      <div class="row">
+        <nav class="col-md-10 offset-md-2 col-12 navbar navbar-expand-md fixed-top bg-light" id="menu-top">
+          <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#menutop-xs" aria-controls="menutop-xs" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon fa fa-align-justify"></span>
           </button>
+          {% block titre %}
+            <a class="navbar-brand" href="{{ path('app_home') }}">Dashboard</a>
+          {% endblock %}
+          
+          <form name="search" method="get" action="/app_dev.php/search" class="search-form visible-xs">
+            <input type="text" id="search" name="search" required="required" class="form-control" placeholder="⌕"/>
+          </form>
+          
+          <span class="visible-xs pad-3 notif-xs">
+            {{ render(controller("AppBundle:Notification:panel")) }}
+          </span>
 
-          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            {% block titre %}
-            <a class="navbar-brand col-2" href="{{ path('app_home') }}">Dashboard</a>
-            {% endblock %}
-            <ul class="navbar-nav pr-0 col-2 ml-2 float-right" id="groupe-icon">
+          <div class="hidden-size-xs collapse navbar-collapse-custom" id="menutop-xs">
+            <div class="p-0 visible-xs" id="menutop-bg">
+              <div class="row m-0 w-100">
+                <h5 id="nom" class="pb-2 pt-3 w-100">
+                  {% if app.user.avatar == null %}
+                  <span class="visible-xs menu-avatar" style="background-color: {{ app.user.color  }};">{{ app.user.username|first|upper }}</span>
+                  {% else %}
+                  <img src="{{ asset('bundles/app/avatar/'~ app.user.avatar) }}" class="img-fluid rounded visible-xs menu-avatar" alt="avatar" style="max-width: 25px; max-height: 25px;">
+                  {% endif %}
+                  {{ app.user.username }}
+                </h5>
+              </div>
+                      
+              <ul class="nav nav-itempills flex-column pt-3">
+                <li class="nav-item">
+                  <a class="nav-link text-grey" href="{{ path('app_home') }}"><i class="fa fa-home"></i> Dashboard</a>
+                </li>
+              </ul>
+              <ul class="nav nav-pills flex-column pt-3 w-100">
+                {{ render(controller('AppBundle:Default:menu')) }}
+              </ul>
+              <ul class="nav nav-pills flex-column pt-3 w-100">
+                <li class="nav-item">
+                  <a class="nav-link text-grey" href="{{ path('fos_user_profil') }}"><i class="fa fa-user"></i> Profil</a>
+                </li>
+              </ul>
+              <ul class="nav nav-pills flex-column pt-3 w-100">
+                <li class="nav-item">
+                  <a class="nav-link text-grey" href="{{ path('fos_user_security_logout') }}"><i class="fa fa-power-off"></i> Deconnexion</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="navbar-collapse hidden-xs" id="menutop">
+            <ul class="navbar-nav w-100" id="groupe-icon">
               {% block groupe %}
-              <li class="nav-item" id="fiche-icon">
-                <a class="nav-link" href="">16 <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+              <li class="nav-item li-inline" id="fiche-icon">
+                <a class="nav-link" href=""><i class="fa fa-file-text-o" aria-hidden="true"></i></a>
               </li>
-              <li class="nav-item" id="membre-list">
-                <a class="nav-link" href="">14 <i class="fa fa-user-o" aria-hidden="true"></i></a>
+              <li class="nav-item li-inline" id="membre-list">
+                <a class="nav-link" href=""><i class="fa fa-user-o" aria-hidden="true"></i></a>
               </li>
               {% endblock %}
+
               {% block invite %}
               {{ render(controller('AppBundle:Default:menuTop')) }}
               {% endblock %}
-            </ul>
-            {% block search%}
-            {{ render(controller('AppBundle:Search:searchBar')) }}
-            {% endblock %}
+        
+              {% block search%}
+                <li class="nav-item li-inline" id="searchbar">
+                {{ render(controller('AppBundle:Search:searchBar')) }}
+                </li>
+              {% endblock %}
             
-            <div class="col-1 p-0" id="notif">
-              {{ render(controller("AppBundle:Notification:panel")) }}  
-            </div>
-
-            <ul class="navbar-nav col-2" id="deconnexion">
-              <li class="nav-item float-right" style="width: 50px;">
-                <a class="nav-link float-right" href="{{ path('fos_user_profil') }}">
+              <li class="nav-item li-inline" id="notif">
+                {{ render(controller("AppBundle:Notification:panel")) }}
+              </li>
+              <li class="nav-item li-inline" id="profil">
+                <a class="nav-link" href="{{ path('fos_user_profil') }}">
                   <button class="btn bg-info" style=" color:white; border-radius: 50%; max-height: 35px; max-width: 35px; padding-left: 10.5px">
                       <i class="fa fa-user" aria-hidden="true"></i>
                   </button>
                 </a>
               </li>
-              <li class="nav-item float-right" style="width: 50px;">
-                <a class="nav-link float-right btn" href="{{ path('fos_user_security_logout') }}">
+              <li class="nav-item li-inline" id="deconnexion" >
+                <a class="nav-link btn" href="{{ path('fos_user_security_logout') }}">
                   <button class="btn bg-danger" style="color:white; border-radius: 50%; max-height: 35px; max-width: 35px; padding-left: 9.5px">
                       <i class="fa fa-power-off" aria-hidden="true"></i>
                   </button>
-                </a>
+                  </a>
               </li>
             </ul>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </header>
     <div class="container-fluid">
       <div class="row h-100">
 
         {% block menuleft %}
-          {{ render(controller("AppBundle:Default:menu")) }}
+          {{ include('AppBundle::menuleft.html.twig') }}
         {% endblock %}
 
-        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-5">
+        <main role="main" class="col-12 col-md-10 offset-md-2 pt-5">
 
           {% block body %}
           {% endblock %}
@@ -152,6 +195,17 @@
               $('form').submit();
           });
       });
+    </script>
+    <script type="text/javascript">
+          $('form ul li').prepend('<i class="fa fa-exclamation-circle"></i> ');
+    </script>
+    <script type="text/javascript">
+          $('input#search').focus(function() {
+            $('.navbar-brand').addClass('collapse-search');
+          });
+          $('input#search').focusout(function() {
+            $('.navbar-brand').removeClass('collapse-search');
+          });
     </script>
   {% endblock %} 
 

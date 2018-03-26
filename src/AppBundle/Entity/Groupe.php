@@ -27,37 +27,52 @@ class Groupe
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=75, nullable=true)
+     * @ORM\Column(name="titre", type="string", length=25, nullable=false)
+     * @Assert\Length(min=3, max=25, minMessage="Votre titre de groupe doit contenir au moins 3 caractères", maxMessage="Votre titre de groupe ne peut contenir plus de 25 caractères")
+     * @Assert\NotBlank()
      */
     private $titre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_fiche", type="integer", nullable=true)
+     * @ORM\Column(name="nb_fiche", type="integer", nullable=false)
+     * @Assert\NotBlank()
      */
     private $nbFiche;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="password_groupe", type="string", length=75, nullable=true)
-     */
-    private $passwordGroupe;
-
-    /**
      * @var integer
      *
-     * @ORM\Column(name="nb_membre", type="integer", nullable=true)
+     * @ORM\Column(name="nb_membre", type="integer", nullable=false)
+     * @Assert\NotBlank()
      */
     private $nbMembre;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="date_creation", type="datetime", nullable=true)
+     * @ORM\Column(name="date_creation", type="datetime", nullable=false)
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $dateCreation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="avatar", nullable=true)
+     */
+    protected $avatar;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string", length=8, nullable=false)
+     * @Assert\Length(min=3, max=12)
+     * @Assert\NotBlank()
+     */
+    private $color;
 
     /**
      * @var \User
@@ -87,26 +102,6 @@ class Groupe
      *
      */
     private $fiche;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="avatar", nullable=true)
-     * @Assert\File(
-     *     maxSize = "5M",
-     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
-     *     maxSizeMessage = "La taille maximal d'un avatar est de 5MB.",
-     *     mimeTypesMessage = "Seulement des fichier de type image sont autorisé (jpg, png, tiff, gif)"
-     * )
-     */
-    protected $avatar;
-
-    /**
-     * @var string
-     *
-     *@ORM\Column(name="color", type="string", length=8, nullable=true)
-     */
-    private $color;
 
     /**
      * Constructor
@@ -178,30 +173,6 @@ class Groupe
     public function getNbFiche()
     {
         return $this->nbFiche;
-    }
-
-    /**
-     * Set passwordGroupe
-     *
-     * @param string $passwordGroupe
-     *
-     * @return Groupe
-     */
-    public function setPasswordGroupe($passwordGroupe)
-    {
-        $this->passwordGroupe = $passwordGroupe;
-
-        return $this;
-    }
-
-    /**
-     * Get passwordGroupe
-     *
-     * @return string
-     */
-    public function getPasswordGroupe()
-    {
-        return $this->passwordGroupe;
     }
 
     /**

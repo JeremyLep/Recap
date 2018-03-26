@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use \DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Membre
@@ -27,6 +28,8 @@ class Membre
      * @var DateTime
      *
      * @ORM\Column(name="date_rejoins", type="datetime", nullable=false)
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     protected $dateRejoins;
 
@@ -34,6 +37,7 @@ class Membre
      * @var array 
      *
      * @ORM\Column(name="roles", type="array", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $roles;
 

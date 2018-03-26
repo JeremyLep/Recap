@@ -5,7 +5,7 @@
   <h5 class="p-3 m-0">{{ search|length }} fiches trouvées pour <i>"{{ term }}"</i></h5>
 </div>
 
-<div id="content" class="col-12">
+<div id="content" class="col-12 table-responsive">
   <table class="table table-hover">
     <thead class="thead-light">
       <tr>
@@ -13,7 +13,7 @@
         <th>Groupe</th>
         <th>Thème</th>
         <th>Titre</th>
-        <th>Description</th>
+        <th class="hidden-xs">Description</th>
       </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
           <td>{{ result['groupe']}}</td>
           <td>{{ result['theme'] }}</td>
           <td>{{ result['titre'] }}</td>
-          <td>{{ result['description']|length > 175 ? result['description']|slice(0, 175) ~ '...' : result['description'] }}</td>
+          <td class="hidden-xs">{{ result['description']|length > 175 ? result['description']|slice(0, 175) ~ '...' : result['description'] }}</td>
         </tr>
       {% endfor %}
     </tbody>

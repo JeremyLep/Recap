@@ -75,8 +75,8 @@ class FicheRepository extends EntityRepository
 
 	public function getSearch($search, $userId)
 	{
-		$search = str_replace(' ', '*+', $search);
-		$search = "+".$search."*";
+		$search = str_replace(' ', '* +', $search);
+		$search = "+*".$search."*";
      	$stmt = $this
      		->getEntityManager()
 			->getConnection()

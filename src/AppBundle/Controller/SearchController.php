@@ -27,7 +27,8 @@ class SearchController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $search = $request->query->get('search');
+        $search = strip_tags($request->query->get('search'));
+        
         if (!empty($search)) {
             $res = $em
                 ->getRepository('AppBundle:Fiche')

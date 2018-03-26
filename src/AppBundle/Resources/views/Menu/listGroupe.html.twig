@@ -1,0 +1,25 @@
+	<li class="nav-item pl-3 p-1 text-grey">
+    	<i class="fa fa-users"></i> Groupes
+    	<a href="{{ path('app_groupe_add') }}" class="float-right pr-3 text-grey"><i class="fa fa-plus-circle"></i></a>
+    </li>
+    {% for groupe in listGroupes %}
+    <li class="nav-item border-left-groupe">
+    	<a class="nav-link pl-3 text-grey" href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">
+    		{% if groupe.avatar == null %}
+	        <span class="visible-xs menu-avatar" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
+	        {% else %}
+	        <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded visible-xs menu-avatar" alt="avatar" style="max-width: 25px; max-height: 25px;">
+	        {% endif %}
+    		{{ groupe.titre }}
+    	</a>
+	</li>
+    {% endfor %}
+</ul>
+
+<ul class="nav nav-pills flex-column pt-3">
+    <li class="nav-item">
+    	<a class="nav-link text-grey" href="{{ path('app_mes_fiches') }}"><i class="fa fa-file-text"></i> Mes fiches ({{ nbFiche }})</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-grey" href="{{ path('app_favoris') }}"><i class="fa fa-star"></i> Favoris ({{ nbFavoris }})</a>
+    </li>

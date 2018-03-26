@@ -25,7 +25,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="nom", type="string", nullable=true)
-     * @Assert\Length(min=2)
+     * @Assert\Length(min=2, max=25, minMessage="Votre nom doit contenir au moins 3 caractères", maxMessage="Votre nom ne doit pas contenir plus de 25 caractères")
      */
     protected $nom;
 
@@ -33,7 +33,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="prenom", type="string", nullable=true)
-     * @Assert\Length(min=2)
+     * @Assert\Length(min=2, max=15, minMessage="Votre prénom doit contenir au moins 3 caractères", maxMessage="Votre prénom ne doit pas contenir plus de 15 caractères")
      */
     protected $prenom;
 
@@ -41,12 +41,6 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="avatar", nullable=true)
-     * @Assert\File(
-     *     maxSize = "5M",
-     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
-     *     maxSizeMessage = "La taille maximal d'un avatar est de 5MB.",
-     *     mimeTypesMessage = "Seulement des fichier de type image sont autorisé (jpg, png, tiff, gif)"
-     * )
      */
     protected $avatar;
 
@@ -55,6 +49,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="date_inscription", type="datetime", nullable=false)
      * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     protected $dateInscription;
 
@@ -79,9 +74,16 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="ville", type="string", nullable=true)
-     * @Assert\Length(min=3)
+     * @Assert\Length(min=2, max=40, minMessage="Votre nom de ville doit contenir au moins 2 caractères.", maxMessage="Votre nom de ville ne doit pas contenir plus de 40 caractères.")
      */
     protected $ville;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string", length=8, nullable=true)
+     */
+    private $color;
 
   	/**
      * @var \AppBundle\Entity\Membre
@@ -129,14 +131,6 @@ class User extends BaseUser
      *
      */
     protected $notificationAuteur;
-
-    /**
-     * @var string
-     *
-     *@ORM\Column(name="color", type="string", length=8, nullable=true)
-     */
-    private $color;
-
 
 	public function __construct()
     {

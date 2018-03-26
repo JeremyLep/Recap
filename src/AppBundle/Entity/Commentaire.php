@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use \DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Commentaire
@@ -26,7 +27,8 @@ class Commentaire
     /**
      * @var string
      *
-     * @ORM\Column(name="contenu", type="string", length=700, nullable=false)
+     * @ORM\Column(name="contenu", type="string", length=600, nullable=false)
+     * @Assert\Length(min=3, max=600, minMessage="Votre message doit contenir au moins 3 caractères", maxMessage="Votre message ne peut contenir plus de 600 caractères")
      */
     private $contenu;
 
@@ -34,6 +36,7 @@ class Commentaire
      * @var \DateTime
      *
      * @ORM\Column(name="date_com", type="date", nullable=false)
+     * @Assert\DateTime()
      */
     private $dateCom;
 

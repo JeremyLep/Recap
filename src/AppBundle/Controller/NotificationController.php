@@ -38,7 +38,7 @@ class NotificationController extends Controller
     {
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-
+        
         $notifications = $em
             ->getRepository('AppBundle:UserNotif')
             ->findBy(array('user' => $user), array('date' => 'DESC'));

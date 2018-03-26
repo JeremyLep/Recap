@@ -2,13 +2,14 @@
 
 {% block body %}
 <div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
-  <h5 class="p-3 m-0">16 fiches trouvées</h5>
+  <h5 class="p-3 m-0">Vous avez accès à {{ nbFicheAccess }} fiches - {{ listGroupes|length }} groupes</h5>
 </div>
 
 <div id="content" class="col-12">
   {% for groupe in listGroupes %}
+  {% if groupe.fiche is not empty %}
   <h4 class="pt-3"><a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a></h4>
-  <div class="row p-3 ">
+  <div class="row p-1">
     {% for fiche in groupe.fiche %}
     {% if loop.index < 3 %}
     <section class="col-md-6 col-12 placeholders pt-3">
@@ -23,13 +24,12 @@
               </div>
             </div>
             <div class="row">
-              <div class=" col-8 text-left">
+              <div class=" col-7 text-left">
                 <p class="m-0" style="font-size: 0.9rem; ">Auteur: {{ fiche.auteur.user.nom }}</p>
               </div>
-              <div class=" col-4 text-right">
+              <div class=" col-5 text-right">
                 <h6 class="m-0">
-                  {{ fiche.note|rating(5) }}
-                  
+                  {{ fiche.note|rating(5) }}             
                 </h6>
               </div>
             </div>
@@ -45,7 +45,7 @@
             </div>
             <div class="card-footer text-muted">
               <div class="row">
-                <h6 class="col-5 text-left m-0">{{ fiche.nbCommentaire }} commentaires</h6>
+                <h6 class="col-5 text-left m-0 pr-0">{{ fiche.nbCommentaire }} commentaires</h6>
                 <h6 class="col-7 m-0 text-right text-white">
                   {% for tag in fiche.getTag() %}
                       <span class="badge badge-color" style="background-color: {{ tag.color}};">{{ tag.label }}</span>
@@ -63,6 +63,7 @@
 
    
   </div>
+{% endif %}
 {% endfor %}
 </div>
 {% endblock %}

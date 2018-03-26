@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use \DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Notification
@@ -27,8 +28,17 @@ class Notification
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @Assert\DateTime()
      */
     private $date;
+
+    /**
+     * @var Integer
+     *
+     * @ORM\Column(name="nb_ressource", type="integer", nullable=false)
+     * @Assert\NotBlank()
+     */
+    private $nbRessource;
 
     /**
      * @var \Fiche
@@ -36,13 +46,6 @@ class Notification
      * @ORM\ManyToOne(targetEntity="Fiche", inversedBy="notification", cascade="remove")
      */
     private $fiche;
-
-    /**
-     * @var Integer
-     *
-     * @ORM\Column(name="nb_ressource", type="integer", nullable=true)
-     */
-    private $nbRessource;
 
     /**
      * @var \UserBundle\Entity\User
@@ -65,6 +68,7 @@ class Notification
     {
         $this->notifBridge = new Collections\ArrayCollection();
         $this->date        = new DateTime();
+        $this->nbRessource = 0;
     }
 
     /**

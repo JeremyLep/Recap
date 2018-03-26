@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
 use \DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Invite
@@ -26,7 +27,9 @@ class Invite
     /**
      * @var email
      *
-     * @ORM\Column(name="email", type="string", length=30, nullable=false)
+     * @ORM\Column(name="email", type="string", length=50, nullable=false)
+     * @Assert\Email(message="L'email '{{ value }}' n'est pas une adresse email valide.")
+     * @Assert\NotBlank()
      */
     private $email;
 
@@ -34,6 +37,8 @@ class Invite
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $date;
 
@@ -41,8 +46,19 @@ class Invite
      * @var \DateTime
      *
      * @ORM\Column(name="date_expiration", type="datetime", nullable=false)
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $dateExpiration;    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="active", type="string", nullable=false)
+     * @Assert\Choice(choices={"En attente", "Expiré", "Confirmé", "Refusé"})
+     * @Assert\NotBlank()
+     */
+    private $active;
 
     /**
      * @var \Groupe
@@ -57,13 +73,6 @@ class Invite
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="invite")
      */
     private $auteur;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="active", type="string", nullable=true)
-     */
-    private $active;
 
     /**
      * Constructor

@@ -4,11 +4,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Tag
  *
- * @ORM\Table(name="tag")
+ * @ORM\Table(name="tag", indexes={@ORM\Index(columns={"label"}, flags={"fulltext"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TagRepository")
  */
 class Tag
@@ -25,7 +26,9 @@ class Tag
     /**
      * @var string
      *
-     * @ORM\Column(name="label", type="string", length=25, nullable=true)
+     * @ORM\Column(name="label", type="string", length=15, nullable=false)
+     * @Assert\Length(min=2, max=15, minMessage="Votre label de tag doit contenir au moins 2 caractères", maxMessage="Votre label de tag ne peut contenir plus de 15 caractères")
+     * @Assert\NotBlank()
      */
     private $label;
 
@@ -33,7 +36,9 @@ class Tag
      *
      * @var string
      *
-     *@ORM\Column(name="color", type="string", length=8, nullable=true)
+     * @ORM\Column(name="color", type="string", length=8, nullable=false)
+     * @Assert\Length(min=3, max=12)
+     * @Assert\NotBlank()
      */
     private $color;
 

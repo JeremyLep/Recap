@@ -18,14 +18,11 @@ class GroupeType extends AbstractType
     {
         $builder
             ->add('titre', TextType::class, array(
-                'label' => 'Titre du groupe'
-            ))
-            ->add('passwordGroupe', PasswordType::class, array(
-                'label' => 'Password du groupe'
+                'label' => 'Titre du groupe',
             ))
             ->add('avatar', FileType::class, array(
-                'label' => 'Image du groupe',
-                'required' => false,
+                'label'      => 'Image du groupe',
+                'required'   => false,
                 'data_class' => null
             ));
     }
