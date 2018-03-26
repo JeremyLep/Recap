@@ -28,8 +28,8 @@ class Fiche
     /**
      * @var string
      *
-     * @ORM\Column(name="theme", type="string", length=100, nullable=false)
-     * @Assert\Length(min=3, max=100, minMessage="Votre thème doit contenir au moins 3 caractères", maxMessage="Votre thème ne peut contenir plus de 100 caractères")
+     * @ORM\Column(name="theme", type="string", length=25, nullable=false)
+     * @Assert\Length(min=3, max=25, minMessage="Votre thème doit contenir au moins 3 caractères", maxMessage="Votre thème ne peut contenir plus de 25 caractères")
      * @Assert\NotNull()
      */
     private $theme;
@@ -37,8 +37,8 @@ class Fiche
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=100, nullable=true)
-     * @Assert\Length(min=3, max=100, minMessage="Votre titre de fiche doit contenir au moins 3 caractères", maxMessage="Votre titre de fiche ne peut contenir plus de 100 caractères")
+     * @ORM\Column(name="titre", type="string", length=25, nullable=true)
+     * @Assert\Length(min=3, max=25, minMessage="Votre titre de fiche doit contenir au moins 3 caractères", maxMessage="Votre titre de fiche ne peut contenir plus de 25 caractères")
      * @Assert\NotNull()
      */
     private $titre;
@@ -46,8 +46,8 @@ class Fiche
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=1500, nullable=true)
-     * @Assert\Length(min=3, max=1500, minMessage="Votre description doit contenir au moins 3 caractères", maxMessage="Votre description ne peut contenir plus de 1500 caractères")
+     * @ORM\Column(name="description", type="string", length=1200, nullable=true)
+     * @Assert\Length(min=3, max=1200, minMessage="Votre description doit contenir au moins 3 caractères", maxMessage="Votre description ne peut contenir plus de 1200 caractères")
      * @Assert\NotNull()
      */
     private $description;
@@ -64,16 +64,16 @@ class Fiche
     /**
      * @var string
      *
-     * @ORM\Column(name="duree", type="string", length=30, nullable=true)
-     * @Assert\Length(min=3, max=30, minMessage="Votre durée doit contenir au moins 3 caractères", maxMessage="Votre durée ne peut contenir plus de 30 caractères")
+     * @ORM\Column(name="duree", type="string", length=25, nullable=true)
+     * @Assert\Length(min=3, max=25, minMessage="Votre durée doit contenir au moins 3 caractères", maxMessage="Votre durée ne peut contenir plus de 25 caractères")
      */
     private $duree;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="difficulte", type="string", length=50, nullable=true)
-     * @Assert\Length(min=3, max=50, minMessage="Votre difficulté doit contenir au moins 3 caractères", maxMessage="Votre difficulté ne peut contenir plus de 50 caractères")
+     * @ORM\Column(name="difficulte", type="string", length=25, nullable=true)
+     * @Assert\Length(min=3, max=25, minMessage="Votre difficulté doit contenir au moins 3 caractères", maxMessage="Votre difficulté ne peut contenir plus de 25 caractères")
      */
     private $difficulte;
 

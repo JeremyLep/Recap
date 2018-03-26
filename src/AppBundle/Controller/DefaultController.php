@@ -24,7 +24,7 @@ class DefaultController extends Controller
         $listGroupes = $em
             ->getRepository('AppBundle:Groupe')
             ->getGroupeMembre($this->getUser());
-        
+
         $nbFiche = $em
             ->getRepository('AppBundle:Fiche')
             ->countMesFiches($this->getUser());
@@ -61,12 +61,18 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Groupe')
             ->getGroupeMembre($this->getUser());
 
+        $nbFicheAccess = 0;
+        foreach ($listGroupes as $groupe) {
+            $nbFicheAccess += count($groupe->getFiche());   
+        }
+
         $nbInvite = $em
             ->getRepository('AppBundle:Invite')
             ->countInviteActive($this->getUser());
             
         return $this->render('AppBundle:Default:index.html.twig', array(
             'listGroupes' => $listGroupes,
+            'nbFicheAccess' => $nbFicheAccess
         ));
     }
 }

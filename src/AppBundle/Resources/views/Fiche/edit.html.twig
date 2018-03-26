@@ -22,7 +22,7 @@
 {% block body %}
 <div id="content" class="col-12">
   <div class="col-sm-8 offset-sm-2">
-      <h2 class="mt-5 mb-5">Fiche édition</h2>
+      <h2 class="mt-5 mb-2">Fiche édition</h2>
 
       {{ form_start(form) }}
           <div class="col-12">
@@ -38,7 +38,7 @@
           <div class="col-12">
               {{ form_label(form.description) }}
               {{ form_errors(form.description) }}
-              {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 6 }}) }}
+              {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 6, 'maxlength': 1200 }}) }}
           </div>
           <div class="col-12">
               {{ form_label(form.duree) }}
@@ -49,11 +49,6 @@
               {{ form_label(form.difficulte) }}
               {{ form_errors(form.difficulte) }}
               {{ form_widget(form.difficulte, { 'attr': {'class': 'form-control' }}) }}
-          </div>
-          <div class="col-12">
-              {{ form_label(form.note) }}
-              {{ form_errors(form.note) }}
-              {{ form_widget(form.note, { 'attr': {'class': 'form-control' }}) }}
           </div>
           <div class="col-12">
               {{ form_label(form.tag) }}

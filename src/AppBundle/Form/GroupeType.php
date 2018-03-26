@@ -20,9 +20,6 @@ class GroupeType extends AbstractType
             ->add('titre', TextType::class, array(
                 'label' => 'Titre du groupe',
             ))
-            ->add('passwordGroupe', PasswordType::class, array(
-                'label' => 'Password du groupe'
-            ))
             ->add('avatar', FileType::class, array(
                 'label'      => 'Image du groupe',
                 'required'   => false,

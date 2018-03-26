@@ -27,8 +27,8 @@ class Commentaire
     /**
      * @var string
      *
-     * @ORM\Column(name="contenu", type="string", length=700, nullable=false)
-     * @Assert\Length(min=3, max=700, minMessage="Votre message doit contenir au moins 3 caractères", maxMessage="Votre message ne peut contenir plus de 700 caractères")
+     * @ORM\Column(name="contenu", type="string", length=600, nullable=false)
+     * @Assert\Length(min=3, max=600, minMessage="Votre message doit contenir au moins 3 caractères", maxMessage="Votre message ne peut contenir plus de 600 caractères")
      */
     private $contenu;
 

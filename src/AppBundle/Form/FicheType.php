@@ -40,7 +40,7 @@ class FicheType extends AbstractType
             ->add('difficulte', TextType::class, array(
                 'label' => 'Difficulté de la fiche',
             ))
-            ->add('note', ChoiceType::class, array(
+            /*->add('note', ChoiceType::class, array(
                 'label'   => 'Note de la fiche',
                 'choices' => array(0, 1, 2, 3, 4, 5),
                 'constraints' => new Range(array(
@@ -49,7 +49,7 @@ class FicheType extends AbstractType
                     'minMessage' => "Votre note doit être comprise entre 0 et 5 étoilesmin",
                     'maxMessage' => "Votre note doit être comprise entre 0 et 5 étoilesmax"
                 )),
-            ))
+            ))*/
             ->add('tag', ChoiceType::class, array(
                 'label'    => 'Tag existant associés à la fiche',
                 'mapped'   => false,

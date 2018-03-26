@@ -379,6 +379,27 @@ strong.select2-results__group{
 	color: black;
 }
 
+form ul li {
+  list-style: none;
+  color: red;
+}
+
+form ul {
+  padding: 0; 
+}
+
+form label {
+  font-size: 18px;
+  padding-top: 15px;
+}
+.countChar {
+  padding-top: 25px;
+}
+
+.select2-selection__choice {
+  color: #495057;
+}
+
 #searchbar {
   margin: auto;
 }

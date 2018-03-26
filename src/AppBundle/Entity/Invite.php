@@ -27,7 +27,7 @@ class Invite
     /**
      * @var email
      *
-     * @ORM\Column(name="email", type="string", length=40, nullable=false)
+     * @ORM\Column(name="email", type="string", length=50, nullable=false)
      * @Assert\Email(message="L'email '{{ value }}' n'est pas une adresse email valide.")
      * @Assert\NotBlank()
      */

@@ -29,7 +29,6 @@ class Notification
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      * @Assert\DateTime()
-     * @Assert\NotBlank()
      */
     private $date;
 
@@ -69,7 +68,7 @@ class Notification
     {
         $this->notifBridge = new Collections\ArrayCollection();
         $this->date        = new DateTime();
-        $this->nbRessource = new DateTime();
+        $this->nbRessource = 0;
     }
 
     /**

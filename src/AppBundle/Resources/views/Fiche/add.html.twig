@@ -21,7 +21,7 @@
 {% block body %}
 <div id="content" class="col-12">
     <div class="col-sm-8 offset-sm-2">
-        <h2 class="mt-5 mb-5">Nouvelle fiche</h2>
+        <h2 class="mt-5 mb-2">Nouvelle fiche</h2>
 
         {{ form_start(form) }}
             <div class="col-12">
@@ -36,8 +36,9 @@
             </div>
             <div class="col-12">
                 {{ form_label(form.description) }}
+                <small class="float-right countChar">1200 caractères restants</small>
                 {{ form_errors(form.description) }}
-                {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 6  }}) }}
+                {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 6, 'maxlength': 1200 }}) }}
             </div>
             <div class="col-12">
                 {{ form_label(form.duree) }}
@@ -48,11 +49,6 @@
                 {{ form_label(form.difficulte) }}
                 {{ form_errors(form.difficulte) }}
                 {{ form_widget(form.difficulte, { 'attr': {'class': 'form-control' }}) }}
-            </div>
-            <div class="col-12">
-                {{ form_label(form.note) }}
-                {{ form_errors(form.note) }}
-                {{ form_widget(form.note, { 'attr': {'class': 'form-control' }}) }}
             </div>
             <div class="col-12">
                 {{ form_label(form.tag) }}
@@ -94,4 +90,16 @@
     });
   });
  </script>
+ <script type="text/javascript">
+    $('form textarea').on("input", function(){
+        var maxlength = $(this).attr("maxlength");
+        var currentLength = $(this).val().length;
+        if( currentLength >= maxlength ){
+            $('.countChar').html(" Vous avez atteint la limite de caractères.").addClass('text-danger');
+            $('.countChar').prepend('<i class="fa fa-exclamation-circle"></i> ');
+        } else {
+            $('.countChar').html(maxlength - currentLength + " caractères restants").removeClass('text-danger');
+        }
+    });
+</script>
 {% endblock %}

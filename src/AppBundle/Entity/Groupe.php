@@ -27,8 +27,8 @@ class Groupe
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=75, nullable=false)
-     * @Assert\Length(min=3, max=75, minMessage="Votre titre de groupe doit contenir au moins 3 caractères", maxMessage="Votre titre de groupe ne peut contenir plus de 75 caractères")
+     * @ORM\Column(name="titre", type="string", length=25, nullable=false)
+     * @Assert\Length(min=3, max=25, minMessage="Votre titre de groupe doit contenir au moins 3 caractères", maxMessage="Votre titre de groupe ne peut contenir plus de 25 caractères")
      * @Assert\NotBlank()
      */
     private $titre;
@@ -40,15 +40,6 @@ class Groupe
      * @Assert\NotBlank()
      */
     private $nbFiche;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password_groupe", type="string", length=75, nullable=false)
-     * @Assert\Length(min=3, max=75, minMessage="Votre password doit contenir au moins 3 caractères", maxMessage="Votre password ne peut contenir plus de 75 caractères")
-     * @Assert\NotBlank()
-     */
-    private $passwordGroupe;
 
     /**
      * @var integer
@@ -182,30 +173,6 @@ class Groupe
     public function getNbFiche()
     {
         return $this->nbFiche;
-    }
-
-    /**
-     * Set passwordGroupe
-     *
-     * @param string $passwordGroupe
-     *
-     * @return Groupe
-     */
-    public function setPasswordGroupe($passwordGroupe)
-    {
-        $this->passwordGroupe = $passwordGroupe;
-
-        return $this;
-    }
-
-    /**
-     * Get passwordGroupe
-     *
-     * @return string
-     */
-    public function getPasswordGroupe()
-    {
-        return $this->passwordGroupe;
     }
 
     /**

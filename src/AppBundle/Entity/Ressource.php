@@ -25,8 +25,8 @@ class Ressource
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=75, nullable=false)
-     * @Assert\Length(min=3, max=75, minMessage="Votre titre de ressource doit contenir au moins 3 caractères", maxMessage="Votre titre de ressource ne peut contenir plus de 75 caractères")
+     * @ORM\Column(name="titre", type="string", length=25, nullable=false)
+     * @Assert\Length(min=3, max=25, minMessage="Votre titre de ressource doit contenir au moins 3 caractères", maxMessage="Votre titre de ressource ne peut contenir plus de 25 caractères")
      * @Assert\NotBlank()
      */
     private $titre;
@@ -34,8 +34,8 @@ class Ressource
     /**
      * @var string
      *
-     * @ORM\Column(name="route_doc", type="string", length=300, nullable=false)
-     * @Assert\Length(min=3, max=300)
+     * @ORM\Column(name="route_doc", type="string", length=200, nullable=false)
+     * @Assert\Length(min=3, max=200)
      * @Assert\NotBlank()
      */
     private $routeDoc;

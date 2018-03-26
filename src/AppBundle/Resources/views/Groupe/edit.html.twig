@@ -2,18 +2,13 @@
 
 {% block body %}
  <div class="col-sm-8 offset-sm-2">
-    <h2 class="mt-5 mb-5">Groupe édition</h2>
+    <h2 class="mt-5 mb-2">Groupe édition</h2>
 
     {{ form_start(editForm) }}
         <div class="col-12">
             {{ form_label(editForm.titre) }}
             {{ form_errors(editForm.titre) }}
             {{ form_widget(editForm.titre, { 'attr': {'class': 'form-control' }}) }}
-        </div>
-        <div class="col-12">
-            {{ form_label(editForm.passwordGroupe) }}
-            {{ form_errors(editForm.passwordGroupe) }}
-            {{ form_widget(editForm.passwordGroupe, { 'attr': {'class': 'form-control' }}) }}
         </div>
         <div class="col-sm-12">
             {{ form_label(editForm.avatar) }}

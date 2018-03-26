@@ -80,12 +80,13 @@
             <ul class="navbar-nav w-100" id="groupe-icon">
               {% block groupe %}
               <li class="nav-item li-inline" id="fiche-icon">
-                <a class="nav-link" href="">16 <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+                <a class="nav-link" href=""><i class="fa fa-file-text-o" aria-hidden="true"></i></a>
               </li>
               <li class="nav-item li-inline" id="membre-list">
-                <a class="nav-link" href="">14 <i class="fa fa-user-o" aria-hidden="true"></i></a>
+                <a class="nav-link" href=""><i class="fa fa-user-o" aria-hidden="true"></i></a>
               </li>
               {% endblock %}
+
               {% block invite %}
               {{ render(controller('AppBundle:Default:menuTop')) }}
               {% endblock %}
@@ -194,6 +195,9 @@
               $('form').submit();
           });
       });
+    </script>
+    <script type="text/javascript">
+          $('form ul li').prepend('<i class="fa fa-exclamation-circle"></i> ');
     </script>
     <script type="text/javascript">
           $('input#search').focus(function() {
