@@ -23,7 +23,9 @@ class RegistrationType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class)
-            ->add('username', null, array('translation_domain' => 'FOSUserBundle'))
+            ->add('username', null, array(
+                'translation_domain' => 'FOSUserBundle'
+            ))
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'options' => array('translation_domain' => 'FOSUserBundle'),
@@ -35,14 +37,23 @@ class RegistrationType extends AbstractType
                     'label' => 'Confirmation mot de passe*',
                     'attr' => array('class' => 'form-control'),
                 ),
-                'invalid_message' => 'fos_user.password.mismatch',
-                
+                'invalid_message' => 'Les mots de passe ne correspondent pas.',    
             ))
-            ->add('nom', TextType::class, array('required' => false))
-            ->add('prenom', TextType::class, array('required' => false))
-            ->add('avatar', FileType::class, array('required' => false))
-            ->add('age', IntegerType::class, array('required' => false))
-            ->add('ville', TextType::class, array('required' => false))
+            ->add('nom', TextType::class, array(
+                'required' => false
+            ))
+            ->add('prenom', TextType::class, array(
+                'required' => false
+            ))
+            ->add('avatar', FileType::class, array(
+                'required' => false
+            ))
+            ->add('age', IntegerType::class, array(
+                'required' => false
+            ))
+            ->add('ville', TextType::class, array(
+                'required' => false
+            ))
             ->add('submit', SubmitType::class);
     }
     

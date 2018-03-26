@@ -8,16 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use AppBundle\Entity\Groupe;
-use AppBundle\Entity\Membre;
-use AppBundle\Entity\Ressource;
-use AppBundle\Entity\Tag;
-use AppBundle\Entity\Commentaire;
-use UserBundle\Entity\User;
-use AppBundle\Repository\TagRepository;
-
+use Symfony\Component\Validator\Constraints\Range;
 
 class FicheType extends AbstractType
 {
@@ -30,27 +21,34 @@ class FicheType extends AbstractType
         $this->tag = $options['tag'];
         $tags = array();
         foreach ($this->tag as $tag) {
-            array_push($tags, array($tag->getLabel() => $tag->getId()));
+            $tags[] = array($tag->getLabel() => $tag->getId());
         }
 
         $builder
             ->add('theme', TextType::class, array(
-                'label' => 'Titre du thème'
+                'label' => 'Titre du thème',
             ))
             ->add('titre', TextType::class, array(
-                'label' => 'Titre de la fiche'
+                'label' => 'Titre de la fiche',
             ))
             ->add('description', TextareaType::class, array(
-                'label' => 'Contenu de la fiche'
+                'label' => 'Contenu de la fiche',
             ))
             ->add('duree', TextType::class, array(
-                'label' => 'Durée estimé de la fiche'
+                'label' => 'Durée estimé de la fiche',
             ))
             ->add('difficulte', TextType::class, array(
-                'label' => 'Difficulté de la fiche'
+                'label' => 'Difficulté de la fiche',
             ))
-            ->add('note', IntegerType::class, array(
-                'label' => 'note de la fiche'
+            ->add('note', ChoiceType::class, array(
+                'label'   => 'Note de la fiche',
+                'choices' => array(0, 1, 2, 3, 4, 5),
+                'constraints' => new Range(array(
+                    'min' => 0,
+                    'max' => 5,
+                    'minMessage' => "Votre note doit être comprise entre 0 et 5 étoilesmin",
+                    'maxMessage' => "Votre note doit être comprise entre 0 et 5 étoilesmax"
+                )),
             ))
             ->add('tag', ChoiceType::class, array(
                 'label'    => 'Tag existant associés à la fiche',
@@ -58,7 +56,7 @@ class FicheType extends AbstractType
                 'multiple' => true,
                 'choices'  => $tags,
                 'attr'     => array(
-                    'class'    => 'selectTag w-100',
+                    'class' => 'selectTag w-100',
                 )
             ));
     }

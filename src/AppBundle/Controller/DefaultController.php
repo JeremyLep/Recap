@@ -33,7 +33,7 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Favoris')
             ->countFavoris($this->getUser());
 
-        return $this->render('AppBundle::menuleft.html.twig', array(
+        return $this->render('AppBundle:Menu:listGroupe.html.twig', array(
             'listGroupes' => $listGroupes,
             'nbFiche'     => $nbFiche,
             'nbFavoris'   => $nbFavoris,

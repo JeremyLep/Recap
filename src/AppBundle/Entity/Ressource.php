@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ressource
@@ -24,14 +25,18 @@ class Ressource
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=75, nullable=true)
+     * @ORM\Column(name="titre", type="string", length=75, nullable=false)
+     * @Assert\Length(min=3, max=75, minMessage="Votre titre de ressource doit contenir au moins 3 caractères", maxMessage="Votre titre de ressource ne peut contenir plus de 75 caractères")
+     * @Assert\NotBlank()
      */
     private $titre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="route_doc", type="string", length=300, nullable=true)
+     * @ORM\Column(name="route_doc", type="string", length=300, nullable=false)
+     * @Assert\Length(min=3, max=300)
+     * @Assert\NotBlank()
      */
     private $routeDoc;
 
@@ -45,7 +50,7 @@ class Ressource
     /**
     * @var string
     *
-    * @ORM\Column(name="image", type="string", length=75, nullable=false)
+    * @ORM\Column(name="image", type="string", length=75, nullable=true)
     */
     private $image;
 

@@ -221,7 +221,6 @@ class FicheController extends Controller
 
       if ($editForm->isSubmitted() && $editForm->isValid()) {
         $tags = $editForm->get('tag')->getData();
-
         $fiche->removeManyTags($fiche->getTag());
 
         if (!empty($_POST['addTag'])) {
@@ -237,6 +236,8 @@ class FicheController extends Controller
 
         $tags = $em->getRepository('AppBundle:Tag')->findById($tags);
         $fiche->addManyTags($tags);
+        $fiche->setNote($editForm->get('note')->getData());
+        
         $em->persist($fiche);
         $em->flush();
 

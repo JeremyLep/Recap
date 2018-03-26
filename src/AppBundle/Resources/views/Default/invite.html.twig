@@ -1,6 +1,6 @@
-<li class="nav-item" id="invite">
+<li class="nav-item li-inline" id="invite">
     <a class="nav-link" href="{{ path('app_invite') }}">
-    	<i class="fa fa-lg fa-envelope-o {% if (nbInvite > 0) or (nbInvite == null) %}text-danger{% endif %}" aria-hidden="true"></i>
+    	<i class="fa fa-lg fa-envelope {% if (nbInvite > 0) or (nbInvite == null) %}text-danger{% endif %}" aria-hidden="true"></i>
     	{% if (nbInvite > 0) or (nbInvite == null) %}
     		<span class="badge badge-pill badge-danger badge-invite">{{ nbInvite }}</span>
     	{% endif %}
