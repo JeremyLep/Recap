@@ -235,7 +235,7 @@ class Membre
      */
     public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
     {
-        $this->commentaire[] = $commentaire;
+        $this->commentaire->add($commentaire);
 
         return $this;
     }
@@ -259,7 +259,7 @@ class Membre
      */
     public function addFiche(\AppBundle\Entity\Fiche $fiche)
     {
-        $this->fiche[] = $fiche;
+        $this->fiche->add($fiche);
 
         return $this;
     }

@@ -126,7 +126,7 @@ class Tag
      */
     public function addFiche(\AppBundle\Entity\Fiche $fiche)
     {
-        $this->fiche[] = $fiche;
+        $this->fiche->add($fiche);
 
         return $this;
     }

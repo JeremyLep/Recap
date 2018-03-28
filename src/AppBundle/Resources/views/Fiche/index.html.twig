@@ -47,18 +47,16 @@
         <div class="card card-fiche">
           <div class="card-header">
             <div class="row">
-              <div class=" col-12 text-left">
+              <div class=" col-7 text-left">
                 <h5>{{ fiche.theme }}</h5>
+              </div>
+              <div class="col-5 text-right" id="rating">
+                {{ include('AppBundle:Fiche:rating.html.twig') }}
               </div>
             </div>
             <div class="row">
-              <div class=" col-7 text-left">
+              <div class=" col-12 text-left">
                 <p class="m-0" style="font-size: 0.9rem; ">Auteur: {{ fiche.auteur.user.nom }}</p>
-              </div>
-              <div class=" col-5 text-right">
-                <h6 class="m-0">
-                  {{ fiche.note|rating(5) }}
-                </h6>
               </div>
             </div>
             <div class="row">
@@ -249,7 +247,6 @@
       });
     </script>
     <script type="text/javascript">
-      //$("#overlayRessource").hide();
       $("object#object").css('height', '0');
       $("a#openRessource").on("click", function() {
         var ressource = $(this).attr('data-ressource');
@@ -295,6 +292,53 @@
         $("object#object").css('height', '0');
         $("#office").css('height', '0');
         $("#image").css('height', '0');
+      });
+    </script>
+
+    <script type="text/javascript">
+      $('.rating').on('click', function() {
+          var rate = $(this).attr('data-rate');
+          $.ajax({
+            url: "{{ path('app_fiche_rating') }}",
+            type: "POST",
+            data: { rate : rate, ficheId : {{ fiche.id }} } ,
+            success: function(rating) {
+                if (typeof rating['message'] === 'undefined') {
+                  $('#rating').html(rating);
+                  $('.rating-error').html('<i class="fa fa-check-circle"></i> Votre vote à été validé').addClass('text-success');  
+                } else {
+                  $('.rating-error').html(rating['message']).addClass('text-danger'); 
+                }
+            }
+          });
+        });
+
+      
+      $('.rating').hover(function() {
+        var count = $(this).attr('data-rate');
+        $(this).removeClass('fa-star-o').addClass('fa-star'); 
+        for (var i = 1; i <= 5; i++) {
+          if (i <= count) {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star-o').addClass('fa-star');    
+          } else {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star').addClass('fa-star-o');
+          }
+        }
+      });
+
+      $( ".rating" ).mouseleave(function() {
+        var count = {{ fiche.averageNote() }};
+        for (var i = 1; i <= 5; i++) {
+          if (i <= count) {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star-o').addClass('fa-star');    
+          } else {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star').addClass('fa-star-o');
+          }
+        }
       });
     </script>
 {% endblock %}

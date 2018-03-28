@@ -118,7 +118,6 @@ class InviteController extends Controller
           'id' => $request->get('id')
         ));
 
-        //var_dump($request->get('confirm'));die;
       if ($request->get('confirm') == 'true') {
         $invite->setActive('Confimé');
         $membre = new Membre();

@@ -46,7 +46,6 @@ class FavorisController extends Controller
                     'fiche' => $request->get('fiche')
                 ));
 
-               // var_dump($favoris);die;
             $fiche = $em
                 ->getRepository('AppBundle:Fiche')
                 ->find($request->get('fiche'));

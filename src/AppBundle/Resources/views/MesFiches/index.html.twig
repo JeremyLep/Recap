@@ -27,18 +27,25 @@
           <div class="card card-fiche">
             <div class="card-header">
               <div class="row">
-              <div class=" col-12 text-left">
+              <div class=" col-7 text-left">
                 <h5>{{ fiche.theme }}</h5>
+              </div>
+              <div class=" col-5 text-right">
+                <small class="">{{ fiche.countNote() }} votes</small>
+                <h6 class="m-0 text-warning">
+                {% for i in 1..5 %}
+                    {% if fiche.averageNote() >= loop.index %}
+                    <span class="fa fa-star"></span>
+                    {% else %}
+                    <span class="fa fa-star-o"></span>
+                    {% endif %}
+                  {% endfor %}
+                </h6>
               </div>
             </div>
             <div class="row">
-              <div class=" col-7 text-left">
+              <div class=" col-12 text-left">
                 <p class="m-0" style="font-size: 0.9rem; ">Auteur: {{ fiche.auteur.user.nom }}</p>
-              </div>
-              <div class=" col-5 text-right">
-                <h6 class="m-0">
-                  {{ fiche.note|rating(5) }}
-                </h6>
               </div>
             </div>
             <div class="row">

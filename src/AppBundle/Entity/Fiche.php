@@ -37,8 +37,8 @@ class Fiche
     /**
      * @var string
      *
-     * @ORM\Column(name="titre", type="string", length=25, nullable=true)
-     * @Assert\Length(min=3, max=25, minMessage="Votre titre de fiche doit contenir au moins 3 caractères", maxMessage="Votre titre de fiche ne peut contenir plus de 25 caractères")
+     * @ORM\Column(name="titre", type="string", length=30, nullable=true)
+     * @Assert\Length(min=3, max=30, minMessage="Votre titre de fiche doit contenir au moins 3 caractères", maxMessage="Votre titre de fiche ne peut contenir plus de 30 caractères")
      * @Assert\NotNull()
      */
     private $titre;
@@ -76,22 +76,6 @@ class Fiche
      * @Assert\Length(min=3, max=25, minMessage="Votre difficulté doit contenir au moins 3 caractères", maxMessage="Votre difficulté ne peut contenir plus de 25 caractères")
      */
     private $difficulte;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="note", type="smallint", nullable=false)
-     * @Assert\NotBlank()
-     */
-    private $note;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="nb_note", type="integer", nullable=false)
-     * @Assert\NotBlank()
-     */
-    private $nbNote;
 
     /**
      * @var integer
@@ -155,6 +139,15 @@ class Fiche
     private $ressource;
 
     /**
+     * @var \Note
+     *
+     * @ORM\OneToMany(targetEntity="Note", mappedBy="fiche", cascade={"persist", "remove"})
+     *
+     */
+    protected $note;
+
+
+    /**
      * @var \AppBundle\Entity\Notification
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notification", mappedBy="fiche")
@@ -172,11 +165,10 @@ class Fiche
         $this->favoris       = new Collections\ArrayCollection();
         $this->ressource     = new Collections\ArrayCollection();
         $this->notification  = new Collections\ArrayCollection();
+        $this->note          = new Collections\ArrayCollection();
         $this->dateCreation  = new DateTime();
         $this->nbRessource   = 0;
         $this->nbCommentaire = 0;
-        $this->note          = 0;
-        $this->nbNote        = 0;
     }
 
 
@@ -334,55 +326,13 @@ class Fiche
         return $this->difficulte;
     }
 
-    /**
-     * Set note
-     *
-     * @param integer $note
-     *
-     * @return Fiche
-     */
-    public function setNote($note)
+    /*public function setNote($note)
     {
         $this->note = (int)round(($this->getNbNote() * $this->note + $note) / ($this->getNbNote()+1));
         $this->nbNote++;
 
         return $this;
-    }
-
-    /**
-     * Get note
-     *
-     * @return integer
-     */
-    public function getNote()
-    {
-        return $this->note;
-    }
-
-    /**
-     * Set note
-     *
-     * @param integer $
-     *
-     * @return Fiche
-     */
-    public function incremNbNote()
-    {
-        
-        $this->nbNote = $nbNote++;
-
-        return $this;
-    }
-
-    /**
-     * Get nb_note
-     *
-     * @return integer
-     */
-    public function getNbNote()
-    {
-        return $this->nbNote;
-    }
+    }*/
 
     /**
      * Set nbRessource
@@ -489,7 +439,7 @@ class Fiche
      */
     public function addTag(\AppBundle\Entity\Tag $tag)
     {
-        $this->tag[] = $tag;
+        $this->tag->add($tag);
 
         return $this;
     }
@@ -504,7 +454,7 @@ class Fiche
     public function addManyTags($tags)
     {   
         foreach ($tags as $tag) {
-            $this->tag[] = $tag;    
+            $this->tag->add($tag);    
         }
 
         return $this;
@@ -563,6 +513,47 @@ class Fiche
     }
 
     /**
+     * Get Note
+     *
+     * @return Collections\ArrayCollection
+     */
+    public function getNotes()
+    {
+        return $this->note;
+    }
+
+    public function averageNote()
+    {
+        if ($this->countNote() === 0) {
+            return 0;
+        }
+        
+        $averageNote = 0;
+        foreach ($this->getNotes() as $note) {
+            $averageNote += $note->getNote();
+        }
+
+        return round($averageNote / $this->countNote());
+    }
+
+    public function countNote()
+    {
+        return count($this->getNotes());
+    }
+
+    /**
+     * add Note
+     *
+     * @return Collections\ArrayCollection
+     */
+    public function addNote(\AppBundle\Entity\Note $note)
+    {
+        $this->note->add($note);
+
+        return $this;
+    }
+
+    /**
      * Get commentaire
      *
      * @return Collections\Collection
@@ -591,7 +582,7 @@ class Fiche
      */
     public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
     {
-        $this->commentaire[] = $commentaire;
+        $this->commentaire->add($commentaire);
         $this->nbCommentaire++;
 
         return $this;
@@ -617,7 +608,7 @@ class Fiche
      */
     public function addRessource(\AppBundle\Entity\Ressource $ressource)
     {
-        $this->ressource[] = $ressource;
+        $this->ressource->add($ressource);
         $this->nbRessource++;
 
         return $this;
