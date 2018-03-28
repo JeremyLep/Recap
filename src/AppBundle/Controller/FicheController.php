@@ -6,12 +6,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use AppBundle\Entity\Fiche;
 use AppBundle\Entity\Commentaire;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Tag;
+use AppBundle\Entity\Note;
 use AppBundle\Entity\Notification;
 use AppBundle\Entity\UserNotif;
 use AppBundle\Form\FicheType;
@@ -236,7 +238,6 @@ class FicheController extends Controller
 
         $tags = $em->getRepository('AppBundle:Tag')->findById($tags);
         $fiche->addManyTags($tags);
-        $fiche->setNote($editForm->get('note')->getData());
         
         $em->persist($fiche);
         $em->flush();
@@ -286,5 +287,54 @@ class FicheController extends Controller
       return $this->redirectToRoute('app_groupe', array(
         'id_groupe' => $id_groupe
       ));
+    }
+
+    public function ratingAction(Request $request)
+    {
+      $em = $this->getDoctrine()->getManager();
+      
+      if ($request->isXmlHttpRequest()) {
+
+        $rate = $request->request->get('rate');
+        $ficheId = $request->request->get('ficheId');
+
+        $fiche = $em
+          ->getRepository('AppBundle:Fiche')
+          ->find($ficheId);
+
+        $oldNote = $em
+          ->getRepository('AppBundle:Note')
+          ->findBy(array(
+            'fiche'  => $fiche,
+            'userId' => $this->getUser()->getId(),
+          ));
+
+        if (!empty($oldNote)) {
+          
+          return new JsonResponse(array(
+            'message' => '<i class="fa fa-exclamation-circle"></i> Vous avez déjà noté cette fiche',
+          ));
+        }
+
+        if ( ($rate < 1) || ($rate > 5) ) {
+          return new JsonResponse(array(
+            'message' => '<i class="fa fa-exclamation-circle"></i> Votre note doit etre comprise entre 1 et 5'
+          ));
+        }
+
+        $note = new Note();
+        $note->setNote($rate);
+        $note->setFiche($fiche);
+        $note->setUserId($this->getUser()->getId());
+        $fiche->addNote($note);
+
+        $em->persist($note);
+        $em->persist($fiche);
+        $em->flush();
+
+        return $this->render('AppBundle:Fiche:rating.html.twig', array(
+          'fiche' => $fiche,
+        ));
+      }
     }
 }

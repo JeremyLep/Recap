@@ -12,7 +12,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     {% stylesheets 
     'bundles/app/css/style.css'
-    'bundles/starrating/css/rating.css' 
     %}
 
       <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
@@ -38,7 +37,7 @@
             <input type="text" id="search" name="search" required="required" class="form-control" placeholder="⌕"/>
           </form>
           
-          <span class="visible-xs pad-3 notif-xs">
+          <span class="visible-xs pad-3 notif-xs" id="notif">
             {{ render(controller("AppBundle:Notification:panel")) }}
           </span>
 
@@ -145,13 +144,7 @@
     <script src="https://use.fontawesome.com/06bfea3587.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
-
-
-    <script src="{{ asset('bundles/starrating/js/rating.js') }}"></script>
-
-    {% javascripts
-      '@StarRatingBundle/Resources/public/js/rating.js' %}
-      <script src="{{ asset_url }}"></script>
+    {% javascripts %}
     {% endjavascripts %}
 
     <script>

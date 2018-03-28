@@ -120,6 +120,23 @@ a, a:hover, a:focus, a:active{
   width: 100%;
 }
 
+.rating {
+  cursor: pointer;
+}
+.fa-star:before {
+  -webkit-transition: all 0.5s ease!important;
+    -moz-transition: all 0.5s ease!important;
+    -o-transition: all 0.5s ease!important;
+    transition: all 0.5s ease!important;
+}
+
+.fa-star-o:before {
+  -webkit-transition: all 0.5s ease!important;
+    -moz-transition: all 0.5s ease!important;
+    -o-transition: all 0.5s ease!important;
+    transition: all 0.5s ease!important;
+}
+
 
 .navbar-dark{
 	overflow-y: auto;
@@ -453,10 +470,11 @@ form label {
   margin-top: 5px;
   top: 10px;
 }
-
-#notif {
-  padding: 3px 0px 0px 35px;
-  margin-left: 10%;
+@media screen and (min-width: 768px) {
+  #notif {
+    padding: 3px 0px 0px 35px;
+    margin-left: 10%;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -692,8 +710,7 @@ form label {
   position: absolute;
   width: 22px;
   display: block;
-  top: -5px;
-  left: 23px;
+  top: 0px;
 }
 
 .badge-color {

@@ -390,7 +390,7 @@ class User extends BaseUser
      */
     public function addUserBridge(\UserBundle\Entity\User $userBridge)
     {
-        $this->userBridge[] = $userBridge;
+        $this->userBridge->add($userBridge);
 
         return $this;
     }
@@ -405,7 +405,7 @@ class User extends BaseUser
     public function addManyNotifications($notifications)
     {   
         foreach ($notifications as $notification) {
-            $this->notification[] = $notification;    
+            $this->notification->add($notification);    
         }
 
         return $this;

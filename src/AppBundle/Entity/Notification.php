@@ -162,7 +162,7 @@ class Notification
      */
     public function addNotifBridge(\AppBundle\Entity\Notification $notifBridge)
     {
-    	$this->notifBridge[] = $notifBridge;
+    	$this->notifBridge->add($notifBridge);
 
     	return $this;
     }

@@ -256,7 +256,7 @@ class Groupe
      */
     public function addMembre(\AppBundle\Entity\Membre $membre)
     {
-        $this->membre[] = $membre;
+        $this->membre->add($membre);
         $this->nbMembre++;
 
         return $this;
@@ -302,7 +302,7 @@ class Groupe
      */
     public function addFiche(\AppBundle\Entity\Fiche $fiche)
     {
-        $this->fiche[] = $fiche;
+        $this->fiche->add($fiche);
         $this->nbFiche++;
 
         return $this;

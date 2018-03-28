@@ -66,6 +66,11 @@ app_fiche_add:
     requirements:
         id_groupe: \d+
 
+app_fiche_rating:
+    path:       /rating
+    defaults:
+        _controller: AppBundle:Fiche:rating
+
 # --------- MES FICHES ----------- #
 app_mes_fiches:
     path:   /mes-fiches

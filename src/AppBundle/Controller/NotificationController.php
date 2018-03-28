@@ -26,8 +26,6 @@ class NotificationController extends Controller
           ->getRepository('AppBundle:Notification')
           ->getNotifByGroup($groupeId);
 
-        //var_dump($notifications);die;
-
         return $this->render('AppBundle:Notification:index.html.twig', array(
             'notifications'  => $notifications,
             'groupe'         => $groupe
