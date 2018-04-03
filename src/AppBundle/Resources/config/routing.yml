@@ -3,6 +3,11 @@ app_home:
     defaults:
         _controller: AppBundle:Default:index
 
+app_dashboard_infinite_scroll:
+    path:      /dashboard_load_more
+    defaults:
+        _controller: AppBundle:Default:dashboardInfiniteScroll
+
 # ----------- GROUPE ----------- #
 app_groupe:
     path:      /groupe{id_groupe}/{page}
@@ -33,6 +38,11 @@ app_groupe_add:
         _controller: AppBundle:Groupe:add
     requirements:
         id_groupe: \d+
+
+app_groupe_infinite_scroll:
+    path:      /groupe_load_more
+    defaults:
+        _controller: AppBundle:Groupe:groupeInfiniteScroll
 
 # --------- FICHE ----------- #
 app_fiche:
@@ -76,6 +86,11 @@ app_mes_fiches:
     path:   /mes-fiches
     defaults:
         _controller: AppBundle:MesFiches:index
+
+app_mesfiches_infinite_scroll:
+    path:      /mes_fiches_load_more
+    defaults:
+        _controller: AppBundle:MesFiches:mesFichesInfiniteScroll
 
 # --------- RESSOURCES ----------- #
 app_ressource_add:
@@ -129,6 +144,11 @@ app_favoris_action:
     defaults:
         _controller: AppBundle:Favoris:ajaxAdd
 
+app_favoris_infinite_scroll:
+    path:      /favoris_load_more
+    defaults:
+        _controller: AppBundle:Favoris:favorisInfiniteScroll
+
 # --------- INVITE ----------- #
 app_invite:
     path:      /invite
@@ -159,6 +179,11 @@ app_all_notif:
     path:      /notifications
     defaults:
         _controller: AppBundle:Notification:all
+
+app_notif:
+    path:      /notif
+    defaults:
+        _controller: AppBundle:Notification:ajaxShowNotif
 
 app_notif_active:
     path:      /notif-active

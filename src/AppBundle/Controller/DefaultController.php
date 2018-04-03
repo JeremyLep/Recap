@@ -2,12 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use App\AppBundle\Entity\Fiche;
-use App\AppBundle\Entity\Groupe;
-use App\AppBundle\Entity\Membre;
-use App\AppBundle\Entity\Ressource;
-use App\AppBundle\Entity\Tag;
-use App\AppBundle\Entity\Commentaire;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,20 +17,25 @@ class DefaultController extends Controller
 
         $listGroupes = $em
             ->getRepository('AppBundle:Groupe')
-            ->getGroupeMembre($this->getUser());
+            ->getUserGroupe($this->getUser()->getId());
 
         $nbFiche = $em
             ->getRepository('AppBundle:Fiche')
-            ->countMesFiches($this->getUser());
+            ->countMesFiches($this->getUser()->getId());
 
         $nbFavoris = $em
             ->getRepository('AppBundle:Favoris')
-            ->countFavoris($this->getUser());
+            ->countFavoris($this->getUser()->getId());
+
+        $nbInvite = $em
+            ->getRepository('AppBundle:Invite')
+            ->countInviteActive($this->getUser()->getEmail());
 
         return $this->render('AppBundle:Menu:listGroupe.html.twig', array(
             'listGroupes' => $listGroupes,
             'nbFiche'     => $nbFiche,
             'nbFavoris'   => $nbFavoris,
+            'nbInvite'    => $nbInvite
         ));
     }
 
@@ -53,26 +52,50 @@ class DefaultController extends Controller
         ));
     }
 
+    public function menuNotifAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $nbNotif = $em
+            ->getRepository('AppBundle:UserNotif')
+            ->countNotif($this->getUser()->getId());
+
+        return $this->render('AppBundle:Default:notif.html.twig', array(
+            'nbNotif' => $nbNotif
+        ));
+    }
+
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $listGroupes = $em
             ->getRepository('AppBundle:Groupe')
-            ->getGroupeMembre($this->getUser());
+            ->getGroupeMembre($this->getUser()->getId(), 0, 3);
 
-        $nbFicheAccess = 0;
-        foreach ($listGroupes as $groupe) {
-            $nbFicheAccess += count($groupe->getFiche());   
-        }
+        $nbFicheAccess = $em
+            ->getRepository('AppBundle:Groupe')
+            ->countFicheAccess($this->getUser()->getId());
 
-        $nbInvite = $em
-            ->getRepository('AppBundle:Invite')
-            ->countInviteActive($this->getUser());
-            
         return $this->render('AppBundle:Default:index.html.twig', array(
             'listGroupes' => $listGroupes,
             'nbFicheAccess' => $nbFicheAccess
+        ));
+    }
+
+    public function dashboardInfiniteScrollAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $offset = $request->request->get('offset');
+        $limit  = $request->request->get('limit');
+
+        $listGroupes = $em
+            ->getRepository('AppBundle:Groupe')
+            ->getGroupeMembre($this->getUser()->getId(), $offset, $limit);
+
+        return $this->render('AppBundle:Default:template.html.twig', array(
+            'listGroupes' => $listGroupes
         ));
     }
 }

@@ -18,20 +18,17 @@ class FavorisController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $favoris = $em
+        $nbFavoris = $em
+            ->getRepository('AppBundle:Favoris')
+            ->countFavoris($this->getUser()->getId());
+
+        $fiches = $em
           ->getRepository('AppBundle:Favoris')
-          ->findBy(array('user' => $this->getUser()));
+          ->getFavorisFiche($this->getUser()->getId(), 4, 0);
 
-        $i=0;
-        foreach ($favoris as $favori) {
-            $fiches[$i++] = $favori->getFiche();
-        }
-
-        $nbFiche = count($fiches);
-
-        return $this->render('AppBundle:MesFiches:index.html.twig', array(
-            'fiches'  => $fiches,
-            'nbFiche' => $nbFiche
+        return $this->render('AppBundle:Favoris:index.html.twig', array(
+            'fiches'    => $fiches,
+            'nbFavoris' => $nbFavoris
         ));
     }
 
@@ -70,5 +67,21 @@ class FavorisController extends Controller
                 ));
             }
         }
+    }
+
+    public function favorisInfiniteScrollAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $offset = $request->request->get('offset');
+        $limit  = $request->request->get('limit');
+
+        $fiches = $em
+          ->getRepository('AppBundle:Favoris')
+          ->getFavorisFiche($this->getUser(), $limit, $offset);
+        
+        return $this->render('AppBundle:Fiche:template.html.twig', array(
+            'fiches' => $fiches
+        ));
     }
 }

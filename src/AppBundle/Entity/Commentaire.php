@@ -38,7 +38,7 @@ class Commentaire
      * @ORM\Column(name="date_com", type="date", nullable=false)
      * @Assert\DateTime()
      */
-    private $dateCom;
+    private $date;
 
     /**
      * @var \Fiche
@@ -60,7 +60,7 @@ class Commentaire
     public function __construct()
     {
         $this->fiche   = new Collections\ArrayCollection();
-        $this->dateCom = new DateTime();
+        $this->date    = new DateTime();
     }
 
     /**
@@ -98,27 +98,27 @@ class Commentaire
     }
 
     /**
-     * Set dateCom
+     * Set date
      *
-     * @param \DateTime $dateCom
+     * @param \DateTime $date
      *
      * @return Commentaire
      */
-    public function setDateCom($dateCom)
+    public function setDate($date)
     {
-        $this->dateCom = $dateCom;
+        $this->date = $date;
 
         return $this;
     }
 
     /**
-     * Get dateCom
+     * Get date
      *
      * @return \DateTime
      */
-    public function getDateCom()
+    public function getDate()
     {
-        return $this->dateCom;
+        return $this->date;
     }
 
     /**

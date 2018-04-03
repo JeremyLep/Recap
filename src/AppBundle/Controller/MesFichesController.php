@@ -19,12 +19,31 @@ class MesFichesController extends Controller
 
         $fiches = $em
           ->getRepository('AppBundle:Fiche')
-          ->findBy(array('auteur' => $this->getUser()));
-        $nbFiche = count($fiches);
+          ->findBy(array('auteur' => $this->getUser()), null, 4, 0);
 
+        $nbFiche = $em
+            ->getRepository('AppBundle:Fiche')
+            ->countMesFiches($this->getUser()->getId());
+    
         return $this->render('AppBundle:MesFiches:index.html.twig', array(
             'fiches'  => $fiches,
             'nbFiche' => $nbFiche
+        ));
+    }
+
+    public function mesFichesInfiniteScrollAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $offset = $request->request->get('offset');
+        $limit  = $request->request->get('limit');
+
+        $fiches = $em
+          ->getRepository('AppBundle:Fiche')
+          ->findBy(array('auteur' => $this->getUser()), null, $limit, $offset);
+        
+        return $this->render('AppBundle:Fiche:template.html.twig', array(
+            'fiches' => $fiches
         ));
     }
 }

@@ -29,12 +29,17 @@ class GroupeController extends Controller
         }
 
         $groupe = $em
-          ->getRepository('AppBundle:Groupe')
-          ->find($id_groupe);
+            ->getRepository('AppBundle:Groupe')
+            ->getGroupe($id_groupe);
 
+        $fiches = $em
+            ->getRepository('AppBundle:Fiche')
+            ->findBy(array('groupe' => $id_groupe), null, 4, 0);
+        
          return $this->render('AppBundle:Groupe:index.html.twig', array(
             'groupe' => $groupe,
-            'membre' => $membre
+            'membre' => $membre,
+            'fiches' => $fiches
         ));
     }
 
@@ -125,5 +130,21 @@ class GroupeController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('app_home');
+    }
+
+    public function groupeInfiniteScrollAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $offset = $request->request->get('offset');
+        $limit  = $request->request->get('limit');
+
+        $fiches = $em
+            ->getRepository('AppBundle:Fiche')
+            ->findBy(array('groupe' => $request->request->get('groupeId')), null, $limit, $offset);
+
+        return $this->render('AppBundle:Fiche:template.html.twig', array(
+            'fiches' => $fiches
+        ));
     }
 }

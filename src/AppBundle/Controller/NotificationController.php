@@ -32,25 +32,6 @@ class NotificationController extends Controller
         ));
     }
 
-    public function panelAction()
-    {
-        $em   = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        
-        $notifications = $em
-            ->getRepository('AppBundle:UserNotif')
-            ->findBy(array('user' => $user), array('date' => 'DESC'));
-
-        $nbNotif = $em
-            ->getRepository('AppBundle:UserNotif')
-            ->countNotif($user);
-        
-        return $this->render('AppBundle:Notification:panel.html.twig', array(
-            'notifications' => $notifications,
-            'nbNotif'       => $nbNotif,
-        ));
-    }
-
     public function allAction()
     {
         $em   = $this->getDoctrine()->getManager();
@@ -92,7 +73,7 @@ class NotificationController extends Controller
 
             $nbNotif = $em
                 ->getRepository('AppBundle:UserNotif')
-                ->countNotif($user);
+                ->countNotif($user->getId());
 
             return $this->render('AppBundle:Notification:panel.html.twig', array(
                 'notifications' => $notifications,
@@ -122,7 +103,29 @@ class NotificationController extends Controller
 
             $nbNotif = $em
                 ->getRepository('AppBundle:UserNotif')
-                ->countNotif($user);
+                ->countNotif($user->getId());
+
+            return $this->render('AppBundle:Notification:panel.html.twig', array(
+                'notifications' => $notifications,
+                'nbNotif'       => $nbNotif,
+            ));
+        }
+    }
+
+    public function ajaxShowNotifAction(Request $request)
+    {
+        $em   = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+        if ($request->isXmlHttpRequest()) {
+
+            $notifications = $em
+                ->getRepository('AppBundle:UserNotif')
+                ->findBy(array('user' => $user), array('date' => 'DESC'), 15, 0);
+                
+            $nbNotif = $em
+                ->getRepository('AppBundle:UserNotif')
+                ->countNotif($user->getId());
 
             return $this->render('AppBundle:Notification:panel.html.twig', array(
                 'notifications' => $notifications,

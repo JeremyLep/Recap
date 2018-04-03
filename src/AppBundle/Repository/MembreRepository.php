@@ -7,14 +7,21 @@ use Doctrine\ORM\QueryBuilder;
 
 class MembreRepository extends EntityRepository
 {
-	public function getMembres($id_groupe)
+	public function countMembreFiche($user)
 	{
-		$query = $this->createQueryBuilder('m')
-		->where('m.id = :idG')
-        ->setParameter('idG', $id_groupe)
-	    ->getQuery();
+		$query = 'SELECT count(id)
+				  FROM fiche AS f
+				  JOIN membre AS m
+				  ON g.id = m.groupe_id
+				  WHERE m.user_id = :user
+				  GROUP BY g.id
+				  ORDER BY g.date_creation';
 
-    	return $query
-      	->getResult();
+		$em = $this->getEntityManager();
+	    $stmt = $em->getConnection()->prepare($query);
+	    $stmt->bindParam(':user', $user);
+	    $stmt->execute();
+
+	    return $stmt->fetchAll();
 	}
 }

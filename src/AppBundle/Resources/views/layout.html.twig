@@ -38,7 +38,8 @@
           </form>
           
           <span class="visible-xs pad-3 notif-xs" id="notif">
-            {{ render(controller("AppBundle:Notification:panel")) }}
+            <button class="btn notif-check"></button>
+            {{ render(controller('AppBundle:Default:menuNotif')) }}
           </span>
 
           <div class="hidden-size-xs collapse navbar-collapse-custom" id="menutop-xs">
@@ -97,7 +98,8 @@
               {% endblock %}
             
               <li class="nav-item li-inline" id="notif">
-                {{ render(controller("AppBundle:Notification:panel")) }}
+                <button class="btn notif-check"></button>
+                {{ render(controller('AppBundle:Default:menuNotif')) }}
               </li>
               <li class="nav-item li-inline" id="profil">
                 <a class="nav-link" href="{{ path('fos_user_profil') }}">
@@ -147,14 +149,29 @@
     {% javascripts %}
     {% endjavascripts %}
 
-    <script>
-      $('#modif').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var recipient = button.data('name');
-      var modal = $(this);
-      modal.find('.modal-title').text('Réglage du membre ' + recipient);
-      })
+    <!-- LOAD NOTIFICATION ON CLICK -->
+    <script type="text/javascript">
+      $(document).on("click", ".notif-check", function() {
+        $.ajax({
+            url: '{{ path("app_notif") }}',
+            type: 'GET',
+            success: function(success) {
+              $('.notif-success').html( success );
+              $('button.notif-check').removeClass('notif-check').addClass('notif-check-close');
+              $('.notification').show();
+            }
+        });
+      });
+      
+      $(document).on('click', '.notif-check-close', function() {
+        $('button.notif-check-close').removeClass('notif-check-close').addClass('notif-check');
+        $('.notification').hide();
+      });
+
+
     </script>
+
+    <!-- MARK ONE NOTIFICATION -->
     <script type="text/javascript">
       $(document).on("click", "#notif-activated i", function() {
         $.ajax({
@@ -162,36 +179,44 @@
             type: 'POST',
             data: { id : $(this).attr('data-id') },
             success: function(success) {
-              $('#notif').html( success );
-              $('.notif-check').prop('checked', true);
+              $('.notif-success').html( success );
+              $('.notification').show();
             }
         });
       });
     </script>
 
+    <!-- MARK ALL NOTIFICATIONS -->
     <script type="text/javascript">
       $(document).on("click", "#markAll", function() {
         $.ajax({
             url: '{{ path("app_all_notif_active") }}',
             type: 'POST',
             success: function(success) {
-              $('#notif').html( success );
-              $('.notif-check').prop('checked', true);
+              $('.notif-success').html( success );
+              $('.notification').show();
             }
         });
       });
     </script>
 
+    <!-- SUBMIT SEARCH FORM BY JS -->
     <script type="text/javascript">
       $(document).ready(function(){
           $('#search-form').click(function(){
-              $('form').submit();
+              if (!$('input#search').val().length === 0) {
+                $('form').submit();  
+              }
           });
       });
     </script>
+
+    <!-- FORM ERROR FA ICON -->
     <script type="text/javascript">
           $('form ul li').prepend('<i class="fa fa-exclamation-circle"></i> ');
     </script>
+
+    <!-- SEARCH BAR COLLAPSE MOBILE -->
     <script type="text/javascript">
           $('input#search').focus(function() {
             $('.navbar-brand').addClass('collapse-search');
@@ -200,6 +225,7 @@
             $('.navbar-brand').removeClass('collapse-search');
           });
     </script>
+
   {% endblock %} 
 
   </body>

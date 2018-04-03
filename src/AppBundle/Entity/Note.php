@@ -59,7 +59,7 @@ class Note
      */
     public function __construct()
     {
-        $this->date   = new \DateTime();
+        $this->date = new \DateTime();
     }
 
 
@@ -112,7 +112,7 @@ class Note
     }
 
     /**
-     * Get ote
+     * Get note
      *
      * @return integer
      */
