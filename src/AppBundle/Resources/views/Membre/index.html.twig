@@ -47,7 +47,7 @@
         <td>{{membre.user.email}}</td>
         <td>3</td>
         <td>Niveau {#membre.roles#}</td>
-        <td><button type="button" class="btn btn-defaut" data-toggle="modal" data-target="#modif"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+        <td><button id="updateMember" type="button" class="btn btn-defaut" data-toggle="modal" data-target="#modif" data-name="{{ membre.user.nom }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
       </tr>
     {% endfor %}
     </tbody>
@@ -108,9 +108,21 @@
     </div>
   </div>
 </div>
-
-
 {% endblock %}
 
+{% block javascripts %}
+  
+  {{ parent() }}
 
+<!-- GET DYNAMIC MEMBRE ON MODAL  -->
+  <script>
+  $('#updateMember').on('click', function (event) {
+    var button = $(event.relatedTarget);
+    var recipient = $(this).attr('data-name');
+    var modal = $('#modif');
+    modal.find('.modal-title').text('Réglage du membre ' + recipient);
+  })
+  </script>
+
+{% endblock %}
 

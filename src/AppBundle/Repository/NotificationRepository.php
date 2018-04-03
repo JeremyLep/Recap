@@ -7,22 +7,24 @@ use Doctrine\ORM\QueryBuilder;
 
 class NotificationRepository extends EntityRepository
 {
-	public function getNotifByGroup($groupeId)
+	public function getNotifByGroup($groupeId, $offset, $limit)
 	{
-		$query = $this
-			->createQueryBuilder('n')
-			->select('n')
-			->join('n.fiche', 'f')
-			->join('f.groupe', 'g')
-			->join('g.membre', 'm')
-			->join('m.user', 'u')
-			->where('g.id = :groupeId')
-	        ->setParameter('groupeId', $groupeId)
-		    ->orderBy('n.date', 'DESC')
-		    ->setFirstResult(1)
-    		->setMaxResults(10);
-			->getQuery();
+		$query = 'SELECT n.id, n.date, n.nb_ressource AS nbRessource, f.titre AS ficheTitre, g.titre AS groupeTitre, u.username, u.avatar, u.color
+				  FROM notification AS n
+				  JOIN fiche AS f
+				  ON f.id = n.fiche_id
+				  JOIN groupe AS g
+				  ON f.groupe_id = g.id
+				  JOIN user AS u
+				  ON u.id = n.auteur_id
+				  WHERE g.id = :groupeId
+				  ORDER BY n.date';
 
-		return $query->getResult();
+		$em = $this->getEntityManager();
+	    $stmt = $em->getConnection()->prepare($query);
+	    $stmt->bindParam(':groupeId', $groupeId);
+	    $stmt->execute();
+
+	    return $stmt->fetchAll();
 	}
 }

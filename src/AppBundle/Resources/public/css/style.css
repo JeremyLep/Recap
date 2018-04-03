@@ -72,8 +72,8 @@ a, a:hover, a:focus, a:active{
 
 #membre{
 	overflow-y: auto;
-	overflow-x: hidden;
-	height: 78vh;
+	overflow-x: auto;
+	height: auto;
 	border-top: .25rem solid transparent;
 }
 
@@ -339,6 +339,24 @@ strong.select2-results__group{
 #invite a:hover {
   color: #f44336;
   transition: all 0.3s ease;
+}
+
+.titre-groupe {
+    background-color: #486a91;
+    color: white;
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+}
+
+.titre-groupe a {
+  color: white;
+}
+
+#loading {
+  text-align: center;
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 30px;
 }
 
 #fiche-fav {
@@ -695,15 +713,14 @@ form label {
 {
   border-radius: 10px;
   background-color: #bebebe;
-}
 
+}
 
 .badge-invite {
   position: absolute;
   width: 22px;
   display: block;
-  top: -2px;
-  left: 110px;
+  top: 5px;
 }
 
 .badge-notif {
@@ -749,20 +766,16 @@ form label {
   }
 }
 
+.notif-content {
+  margin: auto; 
+}
+
 .notif-xs {
   width: 35px;
   height: 35px;
 }
 
-.notif-check [type="checkbox"]:not(:checked){
-  display: none;
-}
-
-.notif-check:checked ~ .notification {
-  display: block;
-}
-
-.notif-check {
+.notif-check, .notif-check-close {
   position: relative!important;
   left: 0!important;
   background: #4a7fb3;
@@ -773,7 +786,7 @@ form label {
   padding-left: 8.5px;
 }
 
-.notif-check:before {
+.notif-check:before, .notif-check-close:before {
   font-family: FontAwesome;
   content: "\f0f3" ;
   background: #4a7fb3; 
@@ -781,7 +794,6 @@ form label {
   border-radius: 50%;
   max-height: 35px;
   max-width: 35px;
-  padding: 10px;
 }
 
 .font-14 {

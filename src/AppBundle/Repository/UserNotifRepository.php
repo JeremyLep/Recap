@@ -8,17 +8,17 @@ use Doctrine\ORM\QueryBuilder;
 class UserNotifRepository extends EntityRepository
 {
 	public function countNotif($user)
-	{
-		$query = $this
-			->createQueryBuilder('n')
-			->select('COUNT(n)')
-			->where('n.user = :user')
-			->andWhere('n.active = true')
-			->setParameters(array(
-				'user' => $user,
-			))
-			->getQuery();
+	{	
+		$query = 'SELECT count(id) 
+				  FROM user_notif
+				  WHERE user_id = :user
+				  AND active = 1';
 
-		return $query->getSingleScalarResult();
+		$em = $this->getEntityManager();
+	    $stmt = $em->getConnection()->prepare($query);
+	    $stmt->bindParam(':user', $user);
+	    $stmt->execute();
+
+	    return $stmt->fetchColumn();
 	}
 }

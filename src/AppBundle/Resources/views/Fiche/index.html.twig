@@ -97,6 +97,7 @@
                     <img src="{{  asset('bundles/app/avatar/' ~commentaire.getMembre.getUser.avatar) }}" class="img-fluid rounded mr-3" alt="avatar" style="max-width: 35px; max-height: 35px;">
                     {{ commentaire.getMembre.getUser.username}}
                     {% endif %}
+                    <small class="pl-3">{{ commentaire.date|date }}</small>
                   </span>
                   <br><br>
                   <span class="p-2 w-100">

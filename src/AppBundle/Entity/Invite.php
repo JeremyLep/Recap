@@ -82,7 +82,7 @@ class Invite
         $this->active         = "En attente";
         $this->date           = new DateTime();
         $this->dateExpiration = new DateTime();
-        $this->dateExpiration->modify('+2 day');
+        $this->dateExpiration->modify('+14 day');
     }
 
     /**

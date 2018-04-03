@@ -1,17 +1,10 @@
 {% extends "AppBundle::layout.html.twig" %}
 
 {% block titre %}
-  <a class="navbar-brand" href="#">Les evenements de {{ groupe.titre }}</a>
+  <a class="navbar-brand" href="#">Les evenements de {{ notifications[0]['groupeTitre'] }}</a>
 {% endblock %}
 
-{% block groupe %}
-  <li class="nav-item li-inline" id="fiche-icon">
-    <a class="nav-link" href="">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
-  </li>
-  <li class="nav-item li-inline" id="notification-list">
-    <a class="nav-link" href="">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
-  </li>
-{% endblock %}
+{% block groupe %}{% endblock %}
 
 {% block body %}
 <div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
@@ -30,10 +23,10 @@
     <tbody>
     {% for notification in notifications %}
       <tr>
-        <th scope="row">{{ notification.notification.id }}</th>
-        <td>{{notification.notification.date|date}}</td>
-        <td>{{notification.notification.fiche.titre}}</td>
-        <td>{{notification.notification.nbRessource}}</td>
+        <th scope="row">{{ notification['id'] }}</th>
+        <td>{{ notification['date']|date }}</td>
+        <td>{{ notification['ficheTitre'] }}</td>
+        <td>{{ notification['nbRessource'] }}</td>
       </tr>
     {% endfor %}
     </tbody>

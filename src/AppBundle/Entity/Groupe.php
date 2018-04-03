@@ -154,15 +154,13 @@ class Groupe
     /**
      * Set nbFiche
      *
-     * @param integer $nbFiche
-     *
      * @return Groupe
      */
-    public function setNbFiche($nbFiche)
+    public function incremNbFiche()
     {
-        $this->nbFiche = $nbFiche;
-
-        return $this;
+        $this->nbFiche++;
+        
+        return;
     }
 
     /**
