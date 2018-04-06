@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <title>Recap</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani:500|Courgette|PT+Sans" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    {% stylesheets 
+    'bundles/app/css/home.css'
+    %}
+      <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+    {% endstylesheets %}
+  </head>
+
+  <body>
+    {% block header %}
+    <header>
+      <nav class="navbar navbar-dark navbar-expand-md bg-dark justify-content-between">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse dual-nav w-100">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" data-href="demarrer">Démarrer <span class="sr-only">Démarrer</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-href="decouvrir">Découvrir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-href="demo">Démo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-href="contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <a href="{{ path('app_home') }}" class="navbar-brand mx-auto d-block text-center w-100 brand">Recap</a>
+        <div class="navbar-collapse collapse dual-nav w-100">
+            <ul class="nav navbar-nav ml-auto">
+                 <li class="nav-item btn-premium btn-warning"><a class="nav-link text-dark" href=""><i class="fa fa-star"></i> Premium</a></li>
+                <li class="nav-item active"><a class="nav-link" href="{{ path('fos_user_security_login') }}"><i class="fa fa-user"></i> Login</a></li>
+                <li class="nav-item active"><a class="nav-link" href="{{ path('fos_user_registration_register') }}"><i class="fa fa-sign-in"></i> Inscription</a></li>
+            </ul>
+        </div>
+      </nav>
+    </header>
+    {% endblock %}
+
+    {% block body %}
+    <div class="container-fluid content content-scroll">
+        <div id="demarrer" class="row clearfix bg-home">
+            <div class="m-auto text-center text-white p-5">
+                <h1>Récap, l'application de partage de fiche récapitulative entre amis !</h1>
+                <h2>Profitez et partagez vos documents au autres membres.</h2>
+                <button class="btn btn-defaut mt-5 font-16 font-title">Démarrer</button>
+            </div>
+        </div>
+        <div id="decouvrir" class="row bg-grey decouvrir">
+            <div class="col-sm-6 col-xs-12 m-auto">
+                <img src="{{ asset('bundles/app/home/demo-desktop2.png') }}">
+            </div>
+            <div class="col-sm-6 col-xs-12 m-auto p-3">
+                <h1 class="pb-5">Groupes privés</h1>
+                <h2 class="text-info">Groupes privés</h2>
+                <h4 class="text-muted pb-2">Créer des groupes privés puis inviter vos amis afin d'accumuler des informations communes. 
+                </h4>
+                <h2 class="text-info">Votre bibliothèque </h2>
+                <h4 class="text-muted">Rassembler vos documents en sûreté sur le Cloud accèssible en un click.</h4>
+            </div>
+        </div>
+        <div id="decouvrir2" class="row bg-white decouvrir">
+            <div class="col-sm-6 col-xs-12 m-auto p-3">
+                <h1 class="pb-5">Partage & Stockage</h1>
+                <h2 class="text-info">Fiche récap'</h2>
+                <h4 class="text-muted pb-2">Partagez votre savoir à travers des fiches récapitulatives.</h4>
+                <h2 class="text-info">Ressources</h2>
+                <h4 class="text-muted">Accompagnez vos fiches avec des documents (Image, Vidéo, PDF, Suite Office) téléchargeables ou visualisables en ligne.</h4>
+            </div>
+            <div class="col-sm-6 col-xs-12 m-auto">
+                <img src="{{ asset('bundles/app/home/demo-laptop2.png') }}">
+            </div>
+        </div>
+        <div id="decouvrir3" class="row bg-grey decouvrir">
+            <div class="col-sm-6 col-xs-12 m-auto">
+                <img src="{{ asset('bundles/app/home/demo-mobile2.png') }}">
+            </div>
+            <div class="col-sm-6 col-xs-12 m-auto p-3">
+                <h1 class="pb-5">Mobile</h1>
+                <h2 class="text-info">Responsive</h2>
+                <h4 class="text-muted pb-2">Disponible sur toute les plateforme. Consulter votre groupe n'importe où avec votre mobile.</h4>
+                <h2 class="text-info">App Mobile</h2>
+                <h4 class="text-muted">Actuelement non disponible.</h4>
+            </div>
+        </div> 
+        <div id="demo" class="row text-white text-center bg-white">
+            <h1 class="text-center font-title text-dark col-12 mt-5 mb-0">Essayer notre application</h1>
+            <div class="col-4 m-0">
+                <img src="{{ asset('bundles/app/home/demo-desktop2.png') }}"><
+            </div>
+            <div class="col-4 m-0">
+                <img src="{{ asset('bundles/app/home/demo-laptop2.png') }}">
+            </div>
+            <div class="col-4 m-0">
+                <img class="mobile" src="{{ asset('bundles/app/home/demo-mobile2.png') }}">
+            </div>
+            <div class="col-12 m-0 pl-5 pr-5">
+                <h3 class="text-muted mb-5">Tester <strong>Recap</strong> dans une version de démomonstration pour vous donner un apércu avant de vous lancer !</h3>
+            </div>
+            <button class="btn btn-danger btn-demo mx-auto">Démo</button>
+        </div>
+        <div id="premium" class="row bg-white">
+            <div class="col-6 p-0 text-center">
+                <div class="bg-dark text-white">
+                    <i class="fa fa-user fa-3x pt-5"></i>    
+                    <h2 class="p-5">Compte classique</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead></thead>
+                        <tbody></tbody>
+                        <button class="btn btn-default border-0 m-auto">Inscription</button>
+                    </table>
+                </div>
+            </div>
+            <div class="col-6 p-0 text-center">
+                <div class="bg-premium text-white">
+                    <i class="fa fa-star fa-3x pt-5"></i>
+                    <h2 class="p-5">Compte premium</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead></thead>
+                        <tbody></tbody>
+                        <button class="btn btn-warning border-0 m-auto">Premium</button>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="contact" class="row bg-grey">
+            <div class="col-md-8 col-md-offset-2 input-container">
+                <div class="row">
+                    <h1 class="text-center col-12 font-title mb-5">Contact</h1>
+                    <div class="col-md-12 col-xs-12">
+                        <div class="styled-input wide">
+                            <input type="text" required />
+                            <label>Nom</label> 
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="styled-input">
+                            <input type="text" required />
+                            <label>Email</label> 
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="styled-input">
+                            <input type="text" required />
+                            <label>N° téléphone</label> 
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12">
+                        <div class="styled-input wide">
+                            <textarea required rows="5"></textarea>
+                            <label>Message</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12">
+                        <button class="btn btn-defaut-inv btn-contact w-100">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 p-0">
+                <div class="w-100 bg-footer text-center text-muted">
+                    <h5 class="mb-5"> Privacy · Mentions légales </h5>
+                    <h4 class="font-title">Recap</h4>
+                    <small>© 2018 · All Right Reserved · Jérémy Leprince</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/06bfea3587.js"></script>
+    
+    <script type="text/javascript">
+        $('ul.navbar-nav li a').on('click', function() {
+            var destination = '#' + $(this).attr('data-href');
+            var container = $('.content-scroll');
+            $('.content-scroll').animate({
+                scrollTop: $(destination).offset().top - container.offset().top + container.scrollTop()
+            });
+        });
+    </script>
+  
+  </body>
+</html>
