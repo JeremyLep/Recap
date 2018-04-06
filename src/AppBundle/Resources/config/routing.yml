@@ -1,7 +1,7 @@
 app_home:
     path:      /
     defaults:
-        _controller: AppBundle:Default:index
+        _controller: AppBundle:Home:index
 
 app_dashboard_infinite_scroll:
     path:      /dashboard_load_more
