@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class NotificationRepository extends EntityRepository
 {
-	public function getNotifByGroup($groupeId, $offset, $limit)
+	public function getNotifByGroup($groupeId)
 	{
 		$query = 'SELECT n.id, n.date, n.nb_ressource AS nbRessource, f.titre AS ficheTitre, g.titre AS groupeTitre, u.username, u.avatar, u.color
 				  FROM notification AS n

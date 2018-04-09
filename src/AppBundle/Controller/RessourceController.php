@@ -37,8 +37,10 @@ class RessourceController extends Controller
             'groupe' => $groupeId,
         ));
       
-      if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_MODO') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
-        throw new AccessDeniedException();
+      if ($member === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
+        if (!$membre->hasRole('ROLE_RESSOURCE')) {
+          throw new AccessDeniedException();
+        }
       }
 
       $ressource = new Ressource();
@@ -259,7 +261,7 @@ class RessourceController extends Controller
             'groupe' => $groupeId,
         ));
       
-      if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_MODO') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
+      if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_RESSOURCE') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
         throw new AccessDeniedException();
       }
 

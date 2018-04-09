@@ -17,6 +17,12 @@ class FavorisController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+
+        $securityContext = $this->get('security.authorization_checker');
+        
+        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
         
         $nbFavoris = $em
             ->getRepository('AppBundle:Favoris')

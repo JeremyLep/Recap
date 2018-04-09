@@ -50,16 +50,17 @@ class GroupeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $avatar    = $form->get('avatar')->getData();
-            $fileName  = md5(uniqid()).'.'.$avatar->guessExtension();
+            if ($form->get('avatar')->getData() !== null) {
+                $avatar   = $form->get('avatar')->getData();
+                $fileName = md5(uniqid()).'.'.$avatar->guessExtension();
 
-            $avatar->move($this->getParameter('avatar_directory'), $fileName);
-            $groupe->setAvatar($fileName);
-            
+                $avatar->move($this->getParameter('avatar_directory'), $fileName);
+                $groupe->setAvatar($fileName);
+            }
             $groupe->setUser($this->getUser());
             $membre = new Membre();
             $membre->setUser($this->getUser());
-            $membre->setRoles(array('ROLE_ADMIN', 'ROLE_MODO', 'ROLE_USER'));
+            $membre->setAdmin();
             $membre->setGroupe($groupe);
 
             $em = $this->getDoctrine()->getManager();

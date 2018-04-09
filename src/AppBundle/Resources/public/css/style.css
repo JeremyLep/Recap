@@ -615,12 +615,14 @@ form label {
   }
   [type="checkbox"]:not(:checked) + label .ui:before {
     content: "Non";
-    left: -10px
+    left: -10px;
+    top: 1px;
   }
   [type="checkbox"]:checked + label .ui:after {
     content: "Oui";
     left: -40px;
     color: #3f567c;
+    top: -13px;
   }
   [type="checkbox"]:focus + label:before {
     border: 1px dashed #777;
@@ -630,6 +632,10 @@ form label {
     box-sizing: border-box;
     margin-top: -1px;
   }
+
+.label-ui {
+  margin-top: 1rem;
+}
 
 .inline {
   display: inline-block;
@@ -694,6 +700,7 @@ form label {
     -ms-flex-align: center;
     align-items: center;
     overflow-y: auto;
+    height: 80vh;
 }
 /* ---------------------- */
 /* TODO SCROLL ON MOBILE MENU */

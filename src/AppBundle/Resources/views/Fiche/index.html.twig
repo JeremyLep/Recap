@@ -29,12 +29,12 @@
     {% else %}
     <i class="fa fa-star-o grey pl-2" id="fiche-fav" data-fav="{{ favoris }}"></i>
     {% endif %}
-  {% if (membre.hasRole('ROLE_ADMIN') or membre.user.id == fiche.auteur.id) %}
+  {% if (membre.hasRole('ROLE_EDIT') or membre.user.id == fiche.auteur.id) %}
   <a href="{{ path('app_fiche_edit', {'id_fiche': fiche.id, 'id_groupe': groupe.id}) }}" class="pl-3" style="font-size: 0.8rem; ">edit</a>
   {% endif %}
 </h5>
 <h5 class="p-3 col-4" style="border-bottom: .0625rem solid #e8e8e8; border-left: 1rem solid transparent;">Sources
-  {% if (membre.hasRole('ROLE_ADMIN') or membre.user.id == fiche.auteur.id) %}
+  {% if (membre.hasRole('ROLE_RESSOURCE') or membre.user.id == fiche.auteur.id) %}
   <a href="{{ path('app_ressource_add', {'ficheId':fiche.id, 'groupeId': groupe.id }) }}" class="pl-3" style="font-size: 0.8rem; ">ajouter</a>
   {% endif %}
 </h5>

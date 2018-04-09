@@ -22,7 +22,7 @@ class ProfilType extends AbstractType
         $builder
             ->add('email', EmailType::class, array(
                 'required'    => true,
-                'constraints' => new Email('message' => 'Vous devez entrer un email valide.')
+                'constraints' => new Email(array('message' => 'Vous devez entrer un email valide.'))
             ))
             ->add('username', null, array(
                 'translation_domain' => 'FOSUserBundle',
