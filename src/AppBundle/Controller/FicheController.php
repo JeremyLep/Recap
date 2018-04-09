@@ -103,7 +103,7 @@ class FicheController extends Controller
                 'groupe' => $id_groupe,
             ));
         
-      if ($membre === null || !$membre->hasRole('ROLE_MODO')) {
+      if ($membre === null || !$membre->hasRole('ROLE_POST')) {
         throw new AccessDeniedException();
       }
 
@@ -133,6 +133,8 @@ class FicheController extends Controller
 
         $groupe->addFiche($fiche);
         
+        $membre->incremNbFiche();
+
         foreach ($tags as $tag) {
           $tag = $em->getRepository('AppBundle:Tag')->find($tag);
           $fiche->addTag($tag);
@@ -156,6 +158,7 @@ class FicheController extends Controller
         $em->persist($notification);
         $em->persist($groupe);
         $em->persist($fiche);
+        $em->persist($membre);
 
         $em->flush();
 
@@ -202,8 +205,10 @@ class FicheController extends Controller
         ->getRepository('AppBundle:Fiche')
         ->find($id_fiche);
       
-      if ($membre === null || !$membre->hasRole('ROLE_MODO') || ($membre->hasRole('ROLE_MODO') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
-        throw new AccessDeniedException();
+      if ($member === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
+        if (!$membre->hasRole('ROLE_EDIT')) {
+          throw new AccessDeniedException();
+        }
       }
 
       $tags  = $em
@@ -272,10 +277,12 @@ class FicheController extends Controller
             'groupe' => $id_groupe,
         ));
 
-      if ($membre === null || !$membre->hasRole('ROLE_MODO') || ($membre->hasRole('ROLE_MODO') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
-        throw new AccessDeniedException();
+      if ($member === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
+        if (!$membre->hasRole('ROLE_EDIT')) {
+          throw new AccessDeniedException();
+        }
       }
-      
+
       $groupe = $fiche->getGroupe();
       $groupe->removeFiche($fiche);
 

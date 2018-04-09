@@ -27,6 +27,13 @@ class SearchController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+
+        $securityContext = $this->get('security.authorization_checker');
+        
+        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
+
         $search = strip_tags($request->query->get('search'));
         
         if (!empty($search)) {

@@ -18,6 +18,12 @@ class InviteController extends Controller
   {
     $em = $this->getDoctrine()->getManager();
 
+    $securityContext = $this->get('security.authorization_checker');
+        
+    if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+      throw new AccessDeniedException();
+    }
+
     $invites = $em
       ->getRepository('AppBundle:Invite')
       ->findBy(
@@ -52,7 +58,7 @@ class InviteController extends Controller
                 'groupe' => $groupeId,
             ));
         
-    if ($membre === null || !$membre->hasRole('ROLE_MODO')) {
+    if ($membre === null || !$membre->hasRole('ROLE_INVITE')) {
       throw new AccessDeniedException();
     }
 

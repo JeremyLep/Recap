@@ -23,6 +23,12 @@ class ProfilController extends Controller
     public function indexAction()
     {
         $profil = $this->getUser();
+        
+        $securityContext = $this->get('security.authorization_checker');
+        
+        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
 
         return $this->render('UserBundle:Profil:index.html.twig', array(
             'profil' => $profil,
@@ -33,6 +39,12 @@ class ProfilController extends Controller
     {
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        
+        $securityContext = $this->get('security.authorization_checker');
+        
+        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
         
         $editForm = $this->createForm('UserBundle\Form\ProfilType', $user);
 
@@ -52,6 +64,12 @@ class ProfilController extends Controller
 
     public function deleteAction()
     {
+        $securityContext = $this->get('security.authorization_checker');
+        
+        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
+
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $em->remove($user);

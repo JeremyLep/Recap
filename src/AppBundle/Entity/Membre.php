@@ -72,6 +72,14 @@ class Membre
     protected $fiche;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="nb_fiche", type="integer", nullable=true)
+     */
+    protected $nbFiche;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -81,6 +89,7 @@ class Membre
         $this->dateRejoins = new DateTime();
         $this->user        = $this->getUser();
         $this->roles       = $this->setRoles(array('ROLE_USER'));
+        $this->nbFiche     = 0;
     }
 
 
@@ -92,6 +101,16 @@ class Membre
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set Admin
+     *
+     */
+    public function setAdmin() {
+        $this->setRoles(array('ROLE_ADMIN', 'ROLE_EDIT', 'ROLE_INVITE', 'ROLE_POST', 'ROLE_RESSOURCES'));
+
+        return $this;
     }
 
     /**
@@ -156,6 +175,27 @@ class Membre
     public function getDateRejoins()
     {
         return $this->dateRejoins;
+    }
+
+    /**
+     * Increm nbFiche
+     *
+     */
+    public function incremNbFiche()
+    {
+        $this->nbFiche++;
+
+        return $this;
+    }
+
+    /**
+     * Get nbFiche
+     *
+     * @return Integer
+     */
+    public function getNbFiche()
+    {
+        return $this->nbFiche;
     }
 
     /**

@@ -17,6 +17,17 @@ class NotificationController extends Controller
     public function indexAction($groupeId)
     {
         $em = $this->getDoctrine()->getManager();
+
+        $membre = $em
+            ->getRepository('AppBundle:Membre')
+            ->findOneBy(array(
+                'user'   => $this->getUser(),
+                'groupe' => $groupeId,
+            ));
+        
+        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+            throw new AccessDeniedException();
+        }
         
         $groupe = $em
           ->getRepository('AppBundle:Groupe')
@@ -36,6 +47,12 @@ class NotificationController extends Controller
     {
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+
+        $securityContext = $this->get('security.authorization_checker');
+        
+        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
 
         $notifications = $em
             ->getRepository('AppBundle:UserNotif')
