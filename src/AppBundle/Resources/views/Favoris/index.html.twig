@@ -1,7 +1,7 @@
 {% extends "AppBundle::layout.html.twig" %}
 
 {% block titre %}
-  <a class="navbar-brand" href="#">Mes fiches</a>
+  <a class="navbar-brand" href="#">Mes favoris</a>
 {% endblock %}
 
 {% block groupe %}
@@ -12,9 +12,9 @@
 
 {% block body %}
 <div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
-  <h5 class="p-3 m-0">{{ nbFavoris }} fiches</h5>
+  <h5 class="p-3 m-0">{{ nbFavoris }} fiches mises en favoris</h5>
 </div>
-
+{{ parent() }}
 <div id="content" class="col-12">
   <div class="row p-1">
     {{ include('AppBundle:Fiche:template.html.twig') }}

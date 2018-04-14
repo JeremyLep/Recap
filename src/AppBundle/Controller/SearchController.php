@@ -28,22 +28,16 @@ class SearchController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $securityContext = $this->get('security.authorization_checker');
-        
-        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
-        }
-
         $search = strip_tags($request->query->get('search'));
-        
+            
         if (!empty($search)) {
             $res = $em
                 ->getRepository('AppBundle:Fiche')
                 ->getSearch($search, $this->getUser()->getId());
-            
+                
             return $this->render('AppBundle:Search:index.html.twig', array(
-            'search' => $res,
-            'term'   => $search
+                'search' => $res,
+                'term'   => $search
             ));
         }
         else {

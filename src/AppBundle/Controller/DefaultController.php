@@ -13,6 +13,7 @@ class DefaultController extends Controller
 {
     public function menuAction()
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $listGroupes = $em
@@ -67,26 +68,30 @@ class DefaultController extends Controller
 
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        try {
+            $em = $this->getDoctrine()->getManager();
 
-        $securityContext = $this->get('security.authorization_checker');
-        
-        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
+            $securityContext = $this->get('security.authorization_checker');
+            
+            if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                throw new AccessDeniedException();
+            }
+
+            $listGroupes = $em
+                ->getRepository('AppBundle:Groupe')
+                ->getGroupeMembre($this->getUser()->getId(), 0, 3);
+
+            $nbFicheAccess = $em
+                ->getRepository('AppBundle:Groupe')
+                ->countFicheAccess($this->getUser()->getId());
+
+            return $this->render('AppBundle:Default:index.html.twig', array(
+                'listGroupes' => $listGroupes,
+                'nbFicheAccess' => $nbFicheAccess
+            ));
+        } catch (AccessDeniedException $e) {
+            return $this->redirectToRoute('fos_user_login');
         }
-
-        $listGroupes = $em
-            ->getRepository('AppBundle:Groupe')
-            ->getGroupeMembre($this->getUser()->getId(), 0, 3);
-
-        $nbFicheAccess = $em
-            ->getRepository('AppBundle:Groupe')
-            ->countFicheAccess($this->getUser()->getId());
-
-        return $this->render('AppBundle:Default:index.html.twig', array(
-            'listGroupes' => $listGroupes,
-            'nbFicheAccess' => $nbFicheAccess
-        ));
     }
 
     public function dashboardInfiniteScrollAction(Request $request)

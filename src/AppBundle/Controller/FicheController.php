@@ -23,277 +23,347 @@ class FicheController extends Controller
 {
     public function indexAction(Request $request, $id_groupe, $id_fiche)
     {
-      $em    = $this->getDoctrine()->getManager();
+      try {
+        $em    = $this->getDoctrine()->getManager();
 
-      $membre = $em
-            ->getRepository('AppBundle:Membre')
-            ->findOneBy(array(
-                'user'   => $this->getUser(),
-                'groupe' => $id_groupe,
-            ));
-        
-      if ($membre === null || !$membre->hasRole('ROLE_USER')) {
-        throw new AccessDeniedException();
-      }
+        $membre = $em
+              ->getRepository('AppBundle:Membre')
+              ->findOneBy(array(
+                  'user'   => $this->getUser(),
+                  'groupe' => $id_groupe,
+              ));
 
-      $fiche = $em
-        ->getRepository('AppBundle:Fiche')
-        ->findOneBy(array(
-          'id'        => $id_fiche, 
-          'groupe'    => $id_groupe,
+        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+          throw new AccessDeniedException('Vous n\'avez pas accès à cette fiche.');
+        }
+
+        $fiche = $em
+          ->getRepository('AppBundle:Fiche')
+          ->findOneBy(array(
+            'id'        => $id_fiche, 
+            'groupe'    => $id_groupe
+          ));
+
+        if ($fiche === null) {
+          throw new NotFoundHttpException('La fiche demandé n\'existe pas.');
+        }
+
+        $favoris = $em
+          ->getRepository('AppBundle:Favoris')
+          ->findOneBy(array(
+            'fiche' => $id_fiche, 
+            'user'  => $this->getUser(),
+          ));
+          
+        if ($favoris === null) {
+          $favoris = false;
+        }
+        else {
+          $favoris = true;
+        }
+
+        $commentaire = new Commentaire;
+        $form        = $this->createForm(CommentaireType::class, $commentaire);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+          $membre = $em->getRepository('AppBundle:Membre')
+                     ->find($this->getUser());
+          $commentaire->setMembre($membre);
+          $commentaire->setFiche($fiche);
+          $fiche->addCommentaire($commentaire);
+          $em->persist($fiche);
+          $em->persist($commentaire);
+          $em->flush();
+
+          return $this->redirectToRoute('app_fiche', array(
+            'id_fiche'  => $fiche->getId(), 
+            'id_groupe' => $fiche->getGroupe()->getId(),
+          ));
+        }
+
+        return $this->render('AppBundle:Fiche:index.html.twig', array(
+            'fiche'        => $fiche,
+            'groupe'       => $fiche->getGroupe(),
+            'commentaires' => $fiche->getCommentaire(),
+            'ressources'   => $fiche->getRessource(),
+            'tags'         => $fiche->getTag(),
+            'form'         => $form->createView(),
+            'favoris'      => $favoris,
+            'membre'       => $membre
         ));
+      } catch (AccessDeniedException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
-      $favoris = $em
-        ->getRepository('AppBundle:Favoris')
-        ->findOneBy(array(
-          'fiche' => $id_fiche, 
-          'user'  => $this->getUser(),
-        ));
-        
-      if ($favoris === null) {
-        $favoris = false;
+        return $this->redirectToRoute('app_groupe', array('id_groupe' => $id_groupe));
+      } catch (NotFoundHttpException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+        return $this->redirectToRoute('app_groupe', array('id_groupe' => $id_groupe));
       }
-      else {
-        $favoris = true;
-      }
-
-      if (!$fiche) {
-        throw $this->createNotFoundException('La fiche n\'existe pas');
-      }
-      $commentaire = new Commentaire;
-      $form        = $this->createForm(CommentaireType::class, $commentaire);
-      $form->handleRequest($request);
-
-      if ($form->isSubmitted() && $form->isValid()) {
-        $membre = $em->getRepository('AppBundle:Membre')
-                   ->find($this->getUser());
-        $commentaire->setMembre($membre);
-        $commentaire->setFiche($fiche);
-        $fiche->addCommentaire($commentaire);
-        $em->persist($fiche);
-        $em->persist($commentaire);
-        $em->flush();
-
-        return $this->redirectToRoute('app_fiche', array(
-          'id_fiche'  => $fiche->getId(), 
-          'id_groupe' => $fiche->getGroupe()->getId(),
-        ));
-      }
-
-      return $this->render('AppBundle:Fiche:index.html.twig', array(
-          'fiche'        => $fiche,
-          'groupe'       => $fiche->getGroupe(),
-          'commentaires' => $fiche->getCommentaire(),
-          'ressources'   => $fiche->getRessource(),
-          'tags'         => $fiche->getTag(),
-          'form'         => $form->createView(),
-          'favoris'      => $favoris,
-          'membre'       => $membre
-      ));
     }
 
     public function addAction(Request $request, $id_groupe)
     {
-      $em    = $this->getDoctrine()->getManager();
-      
-      $membre = $em
-            ->getRepository('AppBundle:Membre')
-            ->findOneBy(array(
-                'user'   => $this->getUser(),
-                'groupe' => $id_groupe,
-            ));
+      try {
+        $em    = $this->getDoctrine()->getManager();
         
-      if ($membre === null || !$membre->hasRole('ROLE_POST')) {
-        throw new AccessDeniedException();
-      }
-
-      $tags  = $em
-        ->getRepository('AppBundle:Tag')
-        ->findAll();
-      
-      $groupe = $em
-        ->getRepository('AppBundle:Groupe')
-        ->find($id_groupe);
-
-      $fiche  = new Fiche();
-      $form   = $this->createForm(FicheType::class, $fiche, array(
-        'tag' => $tags));
-
-      $form->handleRequest($request);
-
-      if ($form->isSubmitted() && $form->isValid()) {
-
-        $tags = $form->get('tag')->getData();
-
-        $membre = $em->getRepository('AppBundle:Membre')
-                     ->find($this->getUser());
-
-        $fiche->setAuteur($membre);
-        $fiche->setGroupe($groupe);
-
-        $groupe->addFiche($fiche);
+        $membre = $em
+              ->getRepository('AppBundle:Membre')
+              ->findOneBy(array(
+                  'user'   => $this->getUser(),
+                  'groupe' => $id_groupe,
+              ));
         
-        $membre->incremNbFiche();
-
-        foreach ($tags as $tag) {
-          $tag = $em->getRepository('AppBundle:Tag')->find($tag);
-          $fiche->addTag($tag);
+        if ($membre === null || !$membre->hasRole('ROLE_POST')) {
+          throw new AccessDeniedException('Vous ne pouvez pas poster de fiche dans ce groupe.');
         }
 
-        if (!empty($_POST['addTag'])) {
-          $addTags = $_POST['addTag'];
-          
-          foreach ($addTags as $addTag) {
-            $newTag = new Tag;
-            $newTag->setLabel($addTag);
-            $fiche->addTag($newTag);
-            $em->persist($newTag);
-          }
+        $groupe = $em
+          ->getRepository('AppBundle:Groupe')
+          ->find($id_groupe);
+
+        if ($groupe === null) {
+          throw new NotFoundHttpException('Vous avez essayé d\'ajouter une fiche dans un groupe inexistant.');
         }
 
-        $notification = new Notification();
-        $notification->setFiche($fiche);
-        $notification->setAuteur($this->getUser());
-        
-        $em->persist($notification);
-        $em->persist($groupe);
-        $em->persist($fiche);
-        $em->persist($membre);
+        $tags  = $em
+          ->getRepository('AppBundle:Tag')
+          ->findAll();
 
-        $em->flush();
-
-        $membres = $fiche->getGroupe()->getMembre();
-        
-        foreach ($membres as $membre) {
-          $user = $membre->getUser();
-          
-          if ($user !== $this->getUser()) {
-            $userNotif = new UserNotif();
-            $userNotif->setNotification($notification);
-            $userNotif->setUser($membre->getUser());
-
-            $em->persist($userNotif);
-            $em->flush();
-          }
-        }
- 
-        return $this->redirectToRoute('app_fiche', array(
-          'id_fiche'  => $fiche->getId(), 
-          'id_groupe' => $id_groupe,
+        $fiche  = new Fiche();
+        $form   = $this->createForm(FicheType::class, $fiche, array(
+          'tag' => $tags
         ));
-      }
 
-      return $this->render('AppBundle:Fiche:add.html.twig', array(
-          'fiche'     => $fiche,
-          'form'      => $form->createView(),
-          'groupe'    => $groupe,
-      ));
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+          $tags = $form->get('tag')->getData();
+
+          $fiche->setAuteur($membre);
+          $fiche->setGroupe($groupe);
+
+          $groupe->addFiche($fiche);
+          
+          $membre->incremNbFiche();
+
+          foreach ($tags as $tag) {
+            $tag = $em
+              ->getRepository('AppBundle:Tag')
+              ->find($tag);
+
+            $fiche->addTag($tag);
+          }
+
+          if (!empty($_POST['addTag'])) {
+            $addTags = $_POST['addTag'];
+            
+            foreach ($addTags as $addTag) {
+              $newTag = new Tag();
+              $newTag->setLabel($addTag);
+              $fiche->addTag($newTag);
+
+              $em->persist($newTag);
+            }
+          }
+
+          $notification = new Notification();
+          $notification->setFiche($fiche);
+          $notification->setAuteur($this->getUser());
+          
+          $em->persist($notification);
+          $em->persist($groupe);
+          $em->persist($fiche);
+          $em->persist($membre);
+
+          $em->flush();
+
+          $membres = $fiche->getGroupe()->getMembre();
+          
+          foreach ($membres as $membre) {
+            $user = $membre->getUser();
+            
+            if ($user !== $this->getUser()) {
+              $userNotif = new UserNotif();
+              $userNotif->setNotification($notification);
+              $userNotif->setUser($membre->getUser());
+
+              $em->persist($userNotif);
+              $em->flush();
+            }
+          }
+   
+          return $this->redirectToRoute('app_fiche', array(
+            'id_fiche'  => $fiche->getId(), 
+            'id_groupe' => $id_groupe,
+          ));
+        }
+
+        return $this->render('AppBundle:Fiche:add.html.twig', array(
+            'fiche'     => $fiche,
+            'form'      => $form->createView(),
+            'groupe'    => $groupe,
+        ));
+      } catch (AccessDeniedException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+        return $this->redirectToRoute('app_groupe', array(
+          'id_groupe' => $id_groupe
+        ));
+      } catch (NotFoundHttpException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+        return $this->redirectToRoute('app_home');
+      }
     }
 
     public function editAction(Request $request, $id_groupe, $id_fiche)
     {
-      $em = $this->getDoctrine()->getManager();
+      try {
+        $em = $this->getDoctrine()->getManager();
 
-      $membre = $em
-        ->getRepository('AppBundle:Membre')
-        ->findOneBy(array(
-            'user'   => $this->getUser(),
-            'groupe' => $id_groupe,
-        ));
+        $membre = $em
+          ->getRepository('AppBundle:Membre')
+          ->findOneBy(array(
+              'user'   => $this->getUser(),
+              'groupe' => $id_groupe,
+          ));
 
-      $fiche = $em
-        ->getRepository('AppBundle:Fiche')
-        ->find($id_fiche);
-      
-      if ($member === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
-        if (!$membre->hasRole('ROLE_EDIT')) {
-          throw new AccessDeniedException();
-        }
-      }
+        $fiche = $em
+          ->getRepository('AppBundle:Fiche')
+          ->find($id_fiche);
 
-      $tags  = $em
-        ->getRepository('AppBundle:Tag')
-        ->findAll();
-
-      $tag = $fiche->getTag();
-      $usedTags = array();
-      foreach ($tag as $t) {
-        array_push($usedTags, $t->getId());
-      }
-
-      $editForm   = $this->createForm(FicheType::class, $fiche, array(
-        'tag'     => $tags
-      ));
-      $editForm->handleRequest($request);
-
-      if ($editForm->isSubmitted() && $editForm->isValid()) {
-        $tags = $editForm->get('tag')->getData();
-        $fiche->removeManyTags($fiche->getTag());
-
-        if (!empty($_POST['addTag'])) {
-          $addTags = $_POST['addTag'];
-          
-          foreach ($addTags as $addTag) {
-            $newTag = new Tag;
-            $newTag->setLabel($addTag);
-            $fiche->addTag($newTag);
-            $em->persist($newTag);
+        if ($membre === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
+          if (!$membre->hasRole('ROLE_EDIT')) {
+            throw new AccessDeniedException('Vous ne pouvez pas éditer de fiche sur ce groupe.');
           }
         }
-
-        $tags = $em->getRepository('AppBundle:Tag')->findById($tags);
-        $fiche->addManyTags($tags);
         
-        $em->persist($fiche);
-        $em->flush();
+        if ($fiche === null) {
+          throw new NotFoundHttpException('Vous essayé d\'éditer une fiche inexistante.');
+        }
+
+        $tags  = $em
+          ->getRepository('AppBundle:Tag')
+          ->findAll();
+
+        $tag = $fiche->getTag();
+        $usedTags = array();
+        foreach ($tag as $t) {
+          array_push($usedTags, $t->getId());
+        }
+
+        $editForm   = $this->createForm(FicheType::class, $fiche, array(
+          'tag'     => $tags
+        ));
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+          $tags = $editForm->get('tag')->getData();
+          $fiche->removeManyTags($fiche->getTag());
+
+          if (!empty($_POST['addTag'])) {
+            $addTags = $_POST['addTag'];
+            
+            foreach ($addTags as $addTag) {
+              $newTag = new Tag;
+              $newTag->setLabel($addTag);
+              $fiche->addTag($newTag);
+              $em->persist($newTag);
+            }
+          }
+
+          $tags = $em->getRepository('AppBundle:Tag')->findById($tags);
+          $fiche->addManyTags($tags);
+          
+          $em->persist($fiche);
+          $em->flush();
+
+          return $this->redirectToRoute('app_fiche', array(
+              'id_fiche' => $fiche->getId(),
+              'id_groupe'=> $id_groupe, 
+            ));
+        }
+
+        return $this->render('AppBundle:Fiche:edit.html.twig', array(
+            'fiche'    => $fiche,
+            'usedTags' => $usedTags,
+            'tags'     => $tags,
+            'groupe'   => $fiche->getGroupe(),
+            'form'     => $editForm->createView(),
+        ));
+      } catch (AccessDeniedException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
-            'id_fiche' => $fiche->getId(),
-            'id_groupe'=> $id_groupe, 
-          ));
-      }
+          'id_groupe' => $id_groupe,
+          'id_fiche' => $id_fiche
+        ));
+      } catch (NotFoundHttpException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
-      return $this->render('AppBundle:Fiche:edit.html.twig', array(
-          'fiche'    => $fiche,
-          'usedTags' => $usedTags,
-          'tags'     => $tags,
-          'groupe'   => $fiche->getGroupe(),
-          'form'     => $editForm->createView(),
-      ));
+        return $this->redirectToRoute('app_groupe', array(
+          'id_groupe' => $id_groupe
+        ));
+      }
     }
 
     public function deleteAction($id_groupe, $id_fiche)
     {
-      $em = $this->getDoctrine()->getManager();
+      try {
+        $em = $this->getDoctrine()->getManager();
 
-      $fiche = $em
-        ->getRepository('AppBundle:Fiche')
-        ->find($id_fiche);
+        $membre = $em
+          ->getRepository('AppBundle:Membre')
+          ->findOneBy(array(
+              'user'   => $this->getUser(),
+              'groupe' => $id_groupe,
+          ));
 
-      $membre = $em
-        ->getRepository('AppBundle:Membre')
-        ->findOneBy(array(
-            'user'   => $this->getUser(),
-            'groupe' => $id_groupe,
-        ));
-
-      if ($member === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
-        if (!$membre->hasRole('ROLE_EDIT')) {
-          throw new AccessDeniedException();
+        if ($membre === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
+          if (!$membre->hasRole('ROLE_EDIT')) {
+            throw new AccessDeniedException('Vous ne pouvez pas supprimer de fiche sur ce groupe.');
+          }
         }
+
+        $fiche = $em
+          ->getRepository('AppBundle:Fiche')
+          ->find($id_fiche);
+        
+        if ($fiche === null) {
+          throw new NotFoundHttpException('Vous essayez de supprimier une fiche inexistante.');
+        }
+
+        $groupe = $fiche->getGroupe();
+        
+        if ($groupe === null) {
+          throw new NotFoundHttpException();
+        }
+
+        $groupe->removeFiche($fiche);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($groupe);
+        $em->remove($fiche);
+        $em->flush();
+    
+        return $this->redirectToRoute('app_groupe', array(
+          'id_groupe' => $id_groupe
+        ));
+      } catch (AccessDeniedException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+        return $this->redirectToRoute('app_fiche', array(
+          'id_groupe' => $id_groupe,
+          'id_fiche' => $id_fiche
+        ));
+      } catch (NotFoundHttpException $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+        
+        return $this->redirectToRoute('app_groupe', array('id_groupe' => $id_groupe));
       }
-
-      $groupe = $fiche->getGroupe();
-      $groupe->removeFiche($fiche);
-
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($groupe);
-      $em->remove($fiche);
-      $em->flush();
-  
-      return $this->redirectToRoute('app_groupe', array(
-        'id_groupe' => $id_groupe
-      ));
     }
 
     public function ratingAction(Request $request)

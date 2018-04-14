@@ -19,56 +19,68 @@ class MembreController extends Controller
 {
     public function indexAction(Request $request, $id_groupe)
     {
-        $em = $this->getDoctrine()->getManager();
+        try {
+            $em = $this->getDoctrine()->getManager();
 
-        $membre = $em
-            ->getRepository('AppBundle:Membre')
-            ->findOneBy(array(
-                'user'   => $this->getUser(),
-                'groupe' => $id_groupe,
-            ));
-        
-        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
-            throw new AccessDeniedException();
-        }
-
-
-        $groupe  = $em
-            ->getRepository('AppBundle:Groupe')
-            ->find($id_groupe);
-
-        $membres = $groupe->getMembre();
-
-        $form = $this->createForm('AppBundle\Form\MembreType', $membre);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid() && $membre->hasRole('ROLE_ADMIN')) {
-            $id = $form->get('id')->getData();
-
-            $membreEdit = $em
+            $membre = $em
                 ->getRepository('AppBundle:Membre')
                 ->findOneBy(array(
-                    'user'   => $id,
+                    'user'   => $this->getUser(),
                     'groupe' => $id_groupe,
                 ));
-
-            $membreEdit->setRoles(array(''));
-
-            if ($form->get('edit')->getData()) {
-                $membreEdit->addRole('ROLE_EDIT');
-            }
-            if ($form->get('invite')->getData()) {
-                $membreEdit->addRole('ROLE_INVITE');
-            }
-            if ($form->get('post')->getData()) {
-                $membreEdit->addRole('ROLE_POST');   
-            }
-            if ($form->get('ressource')->getData()) {
-                $membreEdit->addRole('ROLE_RESSOURCE');
+            
+            if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+                throw new AccessDeniedException('Vous n\'avez pas accès à la liste de membre de ce groupe.');
             }
 
-            $em->persist($membreEdit);
-            $em->flush();
+            $groupe  = $em
+                ->getRepository('AppBundle:Groupe')
+                ->find($id_groupe);
+
+            if ($groupe === null) {
+                throw new NotFoundHttpException('Ce groupe n\'existe pas.');
+            }
+
+            $membres = $groupe->getMembre();
+
+            $form = $this->createForm('AppBundle\Form\MembreType', $membre);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid() && $membre->hasRole('ROLE_ADMIN')) {
+                $id = $form->get('id')->getData();
+
+                $membreEdit = $em
+                    ->getRepository('AppBundle:Membre')
+                    ->findOneBy(array(
+                        'user'   => $id,
+                        'groupe' => $id_groupe,
+                    ));
+
+                $membreEdit->setRoles(array(''));
+
+                if ($form->get('edit')->getData()) {
+                    $membreEdit->addRole('ROLE_EDIT');
+                }
+                if ($form->get('invite')->getData()) {
+                    $membreEdit->addRole('ROLE_INVITE');
+                }
+                if ($form->get('post')->getData()) {
+                    $membreEdit->addRole('ROLE_POST');   
+                }
+                if ($form->get('ressource')->getData()) {
+                    $membreEdit->addRole('ROLE_RESSOURCE');
+                }
+
+                $em->persist($membreEdit);
+                $em->flush();
+
+                return $this->render('AppBundle:Membre:index.html.twig', array(
+                    'groupe'     => $groupe,
+                    'membres'    => $membres,
+                    'currMembre' => $membre,
+                    'form'       => $form->createView(),
+                ));
+            }
 
             return $this->render('AppBundle:Membre:index.html.twig', array(
                 'groupe'     => $groupe,
@@ -76,13 +88,14 @@ class MembreController extends Controller
                 'currMembre' => $membre,
                 'form'       => $form->createView(),
             ));
-        }
+        } catch (Exception $e) {
+            $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
-        return $this->render('AppBundle:Membre:index.html.twig', array(
-            'groupe'     => $groupe,
-            'membres'    => $membres,
-            'currMembre' => $membre,
-            'form'       => $form->createView(),
-        ));
+            return $this->redirectToRoute('app_home');
+        } catch (AccessDeniedException $e) {
+            $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+            return $this->redirectToRoute('app_home');
+        }
     }
 }

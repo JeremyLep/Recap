@@ -16,31 +16,37 @@ class NotificationController extends Controller
 {
     public function indexAction($groupeId)
     {
-        $em = $this->getDoctrine()->getManager();
+        try {
+            $em = $this->getDoctrine()->getManager();
 
-        $membre = $em
-            ->getRepository('AppBundle:Membre')
-            ->findOneBy(array(
-                'user'   => $this->getUser(),
-                'groupe' => $groupeId,
+            $membre = $em
+                ->getRepository('AppBundle:Membre')
+                ->findOneBy(array(
+                    'user'   => $this->getUser(),
+                    'groupe' => $groupeId,
+                ));
+            
+            if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+                throw new AccessDeniedException('Vous n\'avez pas accès aux notifications de ce groupe.');
+            }
+            
+            $groupe = $em
+              ->getRepository('AppBundle:Groupe')
+              ->find($groupeId);
+
+            $notifications = $em
+              ->getRepository('AppBundle:Notification')
+              ->getNotifByGroup($groupeId);
+
+            return $this->render('AppBundle:Notification:index.html.twig', array(
+                'notifications'  => $notifications,
+                'groupe'         => $groupe
             ));
-        
-        if ($membre === null || !$membre->hasRole('ROLE_USER')) {
-            throw new AccessDeniedException();
+        } catch (AccessDeniedException $e) {
+            $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+            return $this->redirectToRoute('app_home');
         }
-        
-        $groupe = $em
-          ->getRepository('AppBundle:Groupe')
-          ->find($groupeId);
-
-        $notifications = $em
-          ->getRepository('AppBundle:Notification')
-          ->getNotifByGroup($groupeId);
-
-        return $this->render('AppBundle:Notification:index.html.twig', array(
-            'notifications'  => $notifications,
-            'groupe'         => $groupe
-        ));
     }
 
     public function allAction()
@@ -48,16 +54,10 @@ class NotificationController extends Controller
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
-        $securityContext = $this->get('security.authorization_checker');
-        
-        if (!$securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
-        }
-
         $notifications = $em
             ->getRepository('AppBundle:UserNotif')
             ->findBy(array('user' => $user), array('date' => 'DESC'));
-        
+            
         return $this->render('AppBundle:Notification:all.html.twig', array(
             'notifications'  => $notifications,
         ));

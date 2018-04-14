@@ -128,8 +128,29 @@
         {% endblock %}
 
         <main role="main" class="col-12 col-md-10 offset-md-2 pt-5">
-
+          
           {% block body %}
+            
+            {% block flashbag %}
+              {% set flashbag = app.flashes %}
+              {% if flashbag|length > 0 %}
+              <div class="page-alert">
+                {% for type, messages in flashbag %}
+                <div class="alert-wrap in">
+                  {% for message in messages %}
+                  <div class="alert alert-{{ type }}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <i class="fa fa-times-circle"></i>
+                    </button>
+                    <div class="media container">{{ message|raw }}</div>
+                  </div>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}  
+            {% endblock %}
+
           {% endblock %}
 
         </main>

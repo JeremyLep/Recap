@@ -8,6 +8,8 @@
   <h5 class="p-3 m-0">Vous avez accès à {{ nbFicheAccess }} fiches - {{ listGroupes|length }} groupes</h5>
 </div>
 
+{{ parent() }}
+
 <div id="content" class="col-12">
   <div>
     {{ include('AppBundle:Default:template.html.twig') }}
