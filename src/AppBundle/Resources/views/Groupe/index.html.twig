@@ -20,7 +20,7 @@
 
 {% block body %}
 <div class="row col-12 pt-2" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
-  <div class="p-3 m-0 col-6" style="font-size: 1.2rem;">{{ groupe.nbFiche }} fiches 
+  <div class="p-3 m-0 col-6" style="font-size: 1.2rem;">{{ groupe.nbFiche }} fiches sur ce groupe 
     {% if (membre.hasRole('ROLE_POST') or membre.user.id == groupe.userId) %}
     <a href="{{ path('app_fiche_add', {'id_groupe': groupe.id}) }}"  style="font-size: 0.8rem;"> Ajouter</a>
     {% endif %}
@@ -31,7 +31,7 @@
     {% endif %}
   </div>
 </div>
-
+{{ parent() }}
 <div id="content" class="col-12">
   <div class="row p-1">
     {{ include('AppBundle:Fiche:template.html.twig') }}

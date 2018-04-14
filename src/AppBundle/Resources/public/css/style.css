@@ -814,6 +814,14 @@ form label {
   width: auto;
 }
 
+.media {
+  display: inline;
+}
+
+.alert {
+  border-radius: 0;
+}
+
 @media screen and (min-width: 767px) and (max-width: 900px) {
   .form-inline {
     width: 70%;
