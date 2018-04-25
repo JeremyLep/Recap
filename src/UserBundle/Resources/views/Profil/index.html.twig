@@ -31,7 +31,24 @@
         <tr>
           <td>Mot de passe</td>
           <td>&bull; &bull; &bull; &bull; &bull; &bull;<a class="btn btn-danger p-2 float-right" href="{{ path('fos_user_change_password') }}">Modifier le mot de passe</a></td>
-        </tr>    
+        </tr>
+        <tr>
+          <td>Compte Premium</td>
+          <td>
+            {% if profil.isPremium %}
+            <i class="fa fa-check-circle text-success"></i>
+            {% else %}
+            <i class="fa fa-times-circle text-danger"></i>
+            <a href="{{ path('app_purchase') }}" class="btn btn-warning float-right text-white">Passer premium</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% if profil.isPremium %}
+        <tr>
+          <td>Temps restant premium</td>
+          <td>{{ profil.getRemainTime() }}</td>
+        </tr>
+        {% endif %}
       </tbody>
     </table>
     <h5>Vos informations personnelles</h5>

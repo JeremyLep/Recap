@@ -3,3 +3,6 @@ app_home:
 
 fos_user:
     resource: "@UserBundle/Resources/config/routing.yml"
+
+app_payment:
+    resource: "@PaymentBundle/Resources/config/routing.yml"

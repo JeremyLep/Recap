@@ -235,10 +235,8 @@ class FicheController extends Controller
           ->getRepository('AppBundle:Fiche')
           ->find($id_fiche);
 
-        if ($membre === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
-          if (!$membre->hasRole('ROLE_EDIT')) {
-            throw new AccessDeniedException('Vous ne pouvez pas éditer de fiche sur ce groupe.');
-          }
+        if ($membre === null || ($fiche->getAuteur()->getId() !== $membre->getId() && !$membre->hasRole('ROLE_EDIT'))) {
+          throw new AccessDeniedException('Vous ne pouvez pas éditer de fiche sur ce groupe.');
         }
         
         if ($fiche === null) {
@@ -322,7 +320,7 @@ class FicheController extends Controller
               'groupe' => $id_groupe,
           ));
 
-        if ($membre === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
+        if ($membre === null || $fiche->getAuteur()->getId() !== $membre->getId()) {
           if (!$membre->hasRole('ROLE_EDIT')) {
             throw new AccessDeniedException('Vous ne pouvez pas supprimer de fiche sur ce groupe.');
           }

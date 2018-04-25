@@ -85,13 +85,45 @@ class User extends BaseUser
      */
     private $color;
 
-  	/**
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="premium", type="boolean", nullable=false)
+     */
+    protected $premium;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="filesize", type="float", nullable=false)
+     */
+    protected $filesize;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="expire_premium", type="datetime", nullable=true)
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
+     */
+    public $expirePremium;
+
+    /**
      * @var \AppBundle\Entity\Membre
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="user")
      *
      */
     private $membre;
+
+
+    /**
+     * @var \AppBundle\Entity\Ressource
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ressource", mappedBy="auteur")
+     *
+     */
+    private $ressource;
 
     /**
      * @var \AppBundle\Entity\Groupe
@@ -132,12 +164,27 @@ class User extends BaseUser
      */
     protected $notificationAuteur;
 
+    /**
+     * @var \PaymentBundle\Entity\Cart
+     *
+     * @ORM\OneToMany(targetEntity="PaymentBundle\Entity\Cart", mappedBy="user")
+     *
+     */
+    protected $cart;
+
+    /**
+     * 
+     *
+     */
 	public function __construct()
     {
         parent::__construct();
         $this->dateInscription = new \DateTime;
         $this->notification    = new Collections\ArrayCollection;
         $this->color           = "#".str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT).str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+        $this->expirePremium   = null;
+        $this->filesize        = 0;
+        $this->premium         = false;
     }
 
 	/**
@@ -308,6 +355,93 @@ class User extends BaseUser
     }
 
     /**
+     * Is premium
+     *
+     * @return boolean
+     */
+    public function isPremium()
+    {
+        return $this->premium;
+    }
+
+    /**
+     * Get filesize
+     *
+     * @return float
+     */
+    public function getFilesize()
+    {
+        return $this->filesize;
+    }
+
+    /**
+     * Set filesize
+     *
+     * @param float $filesize
+     *
+     * @return float
+     */
+    public function setFilesize(Float $filesize)
+    {
+        $this->filesize = $this->filesize + $filesize;
+
+        return $this;
+    }
+
+    /**
+     * delete filesize
+     *
+     * @param float $filesize
+     *
+     * @return float
+     */
+    public function deleteFilesize(Float $filesize)
+    {
+        $this->filesize = $this->filesize - $filesize;
+
+        return $this;
+    }
+
+    /**
+     * Set premium
+     *
+     * @return premium
+     */
+    public function setPremium($type)
+    {
+        $this->premium = true;
+        if ($type === 1) {
+            $this->expirePremium = new \DateTime('+6 months');
+        } else {
+            $this->expirePremium = new \DateTime('+1 years');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get expirePremium
+     *
+     * @return float
+     */
+    public function getExpirePremium()
+    {
+        return $this->expirePremium;
+    }
+
+    /**
+     * Remaining premium time
+     *
+     * @return datetime
+     */
+    public function getRemainTime()
+    {
+        $time = $this->getExpirePremium()->diff(new \DateTime())->format('%m mois, %d jours et %h heures');
+
+        return $time;
+    }
+
+    /**
      * Set groupe
      *
      * @param \AppBundle\Entity\Groupe $groupe
@@ -365,11 +499,34 @@ class User extends BaseUser
         return $this->membre;
     }
 
+    /**
+     * Set ressource
+     *
+     * @param \AppBundle\Entity\Ressource $ressource
+     *
+     * @return Ressource
+     */
+    public function setRessource(\AppBundle\Entity\Ressource $ressource)
+    {
+        $this->ressource = $ressource;
+
+        return $this;
+    }
+
+    /**
+     * Get ressource
+     *
+     * @return \AppBundle\Entity\Ressource
+     */
+    public function getRessource()
+    {
+        return $this->ressource;
+    }
+
     public function isAuthor(User $user = null)
     {
         return $user && $user->getEmail() == $this->getEmail();
     }
-
 
     /**
      * Get userBridge
@@ -433,6 +590,25 @@ class User extends BaseUser
     public function getColor()
     {
         return $this->color;
+    }
+
+    public function convertFilesize($bytes)
+    {
+        if ($bytes >= 1073741824) {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            $bytes = number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes > 1) {
+            $bytes = $bytes . ' B';
+        } elseif ($bytes == 1) {
+            $bytes = $bytes . ' B';
+        } else {
+            $bytes = '0 B';
+        }
+
+        return $bytes;
     }
 
 }

@@ -92,6 +92,17 @@ app_mesfiches_infinite_scroll:
     defaults:
         _controller: AppBundle:MesFiches:mesFichesInfiniteScroll
 
+# --------- MES RESSOURCES ----------- #
+app_mes_ressources:
+    path:   /mes-ressources
+    defaults:
+        _controller: AppBundle:MesRessources:index
+
+app_mesressources_infinite_scroll:
+    path:      /mes_ressources_load_more
+    defaults:
+        _controller: AppBundle:MesRessources:mesRessourcesInfiniteScroll
+
 # --------- RESSOURCES ----------- #
 app_ressource_add:
     path:      /groupe{groupeId}/fiche{ficheId}/add-ressource
@@ -102,12 +113,9 @@ app_ressource_add:
         ficheId: \d+
 
 app_ressource_view:
-    path:     /groupe{groupeId}/fiche{ficheId}/view/ressource
+    path:     view-ressource
     defaults:
         _controller: AppBundle:Ressource:view
-    requirements:
-        groupeId: \d+
-        ficheId: \d+
 
 app_ressource_dl:
     path:     /groupe{groupeId}/fiche{ficheId}/dl/{fileName}
@@ -118,12 +126,9 @@ app_ressource_dl:
         ficheId: \d+
 
 app_ressource_delete:
-    path:     /groupe{groupeId}/fiche{ficheId}/delete-ressource
+    path:     delete-ressource
     defaults:
         _controller: AppBundle:Ressource:delete
-    requirements:
-        groupeId: \d+
-        ficheId: \d+
 
 # --------- MEMBRE ---------- #
 app_membre:

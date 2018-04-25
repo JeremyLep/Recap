@@ -30,7 +30,7 @@
             <span class="navbar-toggler-icon fa fa-align-justify"></span>
           </button>
           {% block titre %}
-            <a class="navbar-brand" href="{{ path('app_home') }}">Dashboard</a>
+            <a class="navbar-brand" href="{{ path('app_home') }}"> Tableau de bord</a>
           {% endblock %}
           
           <form name="search" method="get" action="/app_dev.php/search" class="search-form visible-xs">
@@ -57,7 +57,7 @@
                       
               <ul class="nav nav-itempills flex-column pt-3">
                 <li class="nav-item">
-                  <a class="nav-link text-grey" href="{{ path('app_home') }}"><i class="fa fa-home"></i> Dashboard</a>
+                  <a class="nav-link text-grey" href="{{ path('app_home') }}"><i class="fa fa-home"></i> Tableau de bord</a>
                 </li>
               </ul>
               <ul class="nav nav-pills flex-column pt-3 w-100">
@@ -68,6 +68,13 @@
                   <a class="nav-link text-grey" href="{{ path('fos_user_profil') }}"><i class="fa fa-user"></i> Profil</a>
                 </li>
               </ul>
+              {% if not app.user.isPremium() %}
+              <ul class="nav nav-pills flex-column pt-3 w-100">
+                <li class="nav-item">
+                  <a href="{{ path('app_purchase') }}" class="btn btn-premium text-white w-100">Passez premium !</a>
+                </li>
+              </ul>
+              {% endif %}
               <ul class="nav nav-pills flex-column pt-3 w-100">
                 <li class="nav-item">
                   <a class="nav-link text-grey" href="{{ path('fos_user_security_logout') }}"><i class="fa fa-power-off"></i> Deconnexion</a>
@@ -91,7 +98,7 @@
               {{ render(controller('AppBundle:Default:menuTop')) }}
               {% endblock %}
         
-              {% block search%}
+              {% block search %}
                 <li class="nav-item li-inline" id="searchbar">
                 {{ render(controller('AppBundle:Search:searchBar')) }}
                 </li>

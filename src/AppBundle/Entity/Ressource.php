@@ -41,6 +41,22 @@ class Ressource
     private $routeDoc;
 
     /**
+     *
+     * @var float
+     *
+     * @ORM\Column(name="filesize", type="float", nullable=false)
+     * @Assert\NotBlank()
+     */
+    private $filesize;
+
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="ressource")
+     */
+    protected $auteur;
+
+    /**
      * @var \Fiche
      *
      * @ORM\ManyToOne(targetEntity="Fiche", inversedBy="ressource")
@@ -138,6 +154,30 @@ class Ressource
     }
 
     /**
+     * Set filesize
+     *
+     * @param float $filesize
+     *
+     * @return Ressource
+     */
+    public function setFilesize($filesize)
+    {
+        $this->filesize = $filesize;
+
+        return $this;
+    }
+
+    /**
+     * Get filesize
+     *
+     * @return float
+     */
+    public function getFilesize()
+    {
+        return $this->filesize;
+    }
+
+    /**
      * Set fiche
      *
      * @param \AppBundle\Entity\Fiche $fiche
@@ -159,5 +199,48 @@ class Ressource
     public function getFiche()
     {
         return $this->fiche;
+    }
+
+    /**
+     * Get auteur
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getAuteur()
+    {
+        return $this->auteur;
+    }
+
+    /**
+     * Set auteur
+     *
+     * @param \AppBundle\Entity\User $auteur
+     *
+     * @return Ressource
+     */
+    public function setAuteur(\UserBundle\Entity\User $auteur = null)
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    public function convertFilesize($bytes)
+    {
+        if ($bytes >= 1073741824) {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            $bytes = number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes > 1) {
+            $bytes = $bytes . ' B';
+        } elseif ($bytes == 1) {
+            $bytes = $bytes . ' B';
+        } else {
+            $bytes = '0 B';
+        }
+
+        return $bytes;
     }
 }

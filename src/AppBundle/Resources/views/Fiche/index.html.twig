@@ -34,7 +34,7 @@
     {% endif %}
   </h5>
   <h5 class="p-3 col-4" style="border-bottom: .0625rem solid #e8e8e8; border-left: 1rem solid transparent;">Sources
-    {% if (membre.hasRole('ROLE_RESSOURCE') or membre.user.id == fiche.auteur.id) %}
+    {% if (membre.hasRole('ROLE_RESSOURCES') or membre.user.id == fiche.auteur.user.id) %}
     <a href="{{ path('app_ressource_add', {'ficheId':fiche.id, 'groupeId': groupe.id }) }}" class="pl-3" style="font-size: 0.8rem; ">ajouter</a>
     {% endif %}
   </h5>
@@ -61,8 +61,11 @@
               </div>
             </div>
             <div class="row">
-              <div class=" col-12 text-left">
-                <p class="m-0" style="font-size: 0.7rem; ">Difficulté : {{ fiche.difficulte }}  |  Durée : {{ fiche.duree}}</p>
+              <div class="col-12">
+                <p class="m-0 inline text-left" style="font-size: 0.7rem; ">Difficulté : {{ fiche.difficulte }}  |  Durée : {{ fiche.duree}}</p>
+                {% if fiche.auteur.user.id == app.user.id %}
+                <i class="fa fa-key float-right text-warning"></i>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -98,7 +101,7 @@
                     <img src="{{  asset('bundles/app/avatar/' ~commentaire.getMembre.getUser.avatar) }}" class="img-fluid rounded mr-3" alt="avatar" style="max-width: 35px; max-height: 35px;">
                     {{ commentaire.getMembre.getUser.username}}
                     {% endif %}
-                    <small class="pl-3">{{ commentaire.date|date }}</small>
+                    <small class="pl-3">{{ commentaire.date|date('Y-m-d H:i:s') }}</small>
                   </span>
                   <br><br>
                   <span class="p-2 w-100">
@@ -127,7 +130,7 @@
           <div class="card-body p-0">
             <p class="text-muted m-0">{{ ressource.titre }}</p>
             <div class="row col-12 m-0 p-0">
-              <a id="openRessource" data-ressource="{{ ressource.routeDoc }}" class="openRessource btn btn-sm btn-secondary {% if (membre.hasRole('ROLE_ADMIN') or membre.user == fiche.auteur) %} col-4 {% else %} col-6 {% endif %} rounded-0 text-white" target="_blank">
+              <a id="openRessource" data-ressource="{{ ressource.routeDoc }}" data-title="{{ ressource.titre }}" class="openRessource btn btn-sm btn-secondary {% if (membre.hasRole('ROLE_ADMIN') or membre.user == fiche.auteur) %} col-4 {% else %} col-6 {% endif %} rounded-0 text-white" target="_blank">
                 <i class="fa fa-eye" aria-hidden="true"></i>
               </a>
               <a href="{{ path('app_ressource_dl', { 'ficheId': fiche.id, 'groupeId': groupe.id, 'fileName': ressource.routeDoc }) }}" class="btn btn-sm btn-secondary {% if (membre.hasRole('ROLE_ADMIN') or membre.user == fiche.auteur) %} col-4 {% else %} col-6 {% endif %} rounded-0">
@@ -152,8 +155,9 @@
 </video>
 
 <div id="overlayRessource" style="display: none;">
-  <div id="overlayTop">
-    <div id="close"><i class="fa fa-close fa-lg text-white"></i></div>
+  <div id="overlayTop" class="text-white">
+    <h4 id="titreModal" class="inline p-3"></h4>
+    <div id="close"><i class="fa fa-close fa-lg"></i></div>
   </div>
   <div id="overlayContent">
     <object class="" id="object" data="" type="application/pdf">
@@ -186,7 +190,7 @@
       <div class="modal-footer">
         <div class="row w-100">
           <div class="text-right col-9 pl-0">
-            <form method="POST" action="{{ path('app_ressource_delete', { 'ficheId': fiche.id, 'groupeId': groupe.id}) }}">
+            <form method="POST" action="{{ path('app_ressource_delete') }}">
               <input id="routeModal" type="hidden" name="route" value="">
               <input type="submit" name="submit" class="btn btn-danger btn-lg" value="Supprimer la ressource">
             </form>
@@ -252,11 +256,13 @@
       $("object#object").css('height', '0');
       $("a#openRessource").on("click", function() {
         var ressource = $(this).attr('data-ressource');
+        var title = $(this).attr('data-title');
         $.ajax({
-          url: '{{ path("app_ressource_view", { "ficheId": fiche.id, "groupeId": groupe.id }) }}',
+          url: '{{ path("app_ressource_view") }}',
           type: "POST",
           data: { fileName : ressource },
           success: function(ressource) {
+            $('#titreModal').html(title);
             if (ressource.type == "video") {
               $("#video").attr("src", ressource.content);
               var evt = document.createEvent("MouseEvents");

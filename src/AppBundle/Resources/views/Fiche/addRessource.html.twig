@@ -20,9 +20,18 @@
 {% endblock %}
 
 {% block body %}
+<div class="row" id="menu-titre">
+  <div class="col-12 pt-3" style="border-bottom: .0625rem solid #e8e8e8;">
+    {% if app.user.isPremium() %}
+      {% set maxFilesize = '&infin;' %}
+    {% endif %}
+    <h5 class="m-0 inline">Nouveau document pour la fiche "{{ fiche.titre }}"</h5>
+    <h6 class="m-0 float-right">{{ filesize }} / {{ maxFilesize|raw }}</h6>
+  </div>
+</div>
+{{ parent() }}
+<br>
 <div class="col-sm-8 offset-sm-2">
-    <h2 class="mt-5 mb-2">Nouveau document pour la fiche "{{ fiche.titre }}"</h2>
-
     {{ form_start(form) }}
         <div class="col-12">
             {{ form_label(form.titre) }}
@@ -31,14 +40,52 @@
         </div>
         <div class="col-12">
             {{ form_label(form.routeDoc) }}
+            <small class="float-right countSize pt-4">{{ filesize }} / {{ maxFilesize|raw }}</small>
             {{ form_errors(form.routeDoc) }}
             {{ form_widget(form.routeDoc, { 'attr': {'class': 'form-control' }}) }}
         </div>
         <div class="text-right col-12 mt-2">
-            <input type="submit" class="btn btn-defaut-inv btn-lg" value="Create" />
+            <input type="submit" class="btn btn-defaut-inv btn-lg" value="Envoyer" />
             <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}" class="btn btn-secondary btn-lg">Retour</a>
         </div>
     {{ form_end(form) }}
 </div>
     
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+      var currentSizefile = {{ app.user.filesize }};
+      
+      $('#appbundle_ressource_routeDoc').bind('change', function() {
+        var newSize = this.files[0].size + currentSizefile;
+        if (newSize < 1610000000) {
+          $('.countSize').html('<i class="fa fa-check-circle"></i> ' + convertFilesize(newSize) + ' / 1.50Go').addClass('text-success').removeClass('text-danger');
+        } else {
+          $('.countSize').html('<i class="fa fa-exclamation-circle"></i> ' + convertFilesize(newSize) + ' / 1.50Go' ).removeClass('text-success').addClass('text-danger');
+        }
+      });
+
+      function convertFilesize(size) 
+      {
+        if (size >= 1073741824) {
+            size = size / 1073741824;
+            size = size.toFixed(2) + ' GB'
+        } else if (size >= 1048576) {
+            size = size / 1048576;
+            size = size.toFixed(2) + ' MB'
+        } else if (size >= 1024) {
+            size = size / 1024;
+            size = size.toFixed(2) + ' KB'
+        } else if (size > 1) {
+            size = size + ' B';
+        } else if (size == 1) {
+            size = size + ' B';
+        } else {
+            size = '0 B';
+        }
+        return size;
+      }
+    </script>
 {% endblock %}
