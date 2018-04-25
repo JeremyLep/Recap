@@ -42,6 +42,7 @@ class FicheType extends AbstractType
             ))
             ->add('tag', ChoiceType::class, array(
                 'label'    => 'Tag existant associés à la fiche',
+                'required' => false,
                 'mapped'   => false,
                 'multiple' => true,
                 'choices'  => $tags,

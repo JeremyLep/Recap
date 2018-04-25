@@ -1,0 +1,16 @@
+app_purchase:
+    path:       /purchase
+    defaults:
+        _controller: PaymentBundle:Purchase:index
+
+app_purchase_validate:
+    path:       /purchase/validate/{type}
+    defaults:
+        _controller: PaymentBundle:Purchase:purchase
+    requirements:
+        type: \d+
+
+app_payment:
+    path:       /payment
+    defaults:
+        _controller: PaymentBundle:Payment:index

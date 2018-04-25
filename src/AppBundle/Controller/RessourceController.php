@@ -32,7 +32,7 @@ class RessourceController extends Controller
           ));
 
         if ($fiche === null) {
-          throw new NotFoundHttpException('Vous ne pouvez pas ajouter des ressources sur ce groupe');
+          throw new NotFoundHttpException('Vous ne pouvez pas ajouter des ressources sur ce groupe.');
         }
 
         $membre = $em
@@ -41,22 +41,22 @@ class RessourceController extends Controller
               'user'   => $this->getUser(),
               'groupe' => $groupeId,
           ));
-        
-        if ($membre === null || $fiche->getAuteur()->getId() !== $membre->getUser()->getId()) {
-          if (!$membre->hasRole('ROLE_RESSOURCE')) {
-            throw new AccessDeniedException('Vous ne pouvez pas ajouter des ressources sur ce groupe');
-          }
+          
+        if ($membre === null || ($fiche->getAuteur()->getId() !== $membre->getId() && !$membre->hasRole('ROLE_RESSOURCE') )) {
+          throw new AccessDeniedException('Vous ne pouvez pas ajouter des ressources sur ce groupe.');
         }
 
-        $ressource = new Ressource();
-        $form      = $this->createForm(RessourceType::class, $ressource);
+        $maxFilesize = $this->getParameter('max_filesize');
+        $ressource   = new Ressource();
+        $form        = $this->createForm(RessourceType::class, $ressource);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-          $file = $ressource->getRouteDoc();
+          $file      = $ressource->getRouteDoc();
+          $extension = $file->guessExtension();
 
-          switch ($file->guessExtension()) {
+          switch ($extension) {
             case "pdf":
               $imageRessource = "pdf.png";
             break;
@@ -97,20 +97,36 @@ class RessourceController extends Controller
             case "bmp":
                 $imageRessource = "image.jpg";
             break;
+            default:
+              throw new \Exception('Le format de l\'image n\'est pas supporté. ');
           }
-          
-          $fileName = md5(uniqid()).'.'.$file->guessExtension();
-          $route = $this->getParameter('ressource_dir')."groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/";
+
+          $fileName = md5(uniqid()).'.'.$extension;
+          $route    = $this->getParameter('ressource_dir')."groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/";
           if (!is_dir($route)) {
             mkdir($route, 0777, true);
           }
+          
           $file->move($route, $fileName);
+
+          $filesize = filesize($route.$fileName);
+
+          if ($filesize > $maxFilesize)  {
+            throw new \Exception('Vous ne pouvez pas poster un fichier de plus de <b>1,5Go</b>.');
+          } 
+          if ( !($this->getUser()->isPremium()) and ($filesize + $this->getUser()->getFilesize() > $maxFilesize) ) {
+            throw new \Exception(sprintf('Vous avez atteint votre <b>limite de 1,50Go</b> de données postées.<br><b>Passez Premium pour bénéficier du mode illimité !</b><br>Vous pouvez également supprimer des anciennes ressources afin d\'en poster de nouvelles.'));  
+          }
+
           $ressource->setRouteDoc($fileName);
           $ressource->setFiche($fiche);
-
+          $ressource->setFilesize($filesize);
           $ressource->setImage($imageRessource);
           $fiche->addRessource($ressource);
-          
+
+          $user = $this->getUser()->setFilesize($filesize);
+          $ressource->setAuteur($this->getUser());
+
           $notification = new Notification();
           $notification->setFiche($fiche);
           $notification->setAuteur($this->getUser());
@@ -136,6 +152,7 @@ class RessourceController extends Controller
           $em->persist($notification);
           $em->persist($fiche);
           $em->persist($ressource);
+          $em->persist($user);
           $em->flush();
 
           return $this->redirectToRoute('app_fiche', array(
@@ -148,60 +165,72 @@ class RessourceController extends Controller
             'fiche'     => $fiche,
             'form'      => $form->createView(),
             'groupe'    => $fiche->getGroupe(),
+            'filesize'    => $this->getUser()->convertFilesize($this->getUser()->getFilesize()),
+            'maxFilesize' => $this->getUser()->convertFilesize($maxFilesize)
         ));
       } catch (UploadException $e) {
         $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
           'id_groupe' => $groupeId,
-          'id_fiche' => $ficheId
+          'id_fiche'  => $ficheId
         ));
       } catch (NotFoundHttpException $e) {
         $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
           'id_groupe' => $groupeId,
-          'id_fiche' => $ficheId
+          'id_fiche'  => $ficheId
         ));
       } catch (AccessDeniedException $e) {
         $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
           'id_groupe' => $groupeId,
-          'id_fiche' => $ficheId
+          'id_fiche'  => $ficheId
+        ));
+      } catch (\Exception $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+        return $this->render('AppBundle:Fiche:addRessource.html.twig', array(
+            'fiche'       => $fiche,
+            'form'        => $form->createView(),
+            'groupe'      => $fiche->getGroupe(),
+            'filesize'    => $this->getUser()->convertFilesize($this->getUser()->getFilesize()),
+            'maxFilesize' => $maxFilesize
         ));
       }
     }
 
-    public function viewAction(Request $request, $groupeId, $ficheId)
+    public function viewAction(Request $request)
     {
       try {
         if ($request->isXmlHttpRequest()) {
+          $em       = $this->getDoctrine()->getManager();
           $fileName = $request->get('fileName');
-          $em    = $this->getDoctrine()->getManager();  
-          $membre = $em
-              ->getRepository('AppBundle:Membre')
-              ->findOneBy(array(
-                  'user'   => $this->getUser(),
-                  'groupe' => $groupeId,
-              ));
-          
-          if ($membre === null || !$membre->hasRole('ROLE_USER')) {
-            throw new AccessDeniedException('Vous n\'avez pas accès à cette ressource.');
-          }
-
-          $fiche = $em
-            ->getRepository('AppBundle:Fiche')
-            ->findOneBy(array(
-              'id'        => $ficheId, 
-              'groupe'    => $groupeId,
-            ));
 
           $ressource = $em
             ->getRepository('AppBundle:Ressource')
             ->findOneBy(array(
               'routeDoc' => $fileName
             ));
+
+          $fiche = $em
+            ->getRepository('AppBundle:Fiche')
+            ->findOneBy(array(
+              'id' => $ressource->getFiche()->getId(),
+            ));
+
+          $membre = $em
+              ->getRepository('AppBundle:Membre')
+              ->findOneBy(array(
+                  'user'   => $this->getUser(),
+                  'groupe' => $fiche->getGroupe(),
+          ));
+          
+          if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+            throw new AccessDeniedException('Vous n\'avez pas accès à cette ressource.');
+          }
 
           $file = "/bundles/app/files/groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/".$fileName;
 
@@ -239,8 +268,8 @@ class RessourceController extends Controller
         $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
-          'id_groupe' => $groupeId,
-          'id_fiche' => $ficheId
+          'id_groupe' => $fiche->getGroupe()->getId(),
+          'id_fiche'  => $fiche->getId()
         ));
       }
     }
@@ -296,28 +325,33 @@ class RessourceController extends Controller
       }
     }
 
-    public function deleteAction(Request $request, $groupeId, $ficheId)
+    public function deleteAction(Request $request)
     {
       try {
         $em = $this->getDoctrine()->getManager();
         
         $fileName = $request->request->get('route');
 
+        $ressource = $em
+          ->getRepository('AppBundle:Ressource')
+          ->findOneBy(array(
+            'routeDoc' => $fileName,
+          ));
+
         $fiche = $em
-        ->getRepository('AppBundle:Fiche')
-        ->findOneBy(array(
-          'id'     => $ficheId, 
-          'groupe' => $groupeId,
+          ->getRepository('AppBundle:Fiche')
+          ->findOneBy(array(
+            'id' => $ressource->getFiche()->getId(),
         ));
 
         $membre = $em
           ->getRepository('AppBundle:Membre')
           ->findOneBy(array(
               'user'   => $this->getUser(),
-              'groupe' => $groupeId,
+              'groupe' => $fiche->getGroupe()->getId(),
           ));
         
-        if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_RESSOURCE') && !($fiche->getAuteur()->getId() == $membre->getUser()->getId()) )) {
+        if ($membre === null || !$membre->hasRole('ROLE_ADMIN') || ($membre->hasRole('ROLE_RESSOURCE') && !($fiche->getAuteur()->getId() == $membre->getId()) )) {
           throw new AccessDeniedException('Vous ne pouvez pas supprimer de ressources sur cette fiche.');
         }
 
@@ -325,12 +359,9 @@ class RessourceController extends Controller
           throw new NotFoundHttpException('Vous essayez de supprimer une ressource d\'une fiche inexistante.');
         }
 
-        $ressource = $em
-          ->getRepository('AppBundle:Ressource')
-          ->findOneBy(array(
-            'fiche' => $ficheId,
-            'routeDoc' => $fileName,
-          ));
+        $route = $this->getParameter('ressource_dir')."groupe".$fiche->getGroupe()->getId()."/fiche".$fiche->getId()."/";
+
+        $user = $ressource->getAuteur()->deleteFilesize(filesize($route.$fileName));
 
         if ($ressource === null) {
           throw new NotFoundHttpException('Vous essayez de supprimer une ressource inexistante.');
@@ -340,25 +371,33 @@ class RessourceController extends Controller
 
         $em->remove($ressource);
         $em->persist($fiche);
+        $em->persist($user);
         $em->flush();
 
         return $this->redirectToRoute('app_fiche', array(
-          'id_fiche'  => $ficheId, 
-          'id_groupe' => $groupeId,
+          'id_fiche'  => $fiche->getId(), 
+          'id_groupe' => $fiche->getGroupe()->getId(),
         ));
       } catch (AccessDeniedException $e) {
         $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
-          'id_fiche' => $ficheId,
-          'id_groupe' => $groupeId
+          'id_fiche' => $fiche->getId(),
+          'id_groupe' => $fiche->getGroupe()->getId()
         ));
       } catch (NotFoundHttpException $e) {
         $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
         return $this->redirectToRoute('app_fiche', array(
-          'id_fiche' => $ficheId,
-          'id_groupe' => $groupeId
+          'id_fiche' => $fiche->getId(),
+          'id_groupe' => $fiche->getGroupe()->getId()
+        ));
+      } catch (\Exception $e) {
+        $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+
+        return $this->redirectToRoute('app_fiche', array(
+          'id_fiche' => $fiche->getId(),
+          'id_groupe' => $fiche->getGroupe()->getId()
         ));
       }
     }

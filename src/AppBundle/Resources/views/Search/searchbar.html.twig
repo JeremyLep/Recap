@@ -1,7 +1,7 @@
 <div class="input-group hidden-xs">
 	{{ form_start(form, { 'attr': {'class': 'form-inline'} , action: path('app_search')}) }}
 		{{ form_errors(form.search) }}
-		{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Search' }}) }}
+		{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Rechercher' }}) }}
     	<button id="search-form" type="submit" class="btn btn-defaut-inv"><i class="fa fa-search"></i></button>
    	{{ form_end(form) }}
 </div>
@@ -9,7 +9,7 @@
 <div class="input-group visible-xs">
 	{{ form_start(form, { 'attr': {'class': 'demo-2 form-inline'} , action: path('app_search')}) }}
 		{{ form_errors(form.search) }}
-		{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Search' }}) }}
+		{{ form_widget(form.search, { 'attr': {'class': 'form-control', 'placeholder': 'Rechercher' }}) }}
     	<button id="search-form" type="submit" class="btn btn-defaut-inv"><i class="fa fa-search"></i></button>
 	{{ form_end(form) }}
 </div>

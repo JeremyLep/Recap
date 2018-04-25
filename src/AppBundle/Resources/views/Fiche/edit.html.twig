@@ -20,10 +20,12 @@
 {% endblock %}
 
 {% block body %}
+
+<div class="row col-12 pt-2" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
+    <h5 class="p-3 m-0">Editer la fiche {{ fiche.titre }}</h5>
+</div>
 <div id="content" class="col-12">
   <div class="col-sm-8 offset-sm-2">
-      <h2 class="mt-5 mb-2">Fiche édition</h2>
-
       {{ form_start(form) }}
           <div class="col-12">
               {{ form_label(form.theme) }}

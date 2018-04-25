@@ -286,6 +286,13 @@ class ComposerStaticInitce32f360f39707201d89a619cd8d8bbb
                 0 => __DIR__ . '/..' . '/sensiolabs/security-checker',
             ),
         ),
+        'P' => 
+        array (
+            'PayPal' => 
+            array (
+                0 => __DIR__ . '/..' . '/paypal/rest-api-sdk-php/lib',
+            ),
+        ),
         'D' => 
         array (
             'Doctrine\\ORM\\' => 

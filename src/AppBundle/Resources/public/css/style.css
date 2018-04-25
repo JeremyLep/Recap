@@ -388,6 +388,7 @@ strong.select2-results__group{
 }
 
 #menu-titre {
+  margin-bottom: -5px;
 	color: #477099;
 }
 
@@ -674,6 +675,20 @@ form label {
   display: inline-table;
 }
 
+.key-groupe {
+  font-size: 18px!important;
+}
+
+.btn-premium {
+  background-color: #f1c40f;
+  width: 100%;
+  border-radius: 0;
+}
+
+.btn-premium:hover {
+  background-color: #FFDE29;
+}
+
 
 
 @media screen and (max-width: 767px) {
@@ -770,6 +785,14 @@ form label {
   .menu-avatar {
     display: inline-block;
   }
+}
+
+.page-alert {
+  margin-top: 5px;
+}
+
+.premium-menu {
+  background-color: #3c434a;
 }
 
 .notif-content {

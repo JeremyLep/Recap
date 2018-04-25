@@ -19,7 +19,7 @@ class MesFichesController extends Controller
 
         $fiches = $em
           ->getRepository('AppBundle:Fiche')
-          ->findBy(array('auteur' => $this->getUser()), null, 4, 0);
+          ->getMesFiches($this->getUser(), 4, 0);
 
         $nbFiche = $em
             ->getRepository('AppBundle:Fiche')
@@ -40,7 +40,7 @@ class MesFichesController extends Controller
 
         $fiches = $em
           ->getRepository('AppBundle:Fiche')
-          ->findBy(array('auteur' => $this->getUser()), null, $limit, $offset);
+          ->getMesFiches($this->getUser(), $limit, $offset);
         
         return $this->render('AppBundle:Fiche:template.html.twig', array(
             'fiches' => $fiches

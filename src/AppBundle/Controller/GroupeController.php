@@ -52,6 +52,9 @@ class GroupeController extends Controller
     public function addAction(Request $request)
     {
         try {
+            if (!$this->getUser()->isPremium() && count($this->getUser()->getGroupe()) > $this->getParameter('max_groupe')) {
+                throw new \Exception("Vous avez atteint la limit de création de groupe (2), pour ne plus être limité passez premium !\n ");                
+            }
             $groupe = new Groupe();
             $form   = $this->createForm('AppBundle\Form\GroupeType', $groupe);
             $form->handleRequest($request);
@@ -82,7 +85,7 @@ class GroupeController extends Controller
                 'groupe' => $groupe,
                 'form'   => $form->createView(),
             ));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
             
             return $this->redirectToRoute('app_home');

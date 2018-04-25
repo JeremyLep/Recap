@@ -18,7 +18,7 @@ class GroupeRepository extends EntityRepository
 		$offset = (int) $offset;
 
 		$em = $this->getEntityManager();
-		$query = 'SELECT g.id, g.titre, g.avatar, g.color
+		$query = 'SELECT g.id, g.titre, g.avatar, g.color, g.user_id AS user
 				  FROM groupe AS g
 				  JOIN membre AS m
 				  ON g.id = m.groupe_id

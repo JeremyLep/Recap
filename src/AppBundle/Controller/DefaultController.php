@@ -32,11 +32,16 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Invite')
             ->countInviteActive($this->getUser()->getEmail());
 
+        $nbRessource = $em
+            ->getRepository('AppBundle:Ressource')
+            ->countMesRessources($this->getUser()->getId());
+
         return $this->render('AppBundle:Menu:listGroupe.html.twig', array(
             'listGroupes' => $listGroupes,
             'nbFiche'     => $nbFiche,
             'nbFavoris'   => $nbFavoris,
-            'nbInvite'    => $nbInvite
+            'nbInvite'    => $nbInvite,
+            'nbRessource' => $nbRessource
         ));
     }
 
@@ -85,9 +90,15 @@ class DefaultController extends Controller
                 ->getRepository('AppBundle:Groupe')
                 ->countFicheAccess($this->getUser()->getId());
 
+            $user        = $this->getUser();
+            $filesize    = $user->convertFilesize($user->getFilesize());
+            $maxFilesize = $user->convertFilesize($this->getParameter('max_filesize'));
+
             return $this->render('AppBundle:Default:index.html.twig', array(
-                'listGroupes' => $listGroupes,
-                'nbFicheAccess' => $nbFicheAccess
+                'listGroupes'   => $listGroupes,
+                'nbFicheAccess' => $nbFicheAccess,
+                'filesize'      => $filesize,
+                'maxFilesize'   => $maxFilesize
             ));
         } catch (AccessDeniedException $e) {
             return $this->redirectToRoute('fos_user_login');

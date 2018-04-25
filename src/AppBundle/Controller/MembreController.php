@@ -88,7 +88,7 @@ class MembreController extends Controller
                 'currMembre' => $membre,
                 'form'       => $form->createView(),
             ));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 
             return $this->redirectToRoute('app_home');

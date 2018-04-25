@@ -8,11 +8,28 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class FicheRepository extends EntityRepository
 {
+	public function getMesFiches($user, $limit, $offset)
+	{
+		$em = $this->getEntityManager();
+		$query = $em->createQueryBuilder();
+	    	
+	    $query->select('f')
+	  		->from('AppBundle\Entity\Fiche', 'f')
+	  		->join('AppBundle\Entity\Membre', 'm', 'WITH', 'f.auteur = m.id')
+	   	    ->where('m.user = ?1')
+	    	->setParameter(1, $user)
+	   	    ->setFirstResult($offset)
+	    	->setMaxResults($limit);
+
+	    return $query->getQuery()->getResult();
+	}
+
 	public function countMesFiches($user)
 	{
-		$query = 'SELECT count(id)
-				  FROM fiche
-				  WHERE auteur_id = :user';
+		$query = 'SELECT count(f.id)
+				  FROM fiche AS f
+				  LEFT JOIN membre AS m ON f.auteur_id = m.id
+				  WHERE m.user_id = :user';
 
 		$em = $this->getEntityManager();
 	    $stmt = $em->getConnection()->prepare($query);
