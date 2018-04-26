@@ -1,17 +1,25 @@
-<nav class="col-sm-3 col-md-2 d-none d-md-block navbar-dark bg-dark p-0" id="menu-left" style="position: fixed; height: 100%; border-right: .20rem solid transparent;">
+<nav class="col-sm-3 col-md-2 d-none d-md-block bg-dark navbar-dark p-0" id="menu-left" style="position: fixed; height: 100%; border-right: .20rem solid transparent;">
+    <div id="brand" class="col-sm-3 col-md-2 bg-info p-2">
+      <a class="text-white" href="{{ path('app_home') }}">
+        <h5 class="font-brand inline">Recap</h5>
+        <img src="{{ asset('bundles/app/images/logo.png') }}" height="40" width="40">
+      </a>
+    </div>
   <div class="col-12 p-0">
-    <div class="row m-0 w-100">
-      <div class="col-4">
+    <div id="connected-user" class="row m-0 w-100">
+      <div class="col-4 m-auto">
         {% if app.user.avatar == null %}
-        <span class="default-avatar" style="background-color: {{ app.user.color  }};">{{ app.user.username|first|upper }}</span>
+        <span class="default-avatar m-auto" style="background-color: {{ app.user.color  }};">{{ app.user.username|first|upper }}</span>
         {% else %}
-        <img src="{{ asset('bundles/app/avatar/'~ app.user.avatar) }}" class="rounded mt-2 text-right" alt="avatar" style="width: 40px; height: 35px;">
+        <img src="{{ asset('bundles/app/avatar/'~ app.user.avatar) }}" class="rounded m-auto text-right" alt="avatar" height="30" width="35">
         {% endif %}
       </div>
-      <div class="col-8 p-0">
-        <h6 id="nom" class="inline text-white pb-2 pt-3">{{ app.user.username }} </h6>
+      <div class="col-7 p-0">
+        <h6 id="nom" class="inline text-white p-2 m-auto">{{ app.user.username }}</h6>
+      </div>
+      <div class="col-1 p-0 m-auto premium-star">
         {% if app.user.isPremium() %}
-        <i class="fa fa-star inline text-warning"></i>
+          <i class="fa fa-star inline text-warning" data-toggle="tooltip" data-placement="bottom" title="Compte Premium"></i>
         {% endif %}
       </div>
     </div>

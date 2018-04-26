@@ -16,7 +16,7 @@
     <a class="nav-link" href="{{ path('app_groupe', {'id_groupe': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
   </li>
   <li class="nav-item li-inline" id="membre-list">
-    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }} <i data-toggle="tooltip" data-placement="bottom" title="Membres du groupe"  class="fa fa-user-o" aria-hidden="true"></i></a>
   </li>
 {% endblock %}
 
@@ -25,17 +25,17 @@
 <div class="row" id="menu-titre">
   <h5 class="p-3 col-8" style="border-bottom: .0625rem solid #e8e8e8; border-right: 1rem solid transparent;">Fiche N°{{ fiche.id }}
       {% if favoris == true %}
-      <i class="fa fa-star yellow pl-2" id="fiche-fav" data-fav="{{ favoris }}"></i>
+      <i class="fa fa-star yellow ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
       {% else %}
-      <i class="fa fa-star-o grey pl-2" id="fiche-fav" data-fav="{{ favoris }}"></i>
+      <i class="fa fa-star-o grey ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
       {% endif %}
     {% if (membre.hasRole('ROLE_EDIT') or membre.user.id == fiche.auteur.id) %}
-    <a href="{{ path('app_fiche_edit', {'id_fiche': fiche.id, 'id_groupe': groupe.id}) }}" class="pl-3" style="font-size: 0.8rem; ">edit</a>
+    <a href="{{ path('app_fiche_edit', {'id_fiche': fiche.id, 'id_groupe': groupe.id}) }}" class="ml-2 btn btn-info" style="font-size: 0.8rem; ">edit</a>
     {% endif %}
   </h5>
   <h5 class="p-3 col-4" style="border-bottom: .0625rem solid #e8e8e8; border-left: 1rem solid transparent;">Sources
     {% if (membre.hasRole('ROLE_RESSOURCES') or membre.user.id == fiche.auteur.user.id) %}
-    <a href="{{ path('app_ressource_add', {'ficheId':fiche.id, 'groupeId': groupe.id }) }}" class="pl-3" style="font-size: 0.8rem; ">ajouter</a>
+    <a href="{{ path('app_ressource_add', {'ficheId':fiche.id, 'groupeId': groupe.id }) }}" class="ml-2 btn btn-info" style="font-size: 0.8rem; ">ajouter</a>
     {% endif %}
   </h5>
 </div>
@@ -64,7 +64,7 @@
               <div class="col-12">
                 <p class="m-0 inline text-left" style="font-size: 0.7rem; ">Difficulté : {{ fiche.difficulte }}  |  Durée : {{ fiche.duree}}</p>
                 {% if fiche.auteur.user.id == app.user.id %}
-                <i class="fa fa-key float-right text-warning"></i>
+                <i class="fa fa-key float-right text-warning"  data-toggle="tooltip" data-placement="bottom" title="Auteur de la fiche"></i>
                 {% endif %}
               </div>
             </div>
@@ -91,6 +91,11 @@
           </div>
           
           <div  class="card-footer text-muted collapse" id="comment">
+            {% if commentaires|length == 0 %}
+              <div class="row p-3">
+                <p class="text-center m-0 w-100">Il n'y à pas de commentaire sur cette fiche.</p>
+              </div>
+            {% endif %}
             {% for commentaire in commentaires %}
               <div class="row p-3 border-b">
                 <div class="p-2 w-100 border-comment">
@@ -101,7 +106,7 @@
                     <img src="{{  asset('bundles/app/avatar/' ~commentaire.getMembre.getUser.avatar) }}" class="img-fluid rounded mr-3" alt="avatar" style="max-width: 35px; max-height: 35px;">
                     {{ commentaire.getMembre.getUser.username}}
                     {% endif %}
-                    <small class="pl-3">{{ commentaire.date|date('Y-m-d H:i:s') }}</small>
+                    <small class="pl-3">{{ commentaire.date }}</small>
                   </span>
                   <br><br>
                   <span class="p-2 w-100">
@@ -113,7 +118,7 @@
             <br>
             {{ form_start(form) }}
                 {{ form_errors(form.contenu) }}
-                {{ form_widget(form.contenu, { 'attr': {'class': 'form-control' }}) }}
+                {{ form_widget(form.contenu, { 'attr': {'class': 'form-control', 'placeholder': 'Ecrire un commentaire' }}) }}
                 <input type="submit" class="btn btn-defaut-inv btn-lg pull-right mt-2" value="Envoyer" />
             {{ form_end(form) }}
           </div>

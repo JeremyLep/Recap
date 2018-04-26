@@ -5,12 +5,12 @@
 
 {% block body %}
 <div class="row" id="menu-titre">
-  <div class="col-12 pt-3" style="border-bottom: .0625rem solid #e8e8e8;">
+  <div class="col-12 pt-2 pb-2" style="border-bottom: .0625rem solid #e8e8e8;">
     {% if app.user.isPremium() %}
       {% set maxFilesize = '&infin;' %}
     {% endif %}
     <h5 class="m-0 inline">Vous avez accès à {{ nbFicheAccess }} fiches - {{ listGroupes|length }} groupes</h5>
-    <h6 class="m-0 float-right">{{ filesize }} / {{ maxFilesize|raw }}</h6>
+    <h6 class="m-0 float-right p-1">{{ filesize }} / {{ maxFilesize|raw }}</h6>
   </div>
 </div>
 

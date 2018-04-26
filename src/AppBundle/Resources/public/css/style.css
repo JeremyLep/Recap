@@ -9,9 +9,21 @@ thead tr th {
 	border-top: none!important;
 }
 
+main {
+  padding-top: 56px;
+}
+
 a, a:hover, a:focus, a:active{
     text-decoration: none;
     color: initial;
+}
+
+button {
+  cursor: pointer;
+}
+
+.font-brand {
+  font-family: 'Courgette', cursive;
 }
 
 .yellow {
@@ -47,6 +59,20 @@ a, a:hover, a:focus, a:active{
 
 .not-active {
   background-color: rgba(0,0,0,0.07);
+}
+
+#brand {
+  color: white;
+  text-align: center;
+  position: fixed;
+  margin: 0;
+  width: 100%;
+  z-index: 999;
+  height: 56px;
+}
+
+#connected-user {
+  padding-top: 65px;
 }
 
 #fiche{
@@ -232,6 +258,7 @@ strong.select2-results__group{
 .navbar-dark::-webkit-scrollbar-track
 {
 	border-radius: 10px;
+  margin-top: 60px;
 }
 
 .navbar-dark::-webkit-scrollbar
@@ -246,6 +273,10 @@ strong.select2-results__group{
 	opacity: 0;
 }
 
+.premium-star i {
+  margin: -20%; 
+}
+
 
 /* input */
 
@@ -253,6 +284,7 @@ strong.select2-results__group{
 	color: #668bb3!important;
 	background-color: white;
 	border-color: #668bb3;
+  cursor: pointer;
 }
 .btn-defaut:hover{
 	background-color: #668bb3!important;
@@ -262,6 +294,7 @@ strong.select2-results__group{
 .btn-defaut-inv{
 	background-color: #668bb3!important;
 	color: white!important;
+  cursor: pointer;
 }
 .btn-defaut-inv:hover{
 	background-color: #537292!important;
@@ -303,10 +336,22 @@ strong.select2-results__group{
 	color: #c3c3c3;
 	transition: all 0.5s ease;
 }
+
 #menu-left .nav-link:hover{
-	color: white;
-	transition: all 0.5s ease;
-	background-color: #3c434a;
+  color: white;
+  transition: all 0.5s ease;
+  background-color: #3c434a;
+}
+
+#menu-left .nav-link a {
+  color: #c3c3c3;
+  transition: all 0.5s ease;
+}
+
+#menu-left .nav-link a:hover{
+  color: white;
+  transition: all 0.5s ease;
+  background-color: #3c434a;
 }
 
 #fiche-icon a{
@@ -513,7 +558,8 @@ form label {
 
 #deconnexion .nav-link{
   color: #343a40;
-  padding: 3px 0px 0px 20px
+  padding: 3px 0px 0px 20px;
+  cursor: default;
 }
 
 #deconnexion .nav-link:hover{
@@ -537,6 +583,7 @@ form label {
 #profil .nav-link{
   color: #343a40;
   padding: 3px 0px 0px 20px;
+  cursor: default;
 }
 
 /* PADDING */
@@ -813,6 +860,7 @@ form label {
   max-height: 35px;
   max-width: 35px;
   padding-left: 8.5px;
+  cursor: pointer;
 }
 
 .notif-check:before, .notif-check-close:before {

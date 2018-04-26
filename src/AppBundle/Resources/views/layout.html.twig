@@ -8,7 +8,7 @@
   {% block stylesheets %}
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Rajdhani:500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani:500|Courgette" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     {% stylesheets 
     'bundles/app/css/style.css'
@@ -65,7 +65,7 @@
               </ul>
               <ul class="nav nav-pills flex-column pt-3 w-100">
                 <li class="nav-item">
-                  <a class="nav-link text-grey" href="{{ path('fos_user_profil') }}"><i class="fa fa-user"></i> Profil</a>
+                  <a class="nav-link text-grey" href="{{ path('fos_user_profil') }}" data-toggle="tooltip" data-placement="bottom" title="Mon profil"><i class="fa fa-user"></i> Profil</a>
                 </li>
               </ul>
               {% if not app.user.isPremium() %}
@@ -105,19 +105,19 @@
               {% endblock %}
             
               <li class="nav-item li-inline" id="notif">
-                <button class="btn notif-check"></button>
+                <button class="btn notif-check" data-toggle="tooltip" data-placement="bottom" title="Notifications"></button>
                 {{ render(controller('AppBundle:Default:menuNotif')) }}
               </li>
               <li class="nav-item li-inline" id="profil">
                 <a class="nav-link" href="{{ path('fos_user_profil') }}">
-                  <button class="btn bg-info" style=" color:white; border-radius: 50%; max-height: 35px; max-width: 35px; padding-left: 10.5px">
+                  <button  data-toggle="tooltip" data-placement="bottom" title="Mon profil" class="btn bg-info" style=" color:white; border-radius: 50%; max-height: 35px; max-width: 35px; padding-left: 10.5px">
                       <i class="fa fa-user" aria-hidden="true"></i>
                   </button>
                 </a>
               </li>
               <li class="nav-item li-inline" id="deconnexion" >
                 <a class="nav-link btn" href="{{ path('fos_user_security_logout') }}">
-                  <button class="btn bg-danger" style="color:white; border-radius: 50%; max-height: 35px; max-width: 35px; padding-left: 9.5px">
+                  <button data-toggle="tooltip" data-placement="bottom" title="Déconnexion" class="btn bg-danger" style="color:white; border-radius: 50%; max-height: 35px; max-width: 35px; padding-left: 9.5px">
                       <i class="fa fa-power-off" aria-hidden="true"></i>
                   </button>
                   </a>
@@ -134,7 +134,7 @@
           {{ include('AppBundle::menuleft.html.twig') }}
         {% endblock %}
 
-        <main role="main" class="col-12 col-md-10 offset-md-2 pt-5">
+        <main role="main" class="col-12 col-md-10 offset-md-2">
           
           {% block body %}
             
@@ -176,6 +176,16 @@
 
     {% javascripts %}
     {% endjavascripts %}
+
+    <!-- TOOLTIP -->
+    <script type="text/javascript">
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+          trigger: 'hover'
+        });
+      });
+    </script>
+
 
     <!-- LOAD NOTIFICATION ON CLICK -->
     <script type="text/javascript">
