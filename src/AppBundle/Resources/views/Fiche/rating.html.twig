@@ -1,4 +1,4 @@
-<small class="">{{ fiche.countNote() }} votes</small>
+<small class="text-muted">{{ fiche.countNote() }} votes</small>
 <h6 class="m-0 text-warning" id="stars">
     {% for i in 1..5 %}
         <span class="fa fa-star{% if fiche.averageNote() < loop.index %}-o{% endif %} rating" data-rate="{{ loop.index }}"></span>

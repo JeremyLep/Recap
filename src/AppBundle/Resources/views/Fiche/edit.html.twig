@@ -15,7 +15,7 @@
     <a class="nav-link" href="{{ path('app_groupe', {'id_groupe': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
   </li>
   <li class="nav-item li-inline" id="membre-list">
-    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }} <i data-toggle="tooltip" data-placement="bottom" title="Membres du groupe" class="fa fa-user-o" aria-hidden="true"></i></a>
   </li>
 {% endblock %}
 

@@ -5,7 +5,7 @@
   {% if groupe.avatar == null %}
     <span class="default-avatar m-0 hidden-xs" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
   {% else %}
-    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right hidden-xs" alt="avatar" style="max-width: 35px; max-height: 35px;">
+    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="rounded text-right hidden-xs" alt="avatar" height="30" width="35">
   {% endif %}
 {% endblock %}
 
@@ -14,20 +14,20 @@
     <a class="nav-link" href="{{ path('app_groupe', {'id_groupe': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
   </li>
   <li class="nav-item li-inline" id="membre-list">
-    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+    <a class="nav-link" href="{{ path('app_membre', {'id_groupe': groupe.id}) }}">{{ groupe.nbMembre }}  <i data-toggle="tooltip" data-placement="bottom" title="Membres du groupe" class="fa fa-user-o" aria-hidden="true"></i></a>
   </li>
 {% endblock %}
 
 {% block body %}
-<div class="row col-12 pt-2" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
-  <div class="p-3 m-0 col-6" style="font-size: 1.2rem;">{{ groupe.nbFiche }} fiches sur ce groupe 
+<div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
+  <div class="p-2 m-0 col-6" style="font-size: 1.2rem;">{{ groupe.nbFiche }} fiches sur ce groupe 
     {% if (membre.hasRole('ROLE_POST') or membre.user.id == groupe.userId) %}
-    <a href="{{ path('app_fiche_add', {'id_groupe': groupe.id}) }}"  style="font-size: 0.8rem;"> Ajouter</a>
+    <a href="{{ path('app_fiche_add', {'id_groupe': groupe.id}) }}"  style="font-size: 0.8rem;" class="ml-2 btn btn-info"> Ajouter</a>
     {% endif %}
   </div>
   <div class="text-right pr-0 col-6">
     {% if (membre.hasRole('ROLE_INVITE') or membre.user.id == groupe.userId) %}
-    <a class="btn btn-info p-3 rounded-0 h-100" href="{{ path('app_invite_add', {'groupeId': groupe.id}) }}"><i class="fa fa-envelope"></i> Inviter sur ce groupe</a>
+    <a style="; padding-top: 2%!important;" class="btn btn-info p-2 rounded-0 h-100" href="{{ path('app_invite_add', {'groupeId': groupe.id}) }}"><i class="fa fa-envelope"></i> Inviter sur ce groupe</a>
     {% endif %}
   </div>
 </div>
