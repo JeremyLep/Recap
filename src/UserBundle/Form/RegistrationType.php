@@ -30,14 +30,12 @@ class RegistrationType extends AbstractType
                 'type' => PasswordType::class,
                 'options' => array('translation_domain' => 'FOSUserBundle'),
                 'first_options' => array(
-                    'label' => 'Mot de passe*',
-                    'attr' => array('class' => 'form-control'),
+                    'attr' => array('class' => 'form-control', 'placeholder' => 'Mot de passe'),
                 ),
                 'second_options' => array(
-                    'label' => 'Confirmation mot de passe*',
-                    'attr' => array('class' => 'form-control'),
+                    'attr' => array('class' => 'form-control', 'placeholder' => 'Confirmer mot de passe'),
                 ),
-                'invalid_message' => 'Les mots de passe ne correspondent pas.',    
+                'invalid_message' => 'Les mots de passe ne correspondent pas.',
             ))
             ->add('nom', TextType::class, array(
                 'required' => false
@@ -54,7 +52,12 @@ class RegistrationType extends AbstractType
             ->add('ville', TextType::class, array(
                 'required' => false
             ))
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class, array(
+                'attr' => array(
+                    'value' => 'S\'inscrire',
+                    'class' => 'action-button'
+                )
+            ));
     }
     
     /**

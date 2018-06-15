@@ -1,204 +1,277 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
+
   <head>
-    <title>Recap</title>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>New Age - Start Bootstrap Theme</title>
+
+    {% block stylesheets %}
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Rajdhani:500|Courgette|PT+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani:500|Courgette" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     {% stylesheets 
     'bundles/app/css/home.css'
     %}
+
       <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+
     {% endstylesheets %}
+
+  {% endblock %}
+
+    <!-- Custom fonts for this template -->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="device-mockups/device-mockups.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/new-age.min.css" rel="stylesheet">
+
   </head>
 
-  <body>
-    {% block header %}
-    <header>
-      <nav class="navbar navbar-dark navbar-expand-md bg-dark justify-content-between">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
-            <span class="navbar-toggler-icon"></span>
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="brand-navbar js-scroll-trigger" href="#page-top">Recap</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
         </button>
-        <div class="navbar-collapse collapse dual-nav w-100">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#" data-href="demarrer">Démarrer <span class="sr-only">Démarrer</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-href="decouvrir">Découvrir</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-href="demo">Démo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-href="contact">Contact</a>
-                </li>
-            </ul>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger active" href="{{ path('app_purchase') }}">Premium</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger default-item" href="#discover">Découvrir</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger default-item" href="#demo">Démo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger default-item" href="#contact">Contact</a>
+            </li>
+            <li class="nav-item ml-5">
+              <a class="nav-link js-scroll-trigger default-item" href="{{ path('fos_user_security_login') }}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger default-item" href="{{ path('fos_user_registration_register') }}">Inscription</a>
+            </li>
+          </ul>
         </div>
-        <a href="{{ path('app_home') }}" class="navbar-brand mx-auto d-block text-center w-100 brand">Recap</a>
-        <div class="navbar-collapse collapse dual-nav w-100">
-            <ul class="nav navbar-nav ml-auto">
-                 <li class="nav-item btn-premium btn-warning"><a class="nav-link text-dark" href=""><i class="fa fa-star"></i> Premium</a></li>
-                <li class="nav-item active"><a class="nav-link" href="{{ path('fos_user_security_login') }}"><i class="fa fa-user"></i> Login</a></li>
-                <li class="nav-item active"><a class="nav-link" href="{{ path('fos_user_registration_register') }}"><i class="fa fa-sign-in"></i> Inscription</a></li>
-            </ul>
+      </div>
+    </nav>
+
+    <header class="masthead">
+      <div class="container h-100">
+        <div class="row h-100">
+          <div class="col-lg-7 my-auto">
+            <div class="header-content mx-auto">
+              <h1 class="mb-5">Récap, l'application de partage de fiche récapitulative entre amis !</h1>
+              <a href="#discover" class="btn btn-outline btn-xl js-scroll-trigger">Découvrir</a>
+            </div>
+          </div>
+          <div class="col-lg-5 my-auto">
+            <div class="device-container">
+              <div class="device-mockup iphone6_plus portrait white">
+                <div class="device">
+                  <div class="screen">
+                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                    <img src="img/demo-screen-1.jpg" class="img-fluid" alt="">
+                  </div>
+                  <div class="button">
+                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </nav>
+      </div>
     </header>
-    {% endblock %}
 
-    {% block body %}
-    <div class="container-fluid content content-scroll">
-        <div id="demarrer" class="row clearfix bg-home">
-            <div class="m-auto text-center text-white p-5">
-                <h1>Récap, l'application de partage de fiche récapitulative entre amis !</h1>
-                <h2>Profitez et partagez vos documents au autres membres.</h2>
-                <button class="btn btn-defaut mt-5 font-16 font-title">Démarrer</button>
-            </div>
+    <section class="features" id="discover">
+      <div class="container">
+        <div class="section-heading text-center">
+          <h2>Découvrez Recap</h2>
+          <p class="text-muted">Stockez vos document et partagez-les aux autres membres de votre groupe !</p>
+          <hr>
         </div>
-        <div id="decouvrir" class="row bg-grey decouvrir">
-            <div class="col-sm-6 col-xs-12 m-auto">
-                <img src="{{ asset('bundles/app/home/demo-desktop2.png') }}">
+        <div class="row">
+          <div class="col-lg-4 my-auto">
+            <div class="device-container">
+              <div class="device-mockup iphone6_plus portrait white">
+                <div class="device">
+                  <div class="screen">
+                    <img src="{{ asset('bundles/app/home/demo-mobile2.png') }}" class="img-fluid" alt="" style="width: 100%; transform: scale(2, 2);
+-ms-transform: scale(2, 2);
+-webkit-transform: scale(2, 2);"">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-sm-6 col-xs-12 m-auto p-3">
-                <h1 class="pb-5">Groupes privés</h1>
-                <h2 class="text-info">Groupes privés</h2>
-                <h4 class="text-muted pb-2">Créer des groupes privés puis inviter vos amis afin d'accumuler des informations communes. 
-                </h4>
-                <h2 class="text-info">Votre bibliothèque </h2>
-                <h4 class="text-muted">Rassembler vos documents en sûreté sur le Cloud accèssible en un click.</h4>
+          </div>
+          <div class="col-lg-8 my-auto">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="fa-users fa text-primary"></i>
+                    <h3>Groupes privés</h3>
+                    <p class="text-muted">Créer des groupes privés puis inviter vos amis afin d'accumuler des informations communes.</p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="fa fa-files-o text-primary"></i>
+                    <h3>Bibliothèque</h3>
+                    <p class="text-muted">Rassembler vos documents en sûreté sur le Cloud accèssible en un click.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="fa fa-share-alt text-primary"></i>
+                    <h3>Partage & Stockage</h3>
+                    <p class="text-muted">Partagez votre savoir à travers des fiches récapitulatives.<br>
+                    Accompagnez vos fiches avec des documents (Image, Vidéo, PDF, Suite Office) téléchargeables ou visualisables en ligne.</p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="feature-item">
+                    <i class="fa fa-mobile text-primary"></i>
+                    <h3>Mobile</h3>
+                    <p class="text-muted">Consulter votre groupe n'importe où grâce à votre mobile.<br>
+                    Disponible sur toute les plateforme.<br>
+                    Application smartphone actuelement non disponible.</p>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-        <div id="decouvrir2" class="row bg-white decouvrir">
-            <div class="col-sm-6 col-xs-12 m-auto p-3">
-                <h1 class="pb-5">Partage & Stockage</h1>
-                <h2 class="text-info">Fiche récap'</h2>
-                <h4 class="text-muted pb-2">Partagez votre savoir à travers des fiches récapitulatives.</h4>
-                <h2 class="text-info">Ressources</h2>
-                <h4 class="text-muted">Accompagnez vos fiches avec des documents (Image, Vidéo, PDF, Suite Office) téléchargeables ou visualisables en ligne.</h4>
-            </div>
-            <div class="col-sm-6 col-xs-12 m-auto">
-                <img src="{{ asset('bundles/app/home/demo-laptop2.png') }}">
-            </div>
-        </div>
-        <div id="decouvrir3" class="row bg-grey decouvrir">
-            <div class="col-sm-6 col-xs-12 m-auto">
-                <img src="{{ asset('bundles/app/home/demo-mobile2.png') }}">
-            </div>
-            <div class="col-sm-6 col-xs-12 m-auto p-3">
-                <h1 class="pb-5">Mobile</h1>
-                <h2 class="text-info">Responsive</h2>
-                <h4 class="text-muted pb-2">Disponible sur toute les plateforme. Consulter votre groupe n'importe où avec votre mobile.</h4>
-                <h2 class="text-info">App Mobile</h2>
-                <h4 class="text-muted">Actuelement non disponible.</h4>
-            </div>
-        </div> 
-        <div id="demo" class="row text-white text-center bg-white">
-            <h1 class="text-center font-title text-dark col-12 mt-5 mb-0">Essayer notre application</h1>
-            <div class="col-4 m-0">
-                <img src="{{ asset('bundles/app/home/demo-desktop2.png') }}"><
-            </div>
-            <div class="col-4 m-0">
-                <img src="{{ asset('bundles/app/home/demo-laptop2.png') }}">
-            </div>
-            <div class="col-4 m-0">
-                <img class="mobile" src="{{ asset('bundles/app/home/demo-mobile2.png') }}">
-            </div>
-            <div class="col-12 m-0 pl-5 pr-5">
-                <h3 class="text-muted mb-5">Tester <strong>Recap</strong> dans une version de démomonstration pour vous donner un apércu avant de vous lancer !</h3>
-            </div>
-            <button class="btn btn-danger btn-demo mx-auto">Démo</button>
-        </div>
-        <div id="premium" class="row bg-white">
-            <div class="col-6 p-0 text-center">
-                <div class="bg-dark text-white">
-                    <i class="fa fa-user fa-3x pt-5"></i>    
-                    <h2 class="p-5">Compte classique</h2>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead></thead>
-                        <tbody></tbody>
-                        <button class="btn btn-default border-0 m-auto">Inscription</button>
-                    </table>
-                </div>
-            </div>
-            <div class="col-6 p-0 text-center">
-                <div class="bg-premium text-white">
-                    <i class="fa fa-star fa-3x pt-5"></i>
-                    <h2 class="p-5">Compte premium</h2>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead></thead>
-                        <tbody></tbody>
-                        <button class="btn btn-warning border-0 m-auto">Premium</button>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div id="contact" class="row bg-grey">
-            <div class="col-md-8 col-md-offset-2 input-container">
-                <div class="row">
-                    <h1 class="text-center col-12 font-title mb-5">Contact</h1>
-                    <div class="col-md-12 col-xs-12">
-                        <div class="styled-input wide">
-                            <input type="text" required />
-                            <label>Nom</label> 
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <div class="styled-input">
-                            <input type="text" required />
-                            <label>Email</label> 
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <div class="styled-input">
-                            <input type="text" required />
-                            <label>N° téléphone</label> 
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xs-12">
-                        <div class="styled-input wide">
-                            <textarea required rows="5"></textarea>
-                            <label>Message</label>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xs-12">
-                        <button class="btn btn-defaut-inv btn-contact w-100">Envoyer</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 p-0">
-                <div class="w-100 bg-footer text-center text-muted">
-                    <h5 class="mb-5"> Privacy · Mentions légales </h5>
-                    <h4 class="font-title">Recap</h4>
-                    <small>© 2018 · All Right Reserved · Jérémy Leprince</small>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endblock %}
+      </div>
+    </section>
 
+    <section class="download text-center bg-primary" id="demo">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 mx-auto text-white">
+            <h2 class="section-heading">Tester avant d'adopter</h2>
+            <p>Notre version de démomontration vous permettera d'essayer l'application avant de vous inscrire</p>
+            <div class="badges">
+              <a href="#demo" class="btn btn-outline btn-xl">Démo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% set bgGif = asset('bundles/app/images/bgSection.gif') %}
+    <section class="cta" style="background: url('{{ bgGif }}'); background-size: cover;">
+      <div class="cta-content">
+        <div class="container">
+          <h2 class="m-0 m-w-100">N'attendez plus<br>Inscrivez-vous.</h2>
+          <a href="{{ path('fos_user_registration_register') }}" class="btn btn-outline btn-xl js-scroll-trigger">S'inscrire!</a>
+        </div>
+      </div>
+      <div class="overlay"></div>
+    </section>
 
+    <section class="contact bg-primary" id="contact">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8 input-container">
+            <div class="section-heading text-center text-white">
+              <h2 class="font-70">Contact</h2>
+            </div>
+            {{ form_start(form) }}
+              <div class="col-md-12 col-xs-12 mt-4">
+                <div class="styled-input wide">
+                  {{ form_errors(form.nom) }}
+                  {{ form_widget(form.nom, { 'attr': {'class': 'form-control', 'placeholder': 'Nom' }}) }}
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12 mt-4">
+                <div class="styled-input">
+                  {{ form_errors(form.email) }}
+                  {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Email' }}) }}
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12 mt-4">
+                <div class="styled-input">
+                  {{ form_errors(form.tel) }}
+                  {{ form_widget(form.tel, { 'attr': {'class': 'form-control', 'placeholder': 'N° téléphone' }}) }}
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12 mt-4">
+                <div class="styled-input wide">
+                  {{ form_errors(form.message) }}
+                  {{ form_widget(form.message, { 'attr': {'class': 'form-control', 'placeholder': 'Message', 'rows': '5' }}) }}
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12 mt-4 text-white">
+                <input type="submit" class="btn btn-outline btn-xl w-100" value="Envoyer">
+              </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <h4 class="font-brand">Recap</h4><br>
+        <p>© 2018 · All Right Reserved · Jérémy Leprince</p>
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <a href="#">Privacy</a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#">Mentions légales</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+{% block javascripts %}
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/06bfea3587.js"></script>
-    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script type="text/javascript">
-        $('ul.navbar-nav li a').on('click', function() {
-            var destination = '#' + $(this).attr('data-href');
-            var container = $('.content-scroll');
-            $('.content-scroll').animate({
-                scrollTop: $(destination).offset().top - container.offset().top + container.scrollTop()
-            });
-        });
+    $(document).scroll(function(){
+      if($(this).scrollTop() > 50) {   
+        $('#mainNav').addClass('navbar-scroll');
+        $('.brand-navbar').addClass('scroll-brand');
+      }
+      if ($(this).scrollTop() < 50) {
+        $('#mainNav').removeClass('navbar-scroll');
+        $('.brand-navbar').removeClass('scroll-brand');
+      }
+    });
     </script>
-  
+    
+    {% javascripts %}
+    <script src="{{ asset('bundles/app/js/new-age.min.js') }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
   </body>
+
 </html>
