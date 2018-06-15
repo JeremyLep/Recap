@@ -32,22 +32,21 @@
         </thead>
         <tbody>
         {% for invite in invites %}
-          <tr class="{% if invite.active == 'Confirmé' %}
-          bg-success
-          {% elseif invite.active == 'En attente' %}
-          bg-info
-          {% elseif invite.active == 'Refusé' %}
-          bg-danger
-          {% elseif invite.active == 'Expiré' %}
-          bg-warning
-          {% endif %}
-          text-white">
+          <tr>
             <td>{{ invite.auteur.username }}</td>
             <td>{{ invite.groupe.titre }}</td>
             <td>{{ invite.email }}</td>
             <td>{{ invite.date|date('d/m/y H:i:s') }}</td>
             <td>{{ invite.dateExpiration|date('d/m/y H:i:s') }}</td>
-            <td>{{ invite.active }}</td>
+            <td class="text-{% if invite.active == 'Confirmé' %}
+          success
+          {% elseif invite.active == 'En attente' %}
+          info
+          {% elseif invite.active == 'Refusé' %}
+          danger
+          {% elseif invite.active == 'Expiré' %}
+          warning
+          {% endif %}">{{ invite.active }}</td>
             <td>
               {% if invite.active == "En attente" %}
               <button id="confirm" data-confirm="true" data-invite="{{ invite.id }}" type="button" class="btn btn-defaut-inv">Accepter</button>

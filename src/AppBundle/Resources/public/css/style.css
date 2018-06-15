@@ -22,6 +22,11 @@ button {
   cursor: pointer;
 }
 
+.navbar-scroll {
+  background-color: white;
+  transition: ease 1s all;
+}
+
 .font-brand {
   font-family: 'Courgette', cursive;
 }

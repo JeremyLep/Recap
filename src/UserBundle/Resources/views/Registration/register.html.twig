@@ -1,8 +1,51 @@
 {% extends "@FOSUser/layout.html.twig" %}
 
+{% block cover %}
+<div class="cover">
+	<img src="{{ asset('bundles/app/home/bg-camera.jpg') }}">
+</div>
+{% endblock %}
+
 {% block fos_user_content %}
-<div class="col-6 offset-3">
-	<h2>Inscription</h2>
-	{% include "@FOSUser/Registration/register_content.html.twig" %}
+<div class="col-sm-12 col-md-8 col-lg-6 p-0 offset-md-2 offset-lg-3 pt-5">
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register form-horizontal', 'id': 'msform'}}) }}
+  <ul id="progressbar">
+    <li class="active"><b>Identifiant du compte</b></li>
+    <li><b>Informations personnelles</b></li>
+  </ul>
+  <fieldset>
+    <h2 class="fs-title">Créer votre compte</h2>
+    <h3 class="fs-subtitle">Etape 1</h3>
+    {{ form_errors(form.username) }}
+    {{ form_widget(form.username, {'attr': {'placeholder': 'Identifiant'}}) }}
+    {{ form_errors(form.email) }}
+    {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
+    {{ form_errors(form.plainPassword.first) }}
+	{{ form_widget(form.plainPassword.first) }}
+    {{ form_errors(form.plainPassword.second) }}
+	{{ form_widget(form.plainPassword.second) }}
+    <input type="button" name="next" class="next action-button mt-3" value="Suivant" />
+	<br><small class="forum-desc pull-left mt-3">
+		<a href="{{ path('fos_user_security_login') }}">Vous avez déjà un compte ?</a> 
+	</small>
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Informations personnelles</h2>
+    <h3 class="fs-subtitle">Etape 2</h3>
+    {{ form_errors(form.nom) }}
+    {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+	{{ form_errors(form.nom) }}
+	{{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+	{{ form_errors(form.nom) }}
+	{{ form_widget(form.avatar, {'attr': {'class': 'form-control', 'placeholder': 'Avatar'}}) }}
+	{{ form_errors(form.nom) }}
+	{{ form_widget(form.age, {'attr': {'class': 'form-control', 'placeholder': 'Age'}}) }}
+	{{ form_errors(form.nom) }}
+	{{ form_widget(form.ville, {'attr': {'class': 'form-control', 'placeholder': 'Ville'}}) }}
+    <input type="button" name="previous" class="previous action-button" value="Précedent" />
+	{{ form_widget(form.submit, {'label': 'S\'inscrire'}) }}<br>
+  </fieldset>
+{{ form_rest(form) }}
+{{ form_end(form) }}
 </div>
 {% endblock fos_user_content %}
