@@ -1,3 +1,5 @@
+# ---------------- LOGIN / REGISTRATION ------------- #
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -27,3 +29,27 @@ fos_user_profil_delete:
     path:      /profil/delete
     defaults:
         _controller: UserBundle:Profil:delete
+
+# --------- MES FICHES ----------- #
+app_mes_fiches:
+    path:   /mes-fiches
+    defaults:
+        _controller: UserBundle:MesFiches:index
+
+app_mesfiches_infinite_scroll:
+    path:      /mes_fiches_load_more/{offset}
+    defaults:
+        { _controller: UserBundle:MesFiches:mesFichesInfiniteScroll, offset: null }
+    condition: "request.isXmlHttpRequest()"
+
+# --------- MES RESSOURCES ----------- #
+app_mes_ressources:
+    path:   /mes-ressources
+    defaults:
+        _controller: UserBundle:MesRessources:index
+
+app_mesressources_infinite_scroll:
+    path:      /mes_ressources_load_more/{offset}
+    defaults:
+        { _controller: UserBundle:MesRessources:mesRessourcesInfiniteScroll, offset: null }
+    condition: "request.isXmlHttpRequest()"

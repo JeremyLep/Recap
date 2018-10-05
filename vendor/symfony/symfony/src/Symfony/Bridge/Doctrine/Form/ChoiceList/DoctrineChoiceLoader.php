@@ -51,7 +51,7 @@ class DoctrineChoiceLoader implements ChoiceLoaderInterface
     {
         // BC to be removed and replace with type hints in 4.0
         if ($manager instanceof ChoiceListFactoryInterface) {
-            @trigger_error(sprintf('Passing a ChoiceListFactoryInterface to %s is deprecated since version 3.1 and will no longer be supported in 4.0. You should either call "%s::loadChoiceList" or override it to return a ChoiceListInterface.', __CLASS__, __CLASS__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Passing a ChoiceListFactoryInterface to %s is deprecated since Symfony 3.1 and will no longer be supported in 4.0. You should either call "%s::loadChoiceList" or override it to return a ChoiceListInterface.', __CLASS__, __CLASS__), E_USER_DEPRECATED);
 
             // Provide a BC layer since $factory has changed
             // form first to last argument as of 3.1
@@ -97,7 +97,7 @@ class DoctrineChoiceLoader implements ChoiceLoaderInterface
 
         // Optimize performance for single-field identifiers. We already
         // know that the IDs are used as values
-        $optimize = null === $value || is_array($value) && $value[0] === $this->idReader;
+        $optimize = null === $value || \is_array($value) && $value[0] === $this->idReader;
 
         // Attention: This optimization does not check choices for existence
         if ($optimize && !$this->choiceList && $this->idReader->isSingleId()) {
@@ -134,7 +134,7 @@ class DoctrineChoiceLoader implements ChoiceLoaderInterface
 
         // Optimize performance in case we have an object loader and
         // a single-field identifier
-        $optimize = null === $value || is_array($value) && $this->idReader === $value[0];
+        $optimize = null === $value || \is_array($value) && $this->idReader === $value[0];
 
         if ($optimize && !$this->choiceList && $this->objectLoader && $this->idReader->isSingleId()) {
             $unorderedObjects = $this->objectLoader->getEntitiesByIds($this->idReader->getIdField(), $values);

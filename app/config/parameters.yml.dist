@@ -1,19 +1,19 @@
 # This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
+    locale: fr
     database_host: 127.0.0.1
     database_port: ~
-    database_name: symfony
+    database_name: db_name
     database_user: root
     database_password: ~
-    # You should uncomment this if you want to use pdo_sqlite
-    #database_path: '%kernel.project_dir%/var/data/data.sqlite'
-
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: ~
     mailer_password: ~
-
-    # A secret key that's used to generate certain security-related tokens
+    max_filesize: ~
+    max_groupe: ~
+    avatar_directory: ~
+    ressource_dir: ~
+    paypal_id: ~
+    paypal_secret: ~
     secret: ThisTokenIsNotSoSecretChangeIt

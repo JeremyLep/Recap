@@ -14,7 +14,7 @@
 	  				<img class="rounded-circle" height="50" src="{{  asset('bundles/app/images/defaut2.png') }}">
 			  	</div>
 		    	<div class="inline col-8 p-0">
-		  			<a href="{{ path('app_fiche', {'id_fiche': notification.getNotification().getFiche().getId(), 'id_groupe': notification.getNotification().getFiche().getGroupe().getId() }) }}">
+		  			<a href="{{ path('app_fiche', {'ficheId': notification.getNotification().getFiche().getId(), 'groupeId': notification.getNotification().getFiche().getGroupe().getId() }) }}">
 		   				{% if notification.active == true %}<strong>{% endif %}
 		   				{{ notification.notification.auteur.username }} a ajouté
 		   				{% if notification.notification.nbressource == null %}

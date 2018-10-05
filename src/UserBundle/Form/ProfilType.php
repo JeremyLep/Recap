@@ -36,7 +36,6 @@ class ProfilType extends AbstractType
             ))
             ->add('avatar', FileType::class, array(
                 'required'   => false,
-                //'mapped'     => true,
                 'data_class' => null,
             ))
             ->add('tel', TextType::class, array(

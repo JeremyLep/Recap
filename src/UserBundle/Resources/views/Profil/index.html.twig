@@ -76,7 +76,11 @@
         </tr>
         <tr>
           <td>Avatar</td>
-          <td><img src="{{ asset('bundles/app/avatar/' ~profil.avatar) }}" height="35" width="35"></td>
+          {% if app.user.avatar == null %}
+            <td><span class="default-avatar mt-0" style="background-color: {{ profil.color  }};">{{ profil.username|first|upper }}</span></td>
+          {% else %}
+            <td><img src="{{ asset('bundles/app/avatar/'~ profil.avatar) }}" alt="avatar" height="30" width="35"></td>
+          {% endif %}
         </tr>
         <tr>
           <td>Date d'inscription</td>

@@ -2,14 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Groupe;
-use AppBundle\Entity\Notification;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class NotificationController extends Controller
@@ -19,21 +13,22 @@ class NotificationController extends Controller
         try {
             $em = $this->getDoctrine()->getManager();
 
+            // get membre left join groupe
             $membre = $em
-                ->getRepository('AppBundle:Membre')
+                ->getRepository('GroupeBundle:Membre')
                 ->findOneBy(array(
                     'user'   => $this->getUser(),
                     'groupe' => $groupeId,
                 ));
             
-            if ($membre === null || !$membre->hasRole('ROLE_USER')) {
+            if ($this->get('app.role_validator')->roleUser($membre)) {
                 throw new AccessDeniedException('Vous n\'avez pas accès aux notifications de ce groupe.');
             }
-            
+            //
             $groupe = $em
-              ->getRepository('AppBundle:Groupe')
+              ->getRepository('GroupeBundle:Groupe')
               ->find($groupeId);
-
+            // ????
             $notifications = $em
               ->getRepository('AppBundle:Notification')
               ->getNotifByGroup($groupeId);
@@ -52,11 +47,13 @@ class NotificationController extends Controller
     public function allAction()
     {
         $em   = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
 
         $notifications = $em
             ->getRepository('AppBundle:UserNotif')
-            ->findBy(array('user' => $user), array('date' => 'DESC'));
+            ->findBy(
+                array('user' => $this->getUser()),
+                array('date' => 'DESC')
+            );
             
         return $this->render('AppBundle:Notification:all.html.twig', array(
             'notifications'  => $notifications,
@@ -65,38 +62,41 @@ class NotificationController extends Controller
 
     public function ajaxActivatedAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
         $notifications = $em
             ->getRepository('AppBundle:UserNotif')
-            ->findBy(array('user' => $user), array('date' => 'DESC'));
+            ->findBy(
+                array('user' => $this->getUser()),
+                array('date' => 'DESC')
+            );
 
-        if ($request->isXmlHttpRequest()) {
-            $notification = $em
-                ->getRepository('AppBundle:UserNotif')
-                ->findOneBy(array(
-                    'id' => $request->get('id')
-                ));
-
-            if ($notification->isActive() === false) {
-                $notification->setActive(true);
-                $em->persist($notification);
-                $em->flush();
-            } else {
-                $notification->setActive(false);
-                $em->persist($notification);
-                $em->flush();
-            }
-
-            $nbNotif = $em
-                ->getRepository('AppBundle:UserNotif')
-                ->countNotif($user->getId());
-
-            return $this->render('AppBundle:Notification:panel.html.twig', array(
-                'notifications' => $notifications,
-                'nbNotif'       => $nbNotif,
+        // count dans select
+        $notification = $em
+            ->getRepository('AppBundle:UserNotif')
+            ->findOneBy(array(
+                'id' => $request->get('id')
             ));
+
+        if ($notification->isActive() === false) {
+            $notification->setActive(true);
+            $em->persist($notification);
+            $em->flush();
+        } else {
+            $notification->setActive(false);
+            $em->persist($notification);
+            $em->flush();
         }
+
+            //
+        $nbNotif = $em
+            ->getRepository('AppBundle:UserNotif')
+            ->countNotif($this->getUser()->getId());
+
+        return $this->render('AppBundle:Notification:panel.html.twig', array(
+            'notifications' => $notifications,
+            'nbNotif'       => $nbNotif,
+        ));
     }
 
     public function ajaxAllActivatedAction(Request $request)
@@ -104,29 +104,31 @@ class NotificationController extends Controller
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
+        // count dans select
         $notifications = $em
             ->getRepository('AppBundle:UserNotif')
-            ->findBy(array('user' => $user), array('date' => 'DESC'));
+            ->findBy(
+                array('user' => $user),
+                array('date' => 'DESC')
+            );
 
-        if ($request->isXmlHttpRequest()) {
-
-            foreach ($notifications as $notification) {
-                if ($notification->isActive()) {
-                    $notification->setActive(false);
-                    $em->persist($notification);
-                    $em->flush();   
-                }
+        foreach ($notifications as $notification) {
+            if ($notification->isActive()) {
+                $notification->setActive(false);
+                $em->persist($notification);
+                $em->flush();   
             }
-
-            $nbNotif = $em
-                ->getRepository('AppBundle:UserNotif')
-                ->countNotif($user->getId());
-
-            return $this->render('AppBundle:Notification:panel.html.twig', array(
-                'notifications' => $notifications,
-                'nbNotif'       => $nbNotif,
-            ));
         }
+
+        //
+        $nbNotif = $em
+            ->getRepository('AppBundle:UserNotif')
+            ->countNotif($user->getId());
+
+        return $this->render('AppBundle:Notification:panel.html.twig', array(
+            'notifications' => $notifications,
+            'nbNotif'       => $nbNotif,
+        ));
     }
 
     public function ajaxShowNotifAction(Request $request)
@@ -134,20 +136,23 @@ class NotificationController extends Controller
         $em   = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
-        if ($request->isXmlHttpRequest()) {
+        // count dans select
+        $notifications = $em
+            ->getRepository('AppBundle:UserNotif')
+            ->findBy(
+                array('user' => $user),
+                array('date' => 'DESC'),
+                15,
+                0
+            );
+        //
+        $nbNotif = $em
+            ->getRepository('AppBundle:UserNotif')
+            ->countNotif($user->getId());
 
-            $notifications = $em
-                ->getRepository('AppBundle:UserNotif')
-                ->findBy(array('user' => $user), array('date' => 'DESC'), 15, 0);
-                
-            $nbNotif = $em
-                ->getRepository('AppBundle:UserNotif')
-                ->countNotif($user->getId());
-
-            return $this->render('AppBundle:Notification:panel.html.twig', array(
-                'notifications' => $notifications,
-                'nbNotif'       => $nbNotif,
-            ));
-        }
+        return $this->render('AppBundle:Notification:panel.html.twig', array(
+            'notifications' => $notifications,
+            'nbNotif'       => $nbNotif,
+        ));
     }
 }

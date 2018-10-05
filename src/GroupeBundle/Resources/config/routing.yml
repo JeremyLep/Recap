@@ -1,0 +1,59 @@
+# ----------- GROUPE ----------- #
+app_groupe:
+    path:      /groupe{groupeId}
+    defaults:
+        _controller: GroupeBundle:Groupe:index
+    requirements:
+        groupeId: \d+
+
+app_groupe_edit:
+    path:      /groupe{groupeId}/edit
+    defaults:
+        _controller: GroupeBundle:Groupe:edit
+    requirements:
+        groupeId: \d+
+
+app_groupe_delete:
+    path:      /groupe{groupeId}/delete
+    defaults:
+        _controller: GroupeBundle:Groupe:delete
+    requirements:
+        groupeId: \d+
+
+app_groupe_add:
+    path:      /groupe/add
+    defaults:
+        _controller: GroupeBundle:Groupe:add
+
+app_groupe_infinite_scroll:
+    path:      /groupe_load_more/{offset}
+    defaults: 
+        { _controller: GroupeBundle:Groupe:groupeInfiniteScroll, offset: null }
+    condition: "request.isXmlHttpRequest()"
+
+# --------- MEMBRE ---------- #
+app_membre:
+    path:      /groupe{groupeId}/membre
+    defaults:
+        _controller: GroupeBundle:Membre:index
+    requirements:
+        groupeId: \d+
+
+# --------- INVITE ----------- #
+app_invite:
+    path:      /invite
+    defaults:
+        _controller: GroupeBundle:Invite:index
+
+app_invite_add:
+    path:      /groupe{groupeId}/invite/add
+    defaults:
+        _controller: GroupeBundle:Invite:add
+    requirements:
+        groupeId: \d+
+
+app_invite_confirm:
+    path:   /invite-confirm
+    defaults:
+        _controller: GroupeBundle:Invite:inviteConfirm
+    condition: "request.isXmlHttpRequest"

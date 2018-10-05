@@ -43,7 +43,7 @@ class Notification
     /**
      * @var \Fiche
      *
-     * @ORM\ManyToOne(targetEntity="Fiche", inversedBy="notification", cascade="remove")
+     * @ORM\ManyToOne(targetEntity="FicheBundle\Entity\Fiche", inversedBy="notification")
      */
     private $fiche;
 
@@ -108,11 +108,11 @@ class Notification
     /**
      * Set fiche
      *
-     * @param \AppBundle\Entity\Fiche $fiche
+     * @param \FicheBundle\Entity\Fiche $fiche
      *
      * @return Notification
      */
-    public function setFiche(\AppBundle\Entity\Fiche $fiche = null)
+    public function setFiche(\FicheBundle\Entity\Fiche $fiche = null)
     {
         $this->fiche = $fiche;
 
@@ -122,7 +122,7 @@ class Notification
     /**
      * Get fiche
      *
-     * @return \AppBundle\Entity\Fiche
+     * @return \FicheBundle\Entity\Fiche
      */
     public function getFiche()
     {

@@ -32,6 +32,5 @@ class TransactionFactory
             ->setDescription($cart->getLabel())
             ->setAmount($amount)
             ->setCustom($orderId);
-            // Pass important informations for payment return //
     }
 }

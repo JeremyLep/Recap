@@ -1,0 +1,162 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block titre %}
+  <a class="navbar-brand" href="{{ path('app_groupe', {'groupeId': groupe.id}) }}">{{ groupe.titre }}</a>
+   
+  {% if groupe.avatar == null %}
+    <span class="default-avatar m-0 hidden-xs" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
+  {% else %}
+    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right hidden-xs" alt="avatar" style="max-width: 35px; max-height: 35px;">
+  {% endif %}
+{% endblock %}
+
+{% block groupe %}
+  <li class="nav-item li-inline" id="fiche-icon">
+    <a class="nav-link" href="">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item li-inline" id="membre-list">
+    <a class="nav-link" href="">{{ groupe.nbMembre }} <i data-toggle="tooltip" data-placement="bottom" title="Membres du groupe"  class="fa fa-user-o" aria-hidden="true"></i></a>
+  </li>
+{% endblock %}
+
+
+{% block body %}
+<div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
+  <div class="float-left col-7">
+    <h5 class="p-3 m-0">{{ groupe.nbMembre }} membres</h5>
+  </div>
+  <div class="text-right pr-0 col-5">
+    {% if (currMembre.hasRole('ROLE_INVITE') or app.user.id == groupe.user.getId) %}
+    <a class="btn btn-info p-3 rounded-0 h-100" href="{{ path('app_invite_add', {'groupeId': groupe.id}) }}"><i class="fa fa-envelope"></i> Inviter sur ce groupe</a>
+    {% endif %}
+  </div>
+</div>
+{{ parent() }}
+<div class="row p-1" id="membre" style=" border-right: .25rem solid transparent;">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nom</th>
+        <th>E-mail</th>
+        <th>Nombre fiche crée</th>
+        <th>Permissions</th>
+        {% if currMembre.hasRole('ROLE_ADMIN') %}
+        <th>Gérer utilisateur</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+    {% for membre in membres %}
+      <tr>
+        <th>
+          {% if app.user.avatar == null %}
+          <span class="default-avatar m-auto" style="background-color: {{ app.user.color  }};">{{ app.user.username|first|upper }}</span>
+          {% else %}
+          <img src="{{ asset('bundles/app/avatar/'~ app.user.avatar) }}" class="rounded m-auto text-right" alt="avatar" height="30" width="35">
+          {% endif %}
+        </th>
+        <td>{{ membre.user.nom }}</td>
+        <td>{{ membre.user.email }}</td>
+        <td>{{ membre.nbFiche }}</td>
+        <td>
+        {% if 'ROLE_ADMIN' in membre.getRoles() %}
+        Administrateur du groupe
+        {% else %}
+        {% for role in membre.getRoles() if role != null %}
+        {{ role[5:]|capitalize }}, 
+        {% endfor %}
+        {% endif %}
+        </td>
+        {% if currMembre.hasRole('ROLE_ADMIN') %}
+        <td class="text-center">{% if app.user != membre.user %}<button id="update-membre" type="button" class="btn btn-defaut update-membre" data-toggle="modal" data-target="#modif" data-name="{{ membre.user.nom }}" data-id="{{ membre.user.id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>{% endif %}</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="modif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      {{ form_start(form) }}
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Gestion de l'utilisateur pour ce groupe</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-7">
+              <label for="membre_post" class="form-control-label">Poster des fiches</label>
+            </div>
+            <div class="text-right col-5">
+              {{ form_errors(form.post) }}
+              {{ form_widget(form.post) }}
+              <label class="label-ui" for="membre_post"><span class="ui"></span></label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-7">
+              <label for="membre_edit" class="form-control-label">Modifier des fiches</label>
+            </div>
+            <div class="text-right col-5">
+              {{ form_errors(form.edit) }}
+              {{ form_widget(form.edit) }}
+              <label class="label-ui" for="membre_edit"><span class="ui"></span></label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-7">
+              <label for="membre_ressource" class="form-control-label">Ajouter des ressources</label>
+            </div>
+            <div class="text-right col-5">
+              {{ form_errors(form.ressource) }}
+              {{ form_widget(form.ressource) }}
+              <label class="label-ui" for="membre_ressource"><span class="ui"></span></label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-7">
+              <label for="membre_invite" class="form-control-label">Inviter des membres</label>
+            </div>
+            <div class="text-right col-5">
+              {{ form_errors(form.invite) }}
+              {{ form_widget(form.invite) }}
+              <label class="label-ui" for="membre_invite"><span class="ui"></span></label>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row w-100">
+          <div class="text-left col-5 pl-0">
+            <button type="button" class="btn btn-danger text-left">Supprimer le membre</button>
+          </div>
+          <div class="text-right col-7">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            <input id="submit" type="submit" class="btn btn-defaut-inv" value="Appliquer" />
+          </div>
+        </div>
+      </div>
+      {{ form_end(form) }}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  
+  {{ parent() }}
+
+  {% javascripts 
+    '@GroupeBundle/Resources/js/Membre/membre.js'
+  %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+
+{% endblock %}
+
