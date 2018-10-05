@@ -2,46 +2,30 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class DefaultController extends Controller
 {
     public function menuAction()
     {
-
         $em = $this->getDoctrine()->getManager();
 
         $listGroupes = $em
-            ->getRepository('AppBundle:Groupe')
+            ->getRepository('GroupeBundle:Groupe')
             ->getUserGroupe($this->getUser()->getId());
 
-        $nbFiche = $em
-            ->getRepository('AppBundle:Fiche')
-            ->countMesFiches($this->getUser()->getId());
-
-        $nbFavoris = $em
-            ->getRepository('AppBundle:Favoris')
-            ->countFavoris($this->getUser()->getId());
-
-        $nbInvite = $em
-            ->getRepository('AppBundle:Invite')
-            ->countInviteActive($this->getUser()->getEmail());
-
-        $nbRessource = $em
-            ->getRepository('AppBundle:Ressource')
-            ->countMesRessources($this->getUser()->getId());
+        $nbInfoMenu = $em
+            ->getRepository('UserBundle:User')
+            ->getInfoMenu($this->getUser());
 
         return $this->render('AppBundle:Menu:listGroupe.html.twig', array(
             'listGroupes' => $listGroupes,
-            'nbFiche'     => $nbFiche,
-            'nbFavoris'   => $nbFavoris,
-            'nbInvite'    => $nbInvite,
-            'nbRessource' => $nbRessource
+            'nbFiche'     => $nbInfoMenu['count_fiche'],
+            'nbFavoris'   => $nbInfoMenu['count_favoris'],
+            'nbInvite'    => $nbInfoMenu['count_invite'],
+            'nbRessource' => $nbInfoMenu['count_ressource']
         ));
     }
 
@@ -49,8 +33,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $nbInvite = $em
-            ->getRepository('AppBundle:Invite')
+        $nbInvite = $this->getDoctrine()->getManager()
+            ->getRepository('GroupeBundle:Invite')
             ->countInviteActive($this->getUser()->getEmail());
 
         return $this->render('AppBundle:Default:invite.html.twig', array(
@@ -62,7 +46,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $nbNotif = $em
+        $nbNotif = $this->getDoctrine()->getManager()
             ->getRepository('AppBundle:UserNotif')
             ->countNotif($this->getUser()->getId());
 
@@ -83,37 +67,29 @@ class DefaultController extends Controller
             }
 
             $listGroupes = $em
-                ->getRepository('AppBundle:Groupe')
+                ->getRepository('GroupeBundle:Groupe')
                 ->getGroupeMembre($this->getUser()->getId(), 0, 3);
 
             $nbFicheAccess = $em
-                ->getRepository('AppBundle:Groupe')
+                ->getRepository('GroupeBundle:Groupe')
                 ->countFicheAccess($this->getUser()->getId());
-
-            $user        = $this->getUser();
-            $filesize    = $user->convertFilesize($user->getFilesize());
-            $maxFilesize = $user->convertFilesize($this->getParameter('max_filesize'));
 
             return $this->render('AppBundle:Default:index.html.twig', array(
                 'listGroupes'   => $listGroupes,
                 'nbFicheAccess' => $nbFicheAccess,
-                'filesize'      => $filesize,
-                'maxFilesize'   => $maxFilesize
+                'filesize'      => $this->getUser()->getFilesize(),
+                'maxFilesize'   => $this->getParameter('max_filesize')
             ));
         } catch (AccessDeniedException $e) {
             return $this->redirectToRoute('fos_user_login');
         }
     }
 
-    public function dashboardInfiniteScrollAction(Request $request)
+    public function dashboardInfiniteScrollAction(Request $request, $offset)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $offset = $request->request->get('offset');
-        $limit  = $request->request->get('limit');
-
-        $listGroupes = $em
-            ->getRepository('AppBundle:Groupe')
+        $limit       = $request->request->get('limit');
+        $listGroupes = $this->getDoctrine()->getManager()
+            ->getRepository('GroupeBundle:Groupe')
             ->getGroupeMembre($this->getUser()->getId(), $offset, $limit);
 
         return $this->render('AppBundle:Default:template.html.twig', array(

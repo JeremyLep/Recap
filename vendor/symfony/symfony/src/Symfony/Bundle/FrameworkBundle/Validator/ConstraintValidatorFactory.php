@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ContainerConstraintValidatorFactory;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
-@trigger_error(sprintf('The %s class is deprecated since version 3.3 and will be removed in 4.0. Use %s instead.', ConstraintValidatorFactory::class, ContainerConstraintValidatorFactory::class), E_USER_DEPRECATED);
+@trigger_error(sprintf('The %s class is deprecated since Symfony 3.3 and will be removed in 4.0. Use %s instead.', ConstraintValidatorFactory::class, ContainerConstraintValidatorFactory::class), E_USER_DEPRECATED);
 
 /**
  * Uses a service container to create constraint validators.
@@ -71,7 +71,7 @@ class ConstraintValidatorFactory extends ContainerConstraintValidatorFactory
             return parent::getInstance($constraint);
         }
 
-        if (is_string($this->validators[$name])) {
+        if (\is_string($this->validators[$name])) {
             $this->validators[$name] = $this->container->get($this->validators[$name]);
         }
 

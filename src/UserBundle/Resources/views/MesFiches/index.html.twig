@@ -1,0 +1,37 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block titre %}
+  <a class="navbar-brand" href="#">Mes fiches</a>
+{% endblock %}
+
+{% block groupe %}
+  <li class="nav-item li-inline" id="fiche-icon">
+    <a class="nav-link" href="{# path('app_groupe', {'groupeId': groupe.id} ) #}">{{ nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+  </li>
+{% endblock %}
+
+{% block body %}
+<div class="row col-12" id="menu-titre" style="border-bottom: .0625rem solid #e8e8e8;">
+  <h5 class="p-3 m-0">{{ nbFiche }} fiches crées</h5>
+</div>
+{{ parent() }}
+<div id="content" class="col-12">
+  <div class="row p-1" id="fiche" data-route="{{ path('app_mesfiches_infinite_scroll') }}" data-limit="6">
+    {{ include('FicheBundle:Fiche:template.html.twig') }}
+    <div id="loading"><i class="fa fa-pulse fa-spinner"></i></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+  {% javascripts 
+      '@AppBundle/Resources/js/InfiniteScroll/infiniteScroll.js'
+      '@UserBundle/Resources/js/MesFiches/mesFiches.js'
+  %}
+      <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+
+{% endblock %}

@@ -20,7 +20,7 @@
     </thead>
     <tbody>
       {% for result in search %}
-      {% set url = path('app_fiche', {'id_groupe': result['groupe_id'], 'id_fiche': result['id'] }) %}
+      {% set url = path('app_fiche', {'groupeId': result['groupe_id'], 'ficheId': result['id'] }) %}
         <tr class="fiche" onclick="javascript:goToURL('{{ url }}')" url="">
           <td><img src="{{ asset('bundles/app/avatar/'~ result['avatar']) }}" class="img-fluid rounded mt-2 text-right" alt="avatar" style="width: 45px; height: 45px;"></td>
           <td>{{ result['groupe']}}</td>

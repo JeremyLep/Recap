@@ -1,7 +1,7 @@
 {% for groupe in listGroupes %}
 {% if groupe.fiche is not empty %}
   <h4 class="titre-groupe">
-    <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">{{ groupe.titre }}</a>
+    <a href="{{ path('app_groupe', {'groupeId': groupe.id}) }}">{{ groupe.titre }}</a>
     {% if groupe.user == app.user.id %}
     <i class="key-groupe float-right fa fa-key text-white" data-toggle="tooltip" data-placement="bottom" title="Auteur du groupe"></i>
     {% endif %}
@@ -10,7 +10,7 @@
     {% for fiche in groupe.fiche %}
 
     <section class="col-md-6 col-12 placeholders pt-3">
-      <a href="{{ path('app_fiche', {'id_fiche': fiche.id, 'id_groupe': groupe.id}) }}">
+      <a href="{{ path('app_fiche', {'ficheId': fiche.id, 'groupeId': groupe.id}) }}">
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 placeholder">
           <div class="card card-fiche">

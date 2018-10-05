@@ -1,0 +1,357 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block titre %}
+  <a class="navbar-brand" href="{{ path('app_groupe', {'groupeId': groupe.id}) }}">{{ groupe.titre }}</a>
+  
+  {% if groupe.avatar == null %}
+    <span class="default-avatar m-0 hidden-xs" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
+  {% else %}
+    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right hidden-xs" alt="avatar" style="max-width: 35px; max-height: 35px;">
+  {% endif %}
+
+{% endblock %}
+
+{% block groupe %}
+  <li class="nav-item li-inline" id="fiche-icon">
+    <a class="nav-link" href="{{ path('app_groupe', {'groupeId': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item li-inline" id="membre-list">
+    <a class="nav-link" href="{{ path('app_membre', {'groupeId': groupe.id}) }}">{{ groupe.nbMembre }} <i data-toggle="tooltip" data-placement="bottom" title="Membres du groupe"  class="fa fa-user-o" aria-hidden="true"></i></a>
+  </li>
+{% endblock %}
+
+{% block body %}
+
+<div class="row" id="menu-titre">
+  <h5 class="p-3 col-8" style="border-bottom: .0625rem solid #e8e8e8; border-right: 1rem solid transparent;">Fiche N°{{ fiche.id }}
+      {% if favoris == true %}
+      <i class="fa fa-star yellow ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
+      {% else %}
+      <i class="fa fa-star-o grey ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
+      {% endif %}
+    {% if (membre.hasRole('ROLE_EDIT') or membre.user.id == fiche.auteur.id) %}
+    <a href="{{ path('app_fiche_edit', {'ficheId': fiche.id, 'groupeId': groupe.id}) }}" class="ml-2 btn btn-info" style="font-size: 0.8rem; ">edit</a>
+    {% endif %}
+  </h5>
+  <h5 class="p-3 col-4" style="border-bottom: .0625rem solid #e8e8e8; border-left: 1rem solid transparent;">Sources
+    {% if (membre.hasRole('ROLE_RESSOURCES') or membre.user.id == fiche.auteur.user.id) %}
+    <a href="{{ path('app_ressource_add', {'ficheId':fiche.id, 'groupeId': groupe.id }) }}" class="ml-2 btn btn-info" style="font-size: 0.8rem; ">ajouter</a>
+    {% endif %}
+  </h5>
+</div>
+{{ parent() }}
+<div class="row" style="border-top: .25rem solid transparent;">
+
+  <section class="col-8 placeholders pt-3" id="fiche">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 placeholder">
+        <div class="card card-fiche">
+          <div class="card-header">
+            <div class="row">
+              <div class=" col-7 text-left">
+                <h5>{{ fiche.theme }}</h5>
+              </div>
+              <div class="col-5 text-right" id="rating">
+                {{ include('FicheBundle:Fiche:rating.html.twig') }}
+              </div>
+            </div>
+            <div class="row">
+              <div class=" col-12 text-left">
+                <p class="m-0" style="font-size: 0.9rem; ">Auteur: {{ fiche.auteur.user.nom }}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <p class="m-0 inline text-left" style="font-size: 0.7rem; ">Difficulté : {{ fiche.difficulte }}  |  Durée : {{ fiche.duree}}</p>
+                {% if fiche.auteur.user.id == app.user.id %}
+                <i class="fa fa-key float-right text-warning"  data-toggle="tooltip" data-placement="bottom" title="Auteur de la fiche"></i>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="card-block text-center">
+            <h4 class="card-title pt-3">{{ fiche.titre }} 
+              
+            </h4>
+            <p class="card-text p-3">{{ fiche.description }}</p>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <a data-toggle="collapse" href="#comment" role="button" aria-expanded="false" aria-controls="comment" class="col-5 text-left m-0 text-muted">
+                <h6 class="pr-0">{{ fiche.nbCommentaire }} commentaires</h6>
+              </a> 
+              <h6 class="col-7 m-0 text-right text-white">
+              {% for tag in tags %}
+              <a href="{{ path('app_search', {'search': tag.label} ) }}">
+                <span class="badge badge-color" style="background-color: {{ tag.color}};">{{tag.label}}</span>
+              </a>
+              {% endfor %}
+              </h6>
+            </div>
+          </div>
+          
+          <div  class="card-footer text-muted collapse" id="comment">
+            {% if commentaires|length == 0 %}
+              <div class="row p-3">
+                <p class="text-center m-0 w-100">Il n'y à pas de commentaire sur cette fiche.</p>
+              </div>
+            {% endif %}
+            {% for commentaire in commentaires %}
+              <div class="row p-3 border-b">
+                <div class="p-2 w-100 border-comment">
+                  <span class="p-2">
+                    {% if commentaire.membre.user.avatar == null %}
+                      <span class="default-avatar" style="background-color: {{ commentaire.membre.user.color  }};">{{ commentaire.membre.user.username|first|upper }}</span>
+                    {% else %}
+                    <img src="{{  asset('bundles/app/avatar/' ~commentaire.getMembre.getUser.avatar) }}" class="img-fluid rounded mr-3" alt="avatar" style="max-width: 35px; max-height: 35px;">
+                    {{ commentaire.getMembre.getUser.username}}
+                    {% endif %}
+                    <small class="pl-3">{{ commentaire.date }}</small>
+                  </span>
+                  <br><br>
+                  <span class="p-2 w-100">
+                    {{ commentaire.contenu }}
+                  </span>
+                </div>
+              </div>
+            {% endfor %}
+            <br>
+            {{ form_start(form) }}
+                {{ form_errors(form.contenu) }}
+                {{ form_widget(form.contenu, { 'attr': {'class': 'form-control', 'placeholder': 'Ecrire un commentaire' }}) }}
+                <input type="submit" class="btn btn-defaut-inv btn-lg pull-right mt-2" value="Envoyer" />
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="col-4 text-center placeholders pt-3" id="source" style=" border-left: .0625rem solid #e8e8e8;">
+    <div class="row"> 
+      {% for ressource in ressources %}
+      <div class="col-lg-6 col-md-6 col-sm-12 placeholder pb-2">
+        <div class="card">
+          <img class="card-img-top " height="150" src="{{ asset('bundles/app/images/'~ ressource.image) }}" alt="Ressource Image">
+          <div class="card-body p-0">
+            <p class="text-muted m-0">{{ ressource.titre }}</p>
+            <div class="row col-12 m-0 p-0">
+              <a id="openRessource" data-ressource="{{ ressource.routeDoc }}" data-title="{{ ressource.titre }}" class="openRessource btn btn-sm btn-secondary {% if (membre.hasRole('ROLE_ADMIN') or membre.user == fiche.auteur) %} col-4 {% else %} col-6 {% endif %} rounded-0 text-white" target="_blank">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+              </a>
+              <a href="{{ path('app_ressource_dl', { 'ficheId': fiche.id, 'groupeId': groupe.id, 'fileName': ressource.routeDoc }) }}" class="btn btn-sm btn-secondary {% if (membre.hasRole('ROLE_ADMIN') or membre.user == fiche.auteur) %} col-4 {% else %} col-6 {% endif %} rounded-0">
+                <i class="fa fa-cloud-download" aria-hidden="true"></i>
+              </a>
+              {% if (membre.hasRole('ROLE_ADMIN') or membre.user == fiche.auteur) %}
+              <button id="route" type="button" data-route="{{ ressource.routeDoc }}" data-toggle="modal" data-target="#supprimer" class="btn-suppr btn btn-sm btn-secondary col-4 rounded-0"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+  </section>
+</div>
+
+<a id="trigger" class="afterglow" href="#myvideo"></a>
+<video class='afterglow-lightboxplayer' id='myvideo' width='960' height='540'>
+  <source id="video" type='video/mp4' src='' />
+</video>
+
+<div id="overlayRessource" style="display: none;">
+  <div id="overlayTop" class="text-white">
+    <h4 id="titreModal" class="inline p-3"></h4>
+    <div id="close"><i class="fa fa-close fa-lg"></i></div>
+  </div>
+  <div id="overlayContent">
+    <object class="" id="object" data="" type="application/pdf">
+      <embed class="" id="file" src="" type="application/pdf" />
+    </object>
+    <div id="office"></div>
+    <img id="image" class="" src="">
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block modal %}
+
+<div class="modal fade" id="supprimer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="exampleModalLabel">Etes-vous sûr ?
+        <button type="button" class="close text-right" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6>Cette action supprimera cette ressource définitivement.</h6>
+      </div>
+      <div class="modal-footer">
+        <div class="row w-100">
+          <div class="text-right col-9 pl-0">
+            <form method="POST" action="{{ path('app_ressource_delete') }}">
+              <input id="routeModal" type="hidden" name="route" value="">
+              <input type="submit" name="submit" class="btn btn-danger btn-lg" value="Supprimer la ressource">
+            </form>
+          </div>
+          <div class="text-right col-3">
+            <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="ressource" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/js/afterglow.js') }}"></script>
+    <script type="text/javascript">
+      $('.btn-suppr').each(function () {
+        var $this = $(this);
+        $this.on("click", function() {
+          var route = $(this).attr('data-route');
+          $('#routeModal').val(route);
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      $( '#fiche-fav' ).click(function() {
+        $.ajax({
+            url: '{{ path("app_favoris_action") }}',
+            type: 'POST',
+            data: { fiche : '{{ fiche.id }}' },
+            success: function(success) {
+              if (success.add) {
+                $('#fiche-fav').removeClass('fa-star-o grey').addClass('fa-star yellow');
+              } 
+              if (success.delete) {
+                $('#fiche-fav').removeClass('fa-star yellow').addClass('fa-star-o grey');
+              }
+            }
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      $("object#object").css('height', '0');
+      $("a#openRessource").on("click", function() {
+        var ressource = $(this).attr('data-ressource');
+        var title = $(this).attr('data-title');
+        $.ajax({
+          url: '{{ path("app_ressource_view") }}',
+          type: "POST",
+          data: { fileName : ressource },
+          success: function(ressource) {
+            $('#titreModal').html(title);
+            if (ressource.type == "video") {
+              $("#video").attr("src", ressource.content);
+              var evt = document.createEvent("MouseEvents");
+              evt.initMouseEvent("click", true, true, window,
+                0, 0, 0, 0, 0, false, false, false, false, 0, null);
+              var a = document.getElementById("trigger"); 
+              a.dispatchEvent(evt);
+            }
+            if (ressource.type == "file") {
+              $("#overlayRessource").show();
+              $("object#object").css('height', '100%');
+              $("embed#file").attr('src', ressource.content);
+              $("object#object").attr('data', ressource.content);
+            }
+            if (ressource.type == "office") {
+              $("#overlayRessource").show();
+              $("#office").css('height', '100%');
+              $("#office").html(ressource.content);
+            }
+            if (ressource.type == "image") {
+              $("#overlayRessource").show();
+              $("#image").css('height', '100%');
+              $("#image").attr('src', ressource.content);
+            }
+          }
+        });
+      });
+
+      $("#close").on('click', function() {
+        $("#overlayRessource").hide();
+        $("#office").html('');
+        $("embed#file").attr('src', '');
+        $("#image").attr('src', '');
+        $("object#object").attr('data', '');
+        $("object#object").css('height', '0');
+        $("#office").css('height', '0');
+        $("#image").css('height', '0');
+      });
+    </script>
+
+    <script type="text/javascript">
+      $('.rating').on('click', function() {
+          var rate = $(this).attr('data-rate');
+          $.ajax({
+            url: "{{ path('app_fiche_rating') }}",
+            type: "POST",
+            data: { rate : rate, ficheId : {{ fiche.id }} } ,
+            success: function(rating) {
+                if (typeof rating['message'] === 'undefined') {
+                  $('#rating').html(rating);
+                  $('.rating-error').html('<i class="fa fa-check-circle"></i> Votre vote à été validé').addClass('text-success');  
+                } else {
+                  $('.rating-error').html(rating['message']).addClass('text-danger'); 
+                }
+            }
+          });
+        });
+
+      
+      $('.rating').hover(function() {
+        var count = $(this).attr('data-rate');
+        $(this).removeClass('fa-star-o').addClass('fa-star'); 
+        for (var i = 1; i <= 5; i++) {
+          if (i <= count) {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star-o').addClass('fa-star');    
+          } else {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star').addClass('fa-star-o');
+          }
+        }
+      });
+
+      $( ".rating" ).mouseleave(function() {
+        var count = {{ fiche.averageNote() }};
+        for (var i = 1; i <= 5; i++) {
+          if (i <= count) {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star-o').addClass('fa-star');    
+          } else {
+            var rating = $('#stars :nth-child('+i+')');
+            rating.removeClass('fa-star').addClass('fa-star-o');
+          }
+        }
+      });
+    </script>
+{% endblock %}

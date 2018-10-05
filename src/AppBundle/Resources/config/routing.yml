@@ -1,176 +1,8 @@
-app_home:
-    path:      /
-    defaults:
-        _controller: AppBundle:Home:index
-
 app_dashboard_infinite_scroll:
-    path:      /dashboard_load_more
+    path:      /dashboard_load_more/{offset}
     defaults:
-        _controller: AppBundle:Default:dashboardInfiniteScroll
-
-# ----------- GROUPE ----------- #
-app_groupe:
-    path:      /groupe{id_groupe}/{page}
-    defaults:
-        _controller: AppBundle:Groupe:index
-        page:        1
-    requirements:
-        id_groupe: \d+
-        page: \d*
-
-app_groupe_edit:
-    path:      /groupe{id_groupe}/edit
-    defaults:
-        _controller: AppBundle:Groupe:edit
-    requirements:
-        id_groupe: \d+
-
-app_groupe_delete:
-    path:      /groupe{id_groupe}/delete
-    defaults:
-        _controller: AppBundle:Groupe:delete
-    requirements:
-        id_groupe: \d+
-
-app_groupe_add:
-    path:      /groupe/add
-    defaults:
-        _controller: AppBundle:Groupe:add
-    requirements:
-        id_groupe: \d+
-
-app_groupe_infinite_scroll:
-    path:      /groupe_load_more
-    defaults:
-        _controller: AppBundle:Groupe:groupeInfiniteScroll
-
-# --------- FICHE ----------- #
-app_fiche:
-    path:      /groupe{id_groupe}/fiche{id_fiche}
-    defaults:
-        _controller: AppBundle:Fiche:index
-    requirements:
-        id_fiche: \d+
-        id_groupe: \d+
-
-app_fiche_edit:
-    path:      /groupe{id_groupe}/fiche{id_fiche}/edit
-    defaults:
-        _controller: AppBundle:Fiche:edit
-    requirements:
-        id_fiche: \d+
-        id_groupe: \d+
-
-app_fiche_delete:
-    path:      /groupe{id_groupe}/fiche{id_fiche}/delete
-    defaults:
-        _controller: AppBundle:Fiche:delete
-    requirements:
-        id_fiche: \d+
-        id_groupe: \d+
-
-app_fiche_add:
-    path:      /groupe{id_groupe}/fiche/add
-    defaults:
-        _controller: AppBundle:Fiche:add
-    requirements:
-        id_groupe: \d+
-
-app_fiche_rating:
-    path:       /rating
-    defaults:
-        _controller: AppBundle:Fiche:rating
-
-# --------- MES FICHES ----------- #
-app_mes_fiches:
-    path:   /mes-fiches
-    defaults:
-        _controller: AppBundle:MesFiches:index
-
-app_mesfiches_infinite_scroll:
-    path:      /mes_fiches_load_more
-    defaults:
-        _controller: AppBundle:MesFiches:mesFichesInfiniteScroll
-
-# --------- MES RESSOURCES ----------- #
-app_mes_ressources:
-    path:   /mes-ressources
-    defaults:
-        _controller: AppBundle:MesRessources:index
-
-app_mesressources_infinite_scroll:
-    path:      /mes_ressources_load_more
-    defaults:
-        _controller: AppBundle:MesRessources:mesRessourcesInfiniteScroll
-
-# --------- RESSOURCES ----------- #
-app_ressource_add:
-    path:      /groupe{groupeId}/fiche{ficheId}/add-ressource
-    defaults:
-        _controller: AppBundle:Ressource:add
-    requirements:
-        groupeId: \d+
-        ficheId: \d+
-
-app_ressource_view:
-    path:     view-ressource
-    defaults:
-        _controller: AppBundle:Ressource:view
-
-app_ressource_dl:
-    path:     /groupe{groupeId}/fiche{ficheId}/dl/{fileName}
-    defaults:
-        _controller: AppBundle:Ressource:download
-    requirements:
-        groupeId: \d+
-        ficheId: \d+
-
-app_ressource_delete:
-    path:     delete-ressource
-    defaults:
-        _controller: AppBundle:Ressource:delete
-
-# --------- MEMBRE ---------- #
-app_membre:
-    path:      /groupe{id_groupe}/membre
-    defaults:
-        _controller: AppBundle:Membre:index
-    requirements:
-        id_groupe: \d+
-
-# --------- FAVORIS ---------- #
-app_favoris:
-    path:      /favoris
-    defaults:
-        _controller: AppBundle:Favoris:index
-
-app_favoris_action:
-    path:      /favoris-add
-    defaults:
-        _controller: AppBundle:Favoris:ajaxAdd
-
-app_favoris_infinite_scroll:
-    path:      /favoris_load_more
-    defaults:
-        _controller: AppBundle:Favoris:favorisInfiniteScroll
-
-# --------- INVITE ----------- #
-app_invite:
-    path:      /invite
-    defaults:
-        _controller: AppBundle:Invite:index
-
-app_invite_add:
-    path:      /groupe{groupeId}/invite/add
-    defaults:
-        _controller: AppBundle:Invite:add
-    requirements:
-        groupeId: \d+
-
-app_invite_confirm:
-    path:   /invite-confirm
-    defaults:
-        _controller: AppBundle:Invite:inviteConfirm
+        { _controller: AppBundle:Default:dashboardInfiniteScroll, offset: null }
+    condition: "request.isXmlHttpRequest()"
 
 # --------- NOTIFICATION ----------- #
 app_notification:
@@ -189,22 +21,19 @@ app_notif:
     path:      /notif
     defaults:
         _controller: AppBundle:Notification:ajaxShowNotif
+    condition: "request.isXmlHttpRequest()"
 
 app_notif_active:
     path:      /notif-active
     defaults:
         _controller: AppBundle:Notification:ajaxActivated
+    condition: "request.isXmlHttpRequest()"
 
 app_all_notif_active:
     path:      /notif-all-active
     defaults:
         _controller: AppBundle:Notification:ajaxAllActivated
-
-# --------- PARAMETRE ----------- #
-app_parametre:
-    path:      /parametre
-    defaults:
-        _controller: AppBundle:Parametre:index
+    condition: "request.isXmlHttpRequest()"
 
 # --------- SEARCH ----------- #
 app_search:

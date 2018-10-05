@@ -51,6 +51,16 @@ class ProfilController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            if ($editForm->get('avatar')->getData() !== null) {
+                $fileName = $this->get('app.uploader')->upload(
+                    $this->getParameter('avatar_directory'), 
+                    $editForm->get('avatar')->getData()
+                );
+                
+                $user->setAvatar($fileName);
+            }
+
+            $em->persist($user);
             $em->flush();
 
             return $this->redirectToRoute('fos_user_profil');
@@ -71,7 +81,8 @@ class ProfilController extends Controller
         }
 
         $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
+        $em   = $this->getDoctrine()->getManager();
+        
         $em->remove($user);
         $em->flush();
       

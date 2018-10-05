@@ -1,0 +1,84 @@
+# --------- FICHE ----------- #
+app_fiche:
+    path:      /groupe{groupeId}/fiche{ficheId}
+    defaults:
+        _controller: FicheBundle:Fiche:index
+    requirements:
+        ficheId: \d+
+        groupeId: \d+
+
+app_fiche_edit:
+    path:      /groupe{groupeId}/fiche{ficheId}/edit
+    defaults:
+        _controller: FicheBundle:Fiche:edit
+    requirements:
+        ficheId: \d+
+        groupeId: \d+
+
+app_fiche_delete:
+    path:      /groupe{groupeId}/fiche{ficheId}/delete
+    defaults:
+        _controller: FicheBundle:Fiche:delete
+    requirements:
+        ficheId: \d+
+        groupeId: \d+
+
+app_fiche_add:
+    path:      /groupe{groupeId}/fiche/add
+    defaults:
+        _controller: FicheBundle:Fiche:add
+    requirements:
+        groupeId: \d+
+
+app_fiche_rating:
+    path:       /rating
+    defaults:
+        _controller: FicheBundle:Fiche:rating
+    condition: "request.isXmlHttpRequest()"
+
+
+# --------- RESSOURCES ----------- #
+app_ressource_add:
+    path:      /groupe{groupeId}/fiche{ficheId}/add-ressource
+    defaults:
+        _controller: FicheBundle:Ressource:add
+    requirements:
+        groupeId: \d+
+        ficheId: \d+
+
+app_ressource_view:
+    path:     view-ressource
+    defaults:
+        _controller: FicheBundle:Ressource:view
+    condition: "request.isXmlHttpRequest()"
+
+app_ressource_dl:
+    path:     /groupe{groupeId}/fiche{ficheId}/dl/{fileName}
+    defaults:
+        _controller: FicheBundle:Ressource:download
+    requirements:
+        groupeId: \d+
+        ficheId: \d+
+
+app_ressource_delete:
+    path:     delete-ressource
+    defaults:
+        _controller: FicheBundle:Ressource:delete
+
+# --------- FAVORIS ---------- #
+app_favoris:
+    path:      /favoris
+    defaults:
+        _controller: FicheBundle:Favoris:index
+
+app_favoris_action:
+    path:      /favoris-add
+    defaults:
+        _controller: FicheBundle:Favoris:ajaxAdd
+    condition: "request.isXmlHttpRequest()"
+
+app_favoris_infinite_scroll:
+    path:      /favoris_load_more/{offset}
+    defaults:
+        { _controller: FicheBundle:Favoris:favorisInfiniteScroll, offset: null }
+    condition: "request.isXmlHttpRequest()"

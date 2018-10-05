@@ -29,7 +29,7 @@ abstract class AbstractFactory implements SecurityFactoryInterface
     protected $options = array(
         'check_path' => '/login_check',
         'use_forward' => false,
-        'require_previous_session' => true,
+        'require_previous_session' => false,
     );
 
     protected $defaultSuccessHandlerOptions = array(
@@ -81,7 +81,7 @@ abstract class AbstractFactory implements SecurityFactoryInterface
         ;
 
         foreach (array_merge($this->options, $this->defaultSuccessHandlerOptions, $this->defaultFailureHandlerOptions) as $name => $default) {
-            if (is_bool($default)) {
+            if (\is_bool($default)) {
                 $builder->booleanNode($name)->defaultValue($default);
             } else {
                 $builder->scalarNode($name)->defaultValue($default);

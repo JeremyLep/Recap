@@ -5,7 +5,7 @@
     {% for groupe in listGroupes %}
     <li class="nav-item border-left-groupe">
     	<div class="nav-link pl-3 text-grey">
-            <a href="{{ path('app_groupe', {'id_groupe': groupe.id}) }}">
+            <a href="{{ path('app_groupe', {'groupeId': groupe.id}) }}">
     		  {% if groupe.avatar == null %}
 	           <span class="visible-xs menu-avatar" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
 	           {% else %}
@@ -13,8 +13,8 @@
 	           {% endif %}
     		  {{ groupe.titre }}
             </a>
-            <a href="{{ path('app_groupe_edit', {'id_groupe': groupe.id }) }}">
-                {% if groupe.user_id == app.user.getId() %}
+            <a href="{{ path('app_groupe_edit', {'groupeId': groupe.id }) }}">
+                {% if groupe.user.getId() == app.user.getId() %}
                 <i class="edit-groupe fa fa-pencil float-right"></i>
                 {% endif %}
             </a>

@@ -109,42 +109,42 @@ class User extends BaseUser
     public $expirePremium;
 
     /**
-     * @var \AppBundle\Entity\Membre
+     * @var \GroupeBundle\Entity\Membre
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Membre", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="GroupeBundle\Entity\Membre", mappedBy="user")
      *
      */
     private $membre;
 
 
     /**
-     * @var \AppBundle\Entity\Ressource
+     * @var \FicheBundle\Entity\Ressource
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ressource", mappedBy="auteur")
+     * @ORM\OneToMany(targetEntity="FicheBundle\Entity\Ressource", mappedBy="auteur")
      *
      */
     private $ressource;
 
     /**
-     * @var \AppBundle\Entity\Groupe
+     * @var \GroupeBundle\Entity\Groupe
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Groupe", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="GroupeBundle\Entity\Groupe", mappedBy="user")
      *
      */
     private $groupe;
 
     /**
-     * @var \AppBundle\Entity\Favoris
+     * @var \FicheBundle\Entity\Favoris
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Favoris", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="FicheBundle\Entity\Favoris", mappedBy="user")
      *
      */
     protected $favoris;
 
     /**
-     * @var \AppBundle\Entity\Invite
+     * @var \GroupeBundle\Entity\Invite
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Invite", mappedBy="auteur")
+     * @ORM\OneToMany(targetEntity="GroupeBundle\Entity\Invite", mappedBy="auteur")
      *
      */
     protected $invite;
@@ -444,11 +444,11 @@ class User extends BaseUser
     /**
      * Set groupe
      *
-     * @param \AppBundle\Entity\Groupe $groupe
+     * @param \GroupeBundle\Entity\Groupe $groupe
      *
      * @return Groupe
      */
-    public function setGroupe(\AppBundle\Entity\Groupe $groupe)
+    public function setGroupe(\GroupeBundle\Entity\Groupe $groupe)
     {
         $this->groupe = $groupe;
 
@@ -458,7 +458,7 @@ class User extends BaseUser
     /**
      * Get groupe
      *
-     * @return AppBundle\Entity\Groupe
+     * @return GroupeBundle\Entity\Groupe
      */
     public function getGroupe()
     {
@@ -478,11 +478,11 @@ class User extends BaseUser
     /**
      * Set membre
      *
-     * @param \AppBundle\Entity\Membre $membre
+     * @param \GroupeBundle\Entity\Membre $membre
      *
      * @return Membre
      */
-    public function setMembre(\AppBundle\Entity\Membre $membre)
+    public function setMembre(\GroupeBundle\Entity\Membre $membre)
     {
         $this->membre = $membre;
 
@@ -492,7 +492,7 @@ class User extends BaseUser
     /**
      * Get membre
      *
-     * @return \AppBundle\Entity\Membre
+     * @return \GroupeBundle\Entity\Membre
      */
     public function getMembre()
     {
@@ -502,11 +502,11 @@ class User extends BaseUser
     /**
      * Set ressource
      *
-     * @param \AppBundle\Entity\Ressource $ressource
+     * @param \FicheBundle\Entity\Ressource $ressource
      *
      * @return Ressource
      */
-    public function setRessource(\AppBundle\Entity\Ressource $ressource)
+    public function setRessource(\FicheBundle\Entity\Ressource $ressource)
     {
         $this->ressource = $ressource;
 
@@ -516,7 +516,7 @@ class User extends BaseUser
     /**
      * Get ressource
      *
-     * @return \AppBundle\Entity\Ressource
+     * @return \FicheBundle\Entity\Ressource
      */
     public function getRessource()
     {
@@ -610,5 +610,4 @@ class User extends BaseUser
 
         return $bytes;
     }
-
 }

@@ -1,0 +1,105 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block titre %}
+  <a class="navbar-brand" href="{{ path('app_groupe', {'groupeId': groupe.id}) }}">{{ groupe.titre }}</a>  
+  {% if groupe.avatar == null %}
+    <span class="default-avatar m-0 hidden-xs" style="background-color: {{ groupe.color  }};">{{ groupe.titre|first|upper }}</span>
+  {% else %}
+    <img src="{{ asset('bundles/app/avatar/'~ groupe.avatar) }}" class="img-fluid rounded mt-2 text-right hidden-xs" alt="avatar" style="max-width: 35px; max-height: 35px;">
+  {% endif %}
+{% endblock %}
+
+{% block groupe %}
+  <li class="nav-item li-inline" id="fiche-icon">
+    <a class="nav-link" href="{{ path('app_groupe', {'groupeId': groupe.id} ) }}">{{ groupe.nbFiche }}  <i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+  </li>
+  <li class="nav-item li-inline" id="membre-list">
+    <a class="nav-link" href="{{ path('app_membre', {'groupeId': groupe.id}) }}">{{ groupe.nbMembre }}  <i class="fa fa-user-o" aria-hidden="true"></i></a>
+  </li>
+{% endblock %}
+
+{% block body %}
+<div class="row" id="menu-titre">
+  <div class="col-12 pt-3" style="border-bottom: .0625rem solid #e8e8e8;">
+    {% if app.user.isPremium() %}
+      {% set maxFilesize = '∞' %}
+    {% else %}
+      {% set maxFilesize = maxFilesize|convert_bytes %}
+    {% endif %}
+    <h5 class="m-0 inline">Nouveau document pour la fiche "{{ fiche.titre }}"</h5>
+    <h6 class="m-0 float-right">{{ filesize|convert_bytes }} / {{ maxFilesize }}</h6>
+  </div>
+</div>
+{{ parent() }}
+<br>
+<div class="col-sm-8 offset-sm-2">
+    {{ form_start(form) }}
+        <div class="col-12">
+            {{ form_label(form.titre) }}
+            {{ form_errors(form.titre) }}
+            {{ form_widget(form.titre, { 'attr': {'class': 'form-control' }}) }}
+        </div>
+        <div class="col-12">
+            {{ form_label(form.routeDoc) }}
+            <small class="float-right countSize pt-4">{{ filesize|convert_bytes }} / {{ maxFilesize }}</small>
+            {{ form_errors(form.routeDoc) }}
+            {{ form_widget(form.routeDoc, { 'attr': {'class': 'form-control' }}) }}
+        </div>
+        <div class="text-right col-12 mt-2">
+            <input type="submit" class="btn btn-defaut-inv btn-lg" value="Envoyer" />
+            <a href="{{ path('app_groupe', {'groupeId': groupe.id}) }}" class="btn btn-secondary btn-lg">Retour</a>
+        </div>
+    {{ form_end(form) }}
+</div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    $(document).ready(function(){
+      var currentFilesize = {{ app.user.filesize }};
+      {% if app.user.isPremium() %}
+      var maxFilesize = '∞';
+      {% else %}
+      var maxFilesize = '{{ maxFilesize|convert_bytes }}';
+      {% endif %}
+
+      $('#recap_ressource_routeDoc').bind('change', function() {
+        if (typeof this.files[0] == "undefined") {
+          $('.countSize').html(convertFilesize(currentFilesize) + ' / ' + maxFilesize ).removeClass('text-danger text-success');
+        } else {
+          var newSize = this.files[0].size + currentFilesize;  
+        }
+        
+        if (newSize < 1610000000) {
+          $('.countSize').html('<i class="fa fa-check-circle"></i> ' + convertFilesize(newSize) + ' / ' + maxFilesize ).addClass('text-success').removeClass('text-danger');
+        } else if(typeof newSize !== "undefined") {
+          $('.countSize').html('<i class="fa fa-exclamation-circle"></i> ' + convertFilesize(newSize) + ' / ' + maxFilesize ).removeClass('text-success').addClass('text-danger');
+        }
+      });
+
+      function convertFilesize(size) 
+      {
+        if (size >= 1073741824) {
+            size = size / 1073741824;
+            size = size.toFixed(2) + ' GB'
+        } else if (size >= 1048576) {
+            size = size / 1048576;
+            size = size.toFixed(2) + ' MB'
+        } else if (size >= 1024) {
+            size = size / 1024;
+            size = size.toFixed(2) + ' KB'
+        } else if (size > 1) {
+            size = size + ' B';
+        } else if (size == 1) {
+            size = size + ' B';
+        } else {
+            size = '0 B';
+        }
+        return size;
+      }
+
+    });
+    </script>
+{% endblock %}

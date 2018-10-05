@@ -3,13 +3,12 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 
 class UserNotifRepository extends EntityRepository
 {
 	public function countNotif($user)
 	{	
-		$query = 'SELECT count(id) 
+		$query = 'SELECT COUNT(id) 
 				  FROM user_notif
 				  WHERE user_id = :user
 				  AND active = 1';

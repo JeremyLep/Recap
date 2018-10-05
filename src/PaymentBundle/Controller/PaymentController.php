@@ -2,8 +2,6 @@
 
 namespace PaymentBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,7 +38,7 @@ class PaymentController extends Controller
 
 		try {
 		    if (!$cart->comparedArray($payment->getTransactions()[0]->getItemList()->getItems()[0])) {
-		    	throw new \Exception(sprintf('Il s\'est produit une erreur lors du payement de l\'%s, veuillez réessayer.<br>Vus n\'avez pas été débité.<br>Veuillez contacter l\'équipe Récap si l\'erreur persiste', $cart->getLabel()));
+		    	throw new \Exception(sprintf('Il s\'est produit une erreur lors du payement de l\'%s, veuillez réessayer.<br>Vous n\'avez pas été débité.<br>Veuillez contacter l\'équipe Récap si l\'erreur persiste', $cart->getLabel()));
 		    }
 		    $payment->execute($execution, $apiContext);
 		    $cart->setStatus(1);
@@ -58,7 +56,7 @@ class PaymentController extends Controller
 		   	$em->persist($cart);
 		   	$em->flush();
 			
-			$this->get('session')->getFlashBag()->add('danger', sprintf('Il s\'est produit une erreur lors du payement de l\'%s, veuillez réessayer.<br>Vus n\'avez pas été débité.<br>Veuillez contacter l\'équipe Récap si l\'erreur persiste', $cart->getLabel()));
+			$this->get('session')->getFlashBag()->add('danger', sprintf('Il s\'est produit une erreur lors du payement de l\'%s, veuillez réessayer.<br>Vous n\'avez pas été débité.<br>Veuillez contacter l\'équipe Récap si l\'erreur persiste', $cart->getLabel()));
 			
 			return $this->redirectToRoute('app_home');
 		} catch (\Exception $e) {

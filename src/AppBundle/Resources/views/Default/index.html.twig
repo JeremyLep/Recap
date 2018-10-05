@@ -5,12 +5,14 @@
 
 {% block body %}
 <div class="row" id="menu-titre">
-  <div class="col-12 pt-2 pb-2" style="border-bottom: .0625rem solid #e8e8e8;">
-    {% if app.user.isPremium() %}
-      {% set maxFilesize = '&infin;' %}
-    {% endif %}
+  <div class="col-12 pt-2 pb-2" style="border-bottom: .0625rem solid #e8e8e8;"> 
     <h5 class="m-0 inline">Vous avez accès à {{ nbFicheAccess }} fiches - {{ listGroupes|length }} groupes</h5>
-    <h6 class="m-0 float-right p-1">{{ filesize }} / {{ maxFilesize|raw }}</h6>
+    <h6 class="m-0 float-right p-1">{{ filesize|convert_bytes }} / 
+    {% if app.user.isPremium() %}
+      &infin;
+    {% else %}
+      {{ maxFilesize|convert_bytes }}</h6>
+    {% endif %}
   </div>
 </div>
 
@@ -28,10 +30,9 @@
 {{ parent() }}
 <!-- INFINITE SCROLL -->
   <script type="text/javascript">
-
-  var offset = $('.dashboard-tmpl').length;
   var limit  = 4;
   var flag   = true;
+  var offset = $('.dashboard-tmpl').length;
 
   $('#loading').hide();
 
@@ -54,16 +55,13 @@
   function ajaxCall() {
       $.ajax({
         type: "POST",
-        url: "{{ path('app_dashboard_infinite_scroll') }}",
-        data:  {
-          offset: offset,
-          limit: limit
-        },
+        url: "{{ path('app_dashboard_infinite_scroll') }}" + "/" + offset,
+        data:  { limit: limit },
         success: function(success) {
           $('#loading').hide();
           $('.dashboard-tmpl').last().after(success);
-          flag = true;
-          offset = offset + 3;
+          flag   = true;
+          offset = $('.dashboard-tmpl').length;
 
           if (success === '') {
             $('#content').unbind('scroll');

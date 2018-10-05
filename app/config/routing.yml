@@ -1,5 +1,14 @@
-app_home:
+app:
     resource: "@AppBundle/Resources/config/routing.yml"
+
+app_home:
+    resource: "@HomeBundle/Resources/config/routing.yml"
+
+app_fiche:
+    resource: "@FicheBundle/Resources/config/routing.yml"
+
+app_groupe:
+    resource: "@GroupeBundle/Resources/config/routing.yml"
 
 fos_user:
     resource: "@UserBundle/Resources/config/routing.yml"

@@ -26,7 +26,7 @@ class SearchType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return '';
+        return 'recap';
     }
 
     public function configureOptions(OptionsResolver $resolver)
