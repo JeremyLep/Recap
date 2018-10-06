@@ -72,35 +72,14 @@
 
 {% block javascripts %}
     {{ parent() }}
- <script type="text/javascript">
-  $(document).ready(function() {
-    $('.selectTag').select2({
-        multiple:true,
-        placeholder: 'Choisir des tags...'
-    });
-  });
- </script>
 
-  <script type="text/javascript">
-  $(document).ready(function() {
-    $('.selectAddTag').select2({
-        tags: true,
-        tokenSeparators: [',', ' '],
-        multiple:true,
-        placeholder: 'Ajouter des nouveaux tags...'
-    });
-  });
- </script>
- <script type="text/javascript">
-    $('form textarea').on("input", function(){
-        var maxlength = $(this).attr("maxlength");
-        var currentLength = $(this).val().length;
-        if( currentLength >= maxlength ){
-            $('.countChar').html(" Vous avez atteint la limite de caractères.").addClass('text-danger');
-            $('.countChar').prepend('<i class="fa fa-exclamation-circle"></i> ');
-        } else {
-            $('.countChar').html(maxlength - currentLength + " caractères restants").removeClass('text-danger');
-        }
-    });
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    {% javascripts 
+        '@FicheBundle/Resources/js/Fiche/countChar.js'
+        '@FicheBundle/Resources/js/Fiche/selectTag.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
 {% endblock %}

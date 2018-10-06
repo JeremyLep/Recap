@@ -16,18 +16,16 @@
 </div>
 {{ parent() }}
 <div id="content" class="col-12">
-  <div class="row p-1" id="fiche" data-route="{{ path('app_favoris_infinite_scroll') }}" data-limit="6">
+  <div class="row p-1" id="fiches" data-route="{{ path('app_favoris_infinite_scroll') }}" data-limit="6">
     {{ include('FicheBundle:Fiche:template.html.twig') }}
     <div id="loading"><i class="fa fa-pulse fa-spinner"></i></div>
   </div>
 </div>
-id
 {% endblock %}
 
 
 {% block javascripts %}
 {{ parent() }}
-
 
   {% javascripts 
     '@AppBundle/Resources/js/InfiniteScroll/infiniteScroll.js'

@@ -25,9 +25,9 @@
 <div class="row" id="menu-titre">
   <h5 class="p-3 col-8" style="border-bottom: .0625rem solid #e8e8e8; border-right: 1rem solid transparent;">Fiche N°{{ fiche.id }}
       {% if favoris == true %}
-      <i class="fa fa-star yellow ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
+      <i class="fa fa-star yellow ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-route="{{ path('app_favoris_action') }}" data-id="{{ fiche.id }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
       {% else %}
-      <i class="fa fa-star-o grey ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
+      <i class="fa fa-star-o grey ml-2" id="fiche-fav" data-fav="{{ favoris }}" data-route="{{ path('app_favoris_action') }}" data-id="{{ fiche.id }}" data-toggle="tooltip" data-placement="bottom" title="Favoris"></i>
       {% endif %}
     {% if (membre.hasRole('ROLE_EDIT') or membre.user.id == fiche.auteur.id) %}
     <a href="{{ path('app_fiche_edit', {'ficheId': fiche.id, 'groupeId': groupe.id}) }}" class="ml-2 btn btn-info" style="font-size: 0.8rem; ">edit</a>
@@ -127,7 +127,7 @@
     </div>
   </section>
   <section class="col-4 text-center placeholders pt-3" id="source" style=" border-left: .0625rem solid #e8e8e8;">
-    <div class="row"> 
+    <div class="row" id="ressource" data-route-view="{{ path('app_ressource_view') }}"> 
       {% for ressource in ressources %}
       <div class="col-lg-6 col-md-6 col-sm-12 placeholder pb-2">
         <div class="card">
@@ -209,7 +209,6 @@
   </div>
 </div>
 
-
 <div class="modal fade" id="ressource" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -230,128 +229,16 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/app/js/afterglow.js') }}"></script>
-    <script type="text/javascript">
-      $('.btn-suppr').each(function () {
-        var $this = $(this);
-        $this.on("click", function() {
-          var route = $(this).attr('data-route');
-          $('#routeModal').val(route);
-        });
-      });
-    </script>
-    <script type="text/javascript">
-      $( '#fiche-fav' ).click(function() {
-        $.ajax({
-            url: '{{ path("app_favoris_action") }}',
-            type: 'POST',
-            data: { fiche : '{{ fiche.id }}' },
-            success: function(success) {
-              if (success.add) {
-                $('#fiche-fav').removeClass('fa-star-o grey').addClass('fa-star yellow');
-              } 
-              if (success.delete) {
-                $('#fiche-fav').removeClass('fa-star yellow').addClass('fa-star-o grey');
-              }
-            }
-        });
-      });
-    </script>
-    <script type="text/javascript">
-      $("object#object").css('height', '0');
-      $("a#openRessource").on("click", function() {
-        var ressource = $(this).attr('data-ressource');
-        var title = $(this).attr('data-title');
-        $.ajax({
-          url: '{{ path("app_ressource_view") }}',
-          type: "POST",
-          data: { fileName : ressource },
-          success: function(ressource) {
-            $('#titreModal').html(title);
-            if (ressource.type == "video") {
-              $("#video").attr("src", ressource.content);
-              var evt = document.createEvent("MouseEvents");
-              evt.initMouseEvent("click", true, true, window,
-                0, 0, 0, 0, 0, false, false, false, false, 0, null);
-              var a = document.getElementById("trigger"); 
-              a.dispatchEvent(evt);
-            }
-            if (ressource.type == "file") {
-              $("#overlayRessource").show();
-              $("object#object").css('height', '100%');
-              $("embed#file").attr('src', ressource.content);
-              $("object#object").attr('data', ressource.content);
-            }
-            if (ressource.type == "office") {
-              $("#overlayRessource").show();
-              $("#office").css('height', '100%');
-              $("#office").html(ressource.content);
-            }
-            if (ressource.type == "image") {
-              $("#overlayRessource").show();
-              $("#image").css('height', '100%');
-              $("#image").attr('src', ressource.content);
-            }
-          }
-        });
-      });
 
-      $("#close").on('click', function() {
-        $("#overlayRessource").hide();
-        $("#office").html('');
-        $("embed#file").attr('src', '');
-        $("#image").attr('src', '');
-        $("object#object").attr('data', '');
-        $("object#object").css('height', '0');
-        $("#office").css('height', '0');
-        $("#image").css('height', '0');
-      });
-    </script>
+  {% javascripts 
+    '@FicheBundle/Resources/js/Ressource/manageRessource.js'
+    '@FicheBundle/Resources/js/Fiche/fiche.js'
+    '@FicheBundle/Resources/js/Fiche/rating.js'
+    '@FicheBundle/Resources/js/Fiche/favoris.js'
+    '@FicheBundle/Resources/js/Fiche/closeModal.js'
+    'bundles/app/js/afterglow.js'
+  %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 
-    <script type="text/javascript">
-      $('.rating').on('click', function() {
-          var rate = $(this).attr('data-rate');
-          $.ajax({
-            url: "{{ path('app_fiche_rating') }}",
-            type: "POST",
-            data: { rate : rate, ficheId : {{ fiche.id }} } ,
-            success: function(rating) {
-                if (typeof rating['message'] === 'undefined') {
-                  $('#rating').html(rating);
-                  $('.rating-error').html('<i class="fa fa-check-circle"></i> Votre vote à été validé').addClass('text-success');  
-                } else {
-                  $('.rating-error').html(rating['message']).addClass('text-danger'); 
-                }
-            }
-          });
-        });
-
-      
-      $('.rating').hover(function() {
-        var count = $(this).attr('data-rate');
-        $(this).removeClass('fa-star-o').addClass('fa-star'); 
-        for (var i = 1; i <= 5; i++) {
-          if (i <= count) {
-            var rating = $('#stars :nth-child('+i+')');
-            rating.removeClass('fa-star-o').addClass('fa-star');    
-          } else {
-            var rating = $('#stars :nth-child('+i+')');
-            rating.removeClass('fa-star').addClass('fa-star-o');
-          }
-        }
-      });
-
-      $( ".rating" ).mouseleave(function() {
-        var count = {{ fiche.averageNote() }};
-        for (var i = 1; i <= 5; i++) {
-          if (i <= count) {
-            var rating = $('#stars :nth-child('+i+')');
-            rating.removeClass('fa-star-o').addClass('fa-star');    
-          } else {
-            var rating = $('#stars :nth-child('+i+')');
-            rating.removeClass('fa-star').addClass('fa-star-o');
-          }
-        }
-      });
-    </script>
 {% endblock %}

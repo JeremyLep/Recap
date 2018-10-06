@@ -19,7 +19,7 @@
 {{ parent() }}
 
 <div id="content" class="col-12">
-  <div>
+  <div id="dashboard-tmpl" data-route="{{ path('app_dashboard_infinite_scroll') }}" data-limit="4">
     {{ include('AppBundle:Default:template.html.twig') }}
     <div id="loading"><i class="fa fa-pulse fa-spinner"></i></div>
   </div>
@@ -28,47 +28,11 @@
 
 {% block javascripts %}
 {{ parent() }}
-<!-- INFINITE SCROLL -->
-  <script type="text/javascript">
-  var limit  = 4;
-  var flag   = true;
-  var offset = $('.dashboard-tmpl').length;
 
-  $('#loading').hide();
-
-  $('#content').on('scroll', function() {
-    if ($('#content').height() + $('#content').scrollTop() >= $('#content div').height()-4 || $('#content div').height() <= $('#content').height()) {
-
-      $('#loading').show();
-
-      if (flag) {
-        flag = false;
-        ajaxCall();
-      }
-    }
-  });
-
-  if ($('#content').height() > $('#content div').height()) {
-    ajaxCall();
-  }
-
-  function ajaxCall() {
-      $.ajax({
-        type: "POST",
-        url: "{{ path('app_dashboard_infinite_scroll') }}" + "/" + offset,
-        data:  { limit: limit },
-        success: function(success) {
-          $('#loading').hide();
-          $('.dashboard-tmpl').last().after(success);
-          flag   = true;
-          offset = $('.dashboard-tmpl').length;
-
-          if (success === '') {
-            $('#content').unbind('scroll');
-            flag = false;
-          }
-        }
-      });
-    }
-  </script>
+  {% javascripts
+    '@AppBundle/Resources/js/InfiniteScroll/infiniteScroll.js'
+    '@AppBundle/Resources/js/Dashboard/dashboard.js'
+  %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 {% endblock %}

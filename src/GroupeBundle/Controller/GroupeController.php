@@ -151,10 +151,11 @@ class GroupeController extends Controller
 
     public function groupeInfiniteScrollAction(Request $request, $offset)
     {
-        $limit  = $request->request->get('limit');
-        $fiches = $this->getDoctrine()->getManager()
+        $limit    = $request->request->get('limit');
+        $groupeId = $request->request->get('extra');
+        $fiches   = $this->getDoctrine()->getManager()
             ->getRepository('FicheBundle:Fiche')
-            ->getFichesByGroupe($request->request->get('groupeId'), $limit, $offset);
+            ->getFichesByGroupe($groupeId, $limit, $offset);
 
         return $this->render('FicheBundle:Fiche:template.html.twig', array(
             'fiches' => $fiches

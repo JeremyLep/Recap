@@ -1,5 +1,5 @@
 {% for fiche in fiches %}
-<section class="col-xs-12 col-sm-12 col-md-6 col-lg-6 placeholders pt-3 fiche" id={{fiche.id}}>
+<section class="col-xs-12 col-sm-12 col-md-6 col-lg-6 placeholders pt-3 fiches" id={{fiche.id}}>
     <a href="{{ path('app_fiche', {'ficheId': fiche.id, 'groupeId': fiche.groupe.id}) }}">
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 placeholder">

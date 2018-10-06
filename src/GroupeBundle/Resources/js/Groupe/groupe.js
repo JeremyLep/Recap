@@ -1,3 +1,3 @@
 $(document).ready(function() {
-   	var infiniteScroll  = new InfiniteScroll('fiche');
+   	var infiniteScroll  = new InfiniteScroll('fiches');
 });

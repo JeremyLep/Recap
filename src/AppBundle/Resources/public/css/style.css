@@ -809,11 +809,10 @@ form label {
 }
 
 .default-avatar {
-  display: block;
+  display: inline-block;
   width: 35px;
   height: 35px;
   border-radius: 5px;
-  margin-top: 20%;
   color: white;
   font-size: 20px;
   text-align: center;
