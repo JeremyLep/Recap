@@ -6,7 +6,7 @@ class InfiniteScroll
     this.flag         = true;
 
     var self = this;
-    
+
     $('#loading').hide();
 
     $('#content').on('scroll', function() {
@@ -26,23 +26,24 @@ class InfiniteScroll
   }
 
   ajaxCall() {
-    self = this;
+    var self = this;
 
     $.ajax({
       type: "POST",
       url: self.selectorNode.attr('data-route') + "/" + self.getOffset(),
       data:  {
-        limit: self.selectorNode.attr('data-limit')
+        limit: self.selectorNode.attr('data-limit'),
+        extra: self.selectorNode.attr('data-extra')
       },
       success: function(success) {
         $('#loading').hide();
- 
+
         if (success === '') {
           $('#content').unbind('scroll');
           self.lock();
         } else {
           self.selectorNode.find(self.items).last().after(success);
-          self.unlock();         
+          self.unlock();
         }
       }
     });
@@ -57,6 +58,6 @@ class InfiniteScroll
   }
 
   getOffset() {
-    return this.selectorNode.find(self.items).length;
+    return this.selectorNode.find(this.items).length;
   }
 }

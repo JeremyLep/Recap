@@ -6,21 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   {% block stylesheets %}
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Rajdhani:500|Courgette" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     {% stylesheets 
     'bundles/app/css/style.css'
     %}
-
       <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-
     {% endstylesheets %}
-
   {% endblock %}
-
-
   </head>
   <body>
     <header>
@@ -104,7 +98,7 @@
                 </li>
               {% endblock %}
             
-              <li class="nav-item li-inline" id="notif">
+              <li class="nav-item li-inline" id="notif1" data-route="{{ path('app_notif') }}" data-route-active="{{ path('app_notif_active') }}" data-route-all="{{ path('app_all_notif_active') }}">
                 <button class="btn notif-check" data-toggle="tooltip" data-placement="bottom" title="Notifications"></button>
                 {{ render(controller('AppBundle:Default:menuNotif')) }}
               </li>
@@ -172,97 +166,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/06bfea3587.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
-    {% javascripts %}
+    {% javascripts
+      '@AppBundle/Resources/js/Init/init.js'
+    %}
+      <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <!-- TOOLTIP -->
-    <script type="text/javascript">
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip({
-          trigger: 'hover'
-        });
-      });
-    </script>
-
-
-    <!-- LOAD NOTIFICATION ON CLICK -->
-    <script type="text/javascript">
-      $(document).on("click", ".notif-check", function() {
-        $.ajax({
-            url: '{{ path("app_notif") }}',
-            type: 'GET',
-            success: function(success) {
-              $('.notif-success').html( success );
-              $('button.notif-check').removeClass('notif-check').addClass('notif-check-close');
-              $('.notification').show();
-            }
-        });
-      });
-      
-      $(document).on('click', '.notif-check-close', function() {
-        $('button.notif-check-close').removeClass('notif-check-close').addClass('notif-check');
-        $('.notification').hide();
-      });
-
-
-    </script>
-
-    <!-- MARK ONE NOTIFICATION -->
-    <script type="text/javascript">
-      $(document).on("click", "#notif-activated i", function() {
-        $.ajax({
-            url: '{{ path("app_notif_active") }}',
-            type: 'POST',
-            data: { id : $(this).attr('data-id') },
-            success: function(success) {
-              $('.notif-success').html( success );
-              $('.notification').show();
-            }
-        });
-      });
-    </script>
-
-    <!-- MARK ALL NOTIFICATIONS -->
-    <script type="text/javascript">
-      $(document).on("click", "#markAll", function() {
-        $.ajax({
-            url: '{{ path("app_all_notif_active") }}',
-            type: 'POST',
-            success: function(success) {
-              $('.notif-success').html( success );
-              $('.notification').show();
-            }
-        });
-      });
-    </script>
-
-    <!-- SUBMIT SEARCH FORM BY JS -->
-    <script type="text/javascript">
-      $(document).ready(function(){
-          $('#search-form').click(function(){
-              if (!$('input#search').val().length === 0) {
-                $('form').submit();  
-              }
-          });
-      });
-    </script>
-
-    <!-- FORM ERROR FA ICON -->
-    <script type="text/javascript">
-          $('form ul li').prepend('<i class="fa fa-exclamation-circle"></i> ');
-    </script>
-
-    <!-- SEARCH BAR COLLAPSE MOBILE -->
-    <script type="text/javascript">
-          $('input#search').focus(function() {
-            $('.navbar-brand').addClass('collapse-search');
-          });
-          $('input#search').focusout(function() {
-            $('.navbar-brand').removeClass('collapse-search');
-          });
-    </script>
 
   {% endblock %} 
 

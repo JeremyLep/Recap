@@ -41,7 +41,7 @@
         </div>
         <div class="col-12">
             {{ form_label(form.routeDoc) }}
-            <small class="float-right countSize pt-4">{{ filesize|convert_bytes }} / {{ maxFilesize }}</small>
+            <small class="float-right countSize pt-4" data-maxSize="{{ maxFilesize }}" data-size="{{ app.user.filesize }}">{{ filesize|convert_bytes }} / {{ maxFilesize }}</small>
             {{ form_errors(form.routeDoc) }}
             {{ form_widget(form.routeDoc, { 'attr': {'class': 'form-control' }}) }}
         </div>
@@ -55,51 +55,11 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript">
-    $(document).ready(function(){
-      var currentFilesize = {{ app.user.filesize }};
-      {% if app.user.isPremium() %}
-      var maxFilesize = '∞';
-      {% else %}
-      var maxFilesize = '{{ maxFilesize|convert_bytes }}';
-      {% endif %}
+  {{ parent() }}
 
-      $('#recap_ressource_routeDoc').bind('change', function() {
-        if (typeof this.files[0] == "undefined") {
-          $('.countSize').html(convertFilesize(currentFilesize) + ' / ' + maxFilesize ).removeClass('text-danger text-success');
-        } else {
-          var newSize = this.files[0].size + currentFilesize;  
-        }
-        
-        if (newSize < 1610000000) {
-          $('.countSize').html('<i class="fa fa-check-circle"></i> ' + convertFilesize(newSize) + ' / ' + maxFilesize ).addClass('text-success').removeClass('text-danger');
-        } else if(typeof newSize !== "undefined") {
-          $('.countSize').html('<i class="fa fa-exclamation-circle"></i> ' + convertFilesize(newSize) + ' / ' + maxFilesize ).removeClass('text-success').addClass('text-danger');
-        }
-      });
-
-      function convertFilesize(size) 
-      {
-        if (size >= 1073741824) {
-            size = size / 1073741824;
-            size = size.toFixed(2) + ' GB'
-        } else if (size >= 1048576) {
-            size = size / 1048576;
-            size = size.toFixed(2) + ' MB'
-        } else if (size >= 1024) {
-            size = size / 1024;
-            size = size.toFixed(2) + ' KB'
-        } else if (size > 1) {
-            size = size + ' B';
-        } else if (size == 1) {
-            size = size + ' B';
-        } else {
-            size = '0 B';
-        }
-        return size;
-      }
-
-    });
-    </script>
+  {% javascripts
+    '@FicheBundle/Resources/js/Fiche/filesize.js'
+  %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 {% endblock %}
